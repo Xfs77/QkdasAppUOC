@@ -6,7 +6,7 @@
 const packageJson = require('../../../../package.json');
 
 export const environment = {
-  appName: 'Angular Ngrx Material Starter',
+  appName: 'QkdasArtApp',
   envName: 'DEV',
   production: false,
   test: false,
@@ -23,5 +23,15 @@ export const environment = {
     angularCli: packageJson.devDependencies['@angular/cli'],
     typescript: packageJson.devDependencies['typescript'],
     cypress: packageJson.devDependencies['cypress']
+  },
+  firebaseConfig: {
+    apiKey: 'AIzaSyAgvA8lyIGILOZwn5yZr6MyenTgqIDdRiY',
+    authDomain: 'qkdasartuoc.firebaseapp.com',
+    databaseURL: 'https://qkdasartuoc.firebaseio.com',
+    projectId: 'qkdasartuoc',
+    storageBucket: 'qkdasartuoc.appspot.com',
+    messagingSenderId: '429277145752',
+    appId: '1:429277145752:web:2a5394022eeb27ebeabeed',
+    measurementId: 'G-0L6GZKF89N'
   }
 };

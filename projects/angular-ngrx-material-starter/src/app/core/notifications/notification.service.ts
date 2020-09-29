@@ -1,5 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import {
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition
+} from '@angular/material/snack-bar/snack-bar-config';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +52,9 @@ export class NotificationService {
   private show(message: string, configuration: MatSnackBarConfig) {
     // Need to open snackBar from Angular zone to prevent issues with its position per
     // https://stackoverflow.com/questions/50101912/snackbar-position-wrong-when-use-errorhandler-in-angular-5-and-material
+    configuration.horizontalPosition = 'center';
+    configuration.verticalPosition = 'bottom';
+
     this.zone.run(() => this.snackBar.open(message, null, configuration));
   }
 }

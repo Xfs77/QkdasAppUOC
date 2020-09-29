@@ -19,6 +19,9 @@ import {
   actionSettingsChangeAnimationsPageDisabled,
   actionSettingsChangeLanguage
 } from '../core/settings/settings.actions';
+import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.component';
 
 @Component({
   selector: 'anms-root',
@@ -50,7 +53,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private storageService: LocalStorageService
+    private storageService: LocalStorageService,
+    private router: Router,
+    private dialog: MatDialog,
   ) {}
 
   private static isIEorEdgeOrSafari() {
@@ -74,7 +79,14 @@ export class AppComponent implements OnInit {
   }
 
   onLoginClick() {
-    this.store.dispatch(authLogin());
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.width = '90vw';
+    dialogConfig.maxWidth = '500px';
+
+    const dialogRef = this.dialog.open(LoginWrapperComponent, dialogConfig );
+
   }
 
   onLogoutClick() {

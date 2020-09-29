@@ -1,0 +1,43 @@
+<form  [formGroup]="loginForm"
+       (ngSubmit)="onLogin()"
+       >
+
+  <mat-dialog-content>
+
+    <div class="row">
+      <mat-form-field floatLabel="always">
+        <mat-label>Email</mat-label>
+        <input
+          required
+          matInput
+          type="text"
+          formControlName="email">
+        <mat-error *ngFor="let validation of validationMessages.email">
+          <mat-error class="error-message"
+                     *ngIf="email.hasError(validation.type) && (email.dirty || email.touched)">{{validation.message}}</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
+   <div class="row">
+     <mat-form-field floatLabel="always">
+       <mat-label>Contraseña</mat-label>
+       <input
+         required
+         matInput
+         type="password"
+         formControlName="password">
+       <mat-error *ngFor="let validation of validationMessages.password">
+         <mat-error class="error-message"
+                    *ngIf="password.hasError(validation.type) && (password.dirty || password.touched)">{{validation.message}}</mat-error>
+       </mat-error>
+     </mat-form-field>
+   </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="mt-10">
+    <button mat-raised-button type="submit" color="primary" class="w-100">Iniciar Sesión</button>
+  </mat-dialog-actions>
+</form>
+
+<div class="register">Crea una nueva cuenta <a href="" class="vinc">aquí</a></div>
+

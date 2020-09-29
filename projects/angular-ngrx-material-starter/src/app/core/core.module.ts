@@ -74,6 +74,10 @@ import {
   faInstagram,
   faYoutube
 } from '@fortawesome/free-brands-svg-icons';
+import { AngularFireModule } from '@angular/fire';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
 
 export {
   TitleService,
@@ -108,6 +112,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CommonModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    BrowserModule,
 
     // material
     MatSidenavModule,
@@ -133,6 +139,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       : StoreDevtoolsModule.instrument({
           name: 'Angular NgRx Material Starter'
         }),
+
+    // Firebase
+    AngularFireModule.initializeApp(environment.firebaseConfig),
 
     // 3rd party
     FontAwesomeModule,
@@ -190,6 +199,7 @@ export class CoreModule {
       faGithub,
       faMediumM,
       faTwitter,
+      faFacebook,
       faInstagram,
       faYoutube
     );

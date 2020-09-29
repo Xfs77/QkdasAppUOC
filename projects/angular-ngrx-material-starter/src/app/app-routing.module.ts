@@ -34,6 +34,13 @@ const routes: Routes = [
       )
   },
   {
+    path: 'login',
+    loadChildren: () =>
+      import('./features/login-wrapper/login-wrapper.module').then(
+        (m) => m.LoginWrapperModule
+      )
+  },
+  {
     path: '**',
     redirectTo: 'about'
   }
