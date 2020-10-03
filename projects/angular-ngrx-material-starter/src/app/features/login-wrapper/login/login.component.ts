@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'anms-login',
@@ -27,7 +28,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-  ) { }
+    private dialog: MatDialog
+
+) { }
 
   ngOnInit() {
     this.createForm();
@@ -58,4 +61,7 @@ export class LoginComponent implements OnInit {
     this.loginEvent.emit(this.loginData);
   }
 
+  onRegister() {
+    this.dialog.closeAll();
+  }
 }

@@ -114,13 +114,13 @@ mat-sidenav-container {
 
           @media (min-width: map-get($grid-breakpoints, lg)) {
             a {
-              padding: 20px 10px;
+              padding: 8px 10px;
             }
           }
 
           @media (max-width: map-get($grid-breakpoints, md)) {
             a {
-              padding: 20px;
+              padding: 8px;
 
               span {
                 width: 0;
@@ -131,7 +131,7 @@ mat-sidenav-container {
 
           @media (max-width: map-get($grid-breakpoints, sm)) {
             a {
-              padding: 20px 5px;
+              padding: 8px 5px;
             }
           }
         }

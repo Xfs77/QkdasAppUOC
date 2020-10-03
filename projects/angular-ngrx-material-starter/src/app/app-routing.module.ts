@@ -13,6 +13,11 @@ const routes: Routes = [
       import('./features/about/about.module').then((m) => m.AboutModule)
   },
   {
+    path: 'profile',
+    loadChildren: () =>
+      import('./features/profile-wrapper/profile-wrapper.module').then((m) => m.ProfileWrapperModule)
+  },
+  {
     path: 'feature-list',
     loadChildren: () =>
       import('./features/feature-list/feature-list.module').then(

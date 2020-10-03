@@ -1,0 +1,4 @@
+<anms-user-form
+  [user]="user$ | async"
+  (saveUserEvent)="onSave($event)"
+  (cancelUserEvent)="onCancel($event)"></anms-user-form>

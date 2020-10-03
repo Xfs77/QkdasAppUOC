@@ -9,6 +9,7 @@ import { authLogin, authLoginSuccess, authLogout, authLogoutSuccess } from './au
 import { from } from 'rxjs';
 import { AuthService } from './auth.service';
 import { MatDialog } from '@angular/material/dialog';
+import { userGet } from '../user/user.actions';
 
 export const AUTH_KEY = 'AUTH';
 
@@ -33,7 +34,7 @@ export class AuthEffects {
           })
       ))
   ));
-  loginSuccess = createEffect(
+  authLoginSuccess = createEffect(
     () =>
       this.actions$.pipe(
         ofType(authLoginSuccess),
@@ -42,9 +43,11 @@ export class AuthEffects {
             isAuthenticated: true
           });
           this.dialog.closeAll();
-        })
-      ),
-    { dispatch: false }
+        }),
+        switchMap(action => [
+          userGet({payload: {id: action.payload.id}})
+          ])
+        )
   );
   logout = createEffect(
     () =>

@@ -1,0 +1,114 @@
+<div class="container" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0" fxLayoutAlign="center">
+
+  <mat-card fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75">
+    <mat-card-title class="title">Edición Perfil</mat-card-title>
+    <form
+      [formGroup]="signupForm"
+      (ngSubmit)="onSave()">
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Email</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="email">
+            <mat-error *ngFor="let validation of validationMessages.email">
+              <mat-error class="error-message"
+                         *ngIf="email.hasError(validation.type) && (email.dirty || email.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Nombre</mat-label>
+            <input
+              required
+              matInput type="text"
+              formControlName="name">
+            <mat-error *ngFor="let validation of validationMessages.name">
+              <mat-error class="error-message"
+                         *ngIf="name.hasError(validation.type) && (name.dirty || name.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Apellidos</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="surname">
+            <mat-error *ngFor="let validation of validationMessages.surname">
+              <mat-error class="error-message"
+                         *ngIf="surname.hasError(validation.type) && (surname.dirty || surname.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Teléfono</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="phone">
+            <mat-error *ngFor="let validation of validationMessages.phone">
+              <mat-error class="error-message"
+                         *ngIf="phone.hasError(validation.type) && (phone.dirty || phone.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="!user.id" fxLayout="column" fxLayoutGap="10px"
+             formGroupName="passwordGroup">
+          <div fxFlex="100">
+            <mat-form-field floatLabel="always">
+              <mat-label>Contraseña</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="password">
+              <mat-error *ngFor="let validation of validationMessages.password">
+                <mat-error class="error-message"
+                           *ngIf="password.hasError(validation.type) && (password.dirty || password.touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100">
+            <mat-form-field floatLabel="always">
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="repassword">
+              <mat-error
+                *ngFor="let validation of validationMessages.repassword">
+                <mat-error class="error-message"
+                           *ngIf="repassword.hasError(validation.type) && (repassword.dirty || repassword.touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+
+        <div class="form-buttons">
+          <button
+            mat-raised-button
+            color="warn"
+            type="reset"
+            class="form-buttons__button"
+            (click)="onCancel()">Cancelar</button>
+          <button mat-raised-button type="submit" color="primary" class="form-buttons__button">Guardar</button>
+        </div>
+        <div>
+        </div>
+
+    </form>
+
+  </mat-card>
+
+</div>

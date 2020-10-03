@@ -37,6 +37,7 @@
   "anms.menu.login": "Sign in",
   "anms.menu.logout": "Logout",
   "anms.menu.settings": "Settings",
+  "anms.menu.profile": "Profile",
   "anms.settings.animations.elements": "Navigation page elements slide up",
   "anms.settings.animations.page": "Navigation whole page transition",
   "anms.settings.animations.title": "Animations",

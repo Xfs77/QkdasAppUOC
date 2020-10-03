@@ -1,5 +1,5 @@
 import { AuthState } from './auth.models';
-import { authLogin, authLoginSuccess, authLogout, authLogoutSuccess } from './auth.actions';
+import { authLoginSuccess, authLogoutSuccess } from './auth.actions';
 import { createReducer, on, Action } from '@ngrx/store';
 
 export const initialState: AuthState = {

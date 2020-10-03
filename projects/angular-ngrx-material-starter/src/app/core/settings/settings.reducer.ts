@@ -12,7 +12,7 @@ import {
 import { Action, createReducer, on } from '@ngrx/store';
 
 export const initialState: SettingsState = {
-  language: 'es',
+  language: 'cat',
   theme: 'DEFAULT-THEME',
   autoNightMode: false,
   nightTheme: NIGHT_MODE_THEME,

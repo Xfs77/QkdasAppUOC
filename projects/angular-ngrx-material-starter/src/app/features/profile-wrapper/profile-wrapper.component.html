@@ -1,0 +1,103 @@
+<div class="container" fxLayout="column" fxLayoutWrap
+     fxLayoutGap="0.5%" fxLayoutAlign="center">
+
+  <mat-card
+    fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75"
+    class="user-card">
+    <mat-card-title class="title">Datos Personales</mat-card-title>
+    <div class="profile-container">
+      <div>
+        {{(this.user$|async).name}} {{(this.user$|async).surname}}
+      </div>
+      <div>
+        {{(this.user$|async).email}}
+      </div>
+      <div>
+        {{(this.user$|async).phone}}
+      </div>
+      <button mat-raised-button  color="primary" class="button-modify" [routerLink]="'/profile/edit'">Modificar</button>
+    </div>
+  </mat-card>
+
+</div>
+
+<div class="container" fxLayout="column" fxLayoutWrap
+     fxLayoutGap="0.5%" fxLayoutAlign="center">
+
+  <mat-card fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75">
+    <mat-card-title class="title">Direcciones de Envío</mat-card-title>
+
+    <mat-radio-group
+      fxLayout="row wrap"
+      class="radio-group"
+      (change)="updateDefaultAddress($event)">
+      <mat-radio-button  fxFlex="100" fxFlex.md="50" fxFlex.lg="33" class="radio-button pb-3" *ngFor="let address of address$|async"
+                         [checked]="address.default" [value]="address">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <div>
+              {{address.name}} {{address.surname}}
+            </div>
+            <div>
+              {{address.phone1}}
+            </div>
+            <div>
+              <div>
+                {{address.address}}
+              </div>
+              <div>
+                {{address.CP}} {{address.city}}
+              </div>
+              <div>
+                {{address.country}}
+              </div>
+            </div>
+          </div>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{ address: address }"
+            class="actions-button">
+            <mat-icon class="ml10" aria-hidden="false" aria-label="Example home icon">more_vert</mat-icon>
+          </button>
+        </div>
+
+      </mat-radio-button>
+
+    </mat-radio-group>
+
+    <button
+      class="fab-button--float-right"
+      mat-fab
+      color="primary"
+      [routerLink]="['/profile/address/edit']">
+      <mat-icon>add</mat-icon>
+    </button>
+
+  </mat-card>
+
+</div>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-address="address">
+    <button
+      mat-menu-item
+      [routerLink]="['/profile/address/edit', {address: address.id}]">
+      <mat-icon>edit</mat-icon>
+      <span>Editar</span>
+    </button>
+    <button
+      mat-menu-item
+      (click)="removeAddress(address)">
+      <mat-icon>delete</mat-icon>
+      <span>Eliminar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+
+
+
+
+
+

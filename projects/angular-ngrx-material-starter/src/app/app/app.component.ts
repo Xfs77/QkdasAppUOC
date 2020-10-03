@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { environment as env } from '../../environments/environment';
 
 import {
-  authLogin,
   authLogout,
   routeAnimations,
   LocalStorageService,
@@ -17,10 +16,9 @@ import {
 } from '../core/core.module';
 import {
   actionSettingsChangeAnimationsPageDisabled,
-  actionSettingsChangeLanguage
 } from '../core/settings/settings.actions';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.component';
 
 @Component({
@@ -30,22 +28,17 @@ import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.c
   animations: [routeAnimations]
 })
 export class AppComponent implements OnInit {
-  isProd = env.production;
-  envName = env.envName;
   version = env.versions.app;
   year = new Date().getFullYear();
   logo = require('../../assets/logo.png').default;
-  languages = ['en', 'de', 'sk', 'fr', 'es', 'pt-br', 'zh-cn', 'he'];
   navigation = [
     { link: 'about', label: 'anms.menu.about' },
-    { link: 'feature-list', label: 'anms.menu.features' },
-    { link: 'examples', label: 'anms.menu.examples' }
   ];
   navigationSideMenu = [
     ...this.navigation,
     { link: 'settings', label: 'anms.menu.settings' }
   ];
-
+  dialogRef: MatDialogRef<LoginWrapperComponent, any>;
   isAuthenticated$: Observable<boolean>;
   stickyHeader$: Observable<boolean>;
   language$: Observable<string>;
@@ -78,22 +71,18 @@ export class AppComponent implements OnInit {
     this.theme$ = this.store.pipe(select(selectEffectiveTheme));
   }
 
-  onLoginClick() {
+  onLogin() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.closeOnNavigation = true;
     dialogConfig.width = '90vw';
     dialogConfig.maxWidth = '500px';
 
-    const dialogRef = this.dialog.open(LoginWrapperComponent, dialogConfig );
+    this.dialogRef = this.dialog.open(LoginWrapperComponent, dialogConfig );
 
   }
 
-  onLogoutClick() {
+  onLogout() {
     this.store.dispatch(authLogout());
-  }
-
-  onLanguageSelect({ value: language }) {
-    this.store.dispatch(actionSettingsChangeLanguage({ language }));
   }
 }

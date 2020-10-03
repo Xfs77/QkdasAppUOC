@@ -51,6 +51,8 @@ import { BigInputComponent } from './big-input/big-input/big-input.component';
 import { BigInputActionComponent } from './big-input/big-input-action/big-input-action.component';
 import { RtlSupportDirective } from './rtl-support/rtl-support.directive';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   imports: [
@@ -74,7 +76,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSnackBarModule,
     MatSlideToggleModule,
     MatDividerModule,
+    MatRadioModule,
     MatDialogModule,
+    FlexLayoutModule,
 
     FontAwesomeModule
   ],
@@ -105,10 +109,12 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSnackBarModule,
     MatSlideToggleModule,
     MatDividerModule,
+    MatRadioModule,
     MatSliderModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
+    FlexLayoutModule,
 
     FontAwesomeModule,
 

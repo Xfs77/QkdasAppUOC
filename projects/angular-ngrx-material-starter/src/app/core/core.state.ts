@@ -14,11 +14,14 @@ import { authReducer } from './auth/auth.reducer';
 import { RouterStateUrl } from './router/router.state';
 import { settingsReducer } from './settings/settings.reducer';
 import { SettingsState } from './settings/settings.model';
+import { UserState } from './user/user.models';
+import { userReducer } from './user/user.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
   auth: authReducer,
   settings: settingsReducer,
-  router: routerReducer
+  router: routerReducer,
+  profile: userReducer
 };
 
 export const metaReducers: MetaReducer<AppState>[] = [
@@ -34,6 +37,9 @@ if (!environment.production) {
 export const selectAuthState = createFeatureSelector<AppState, AuthState>(
   'auth'
 );
+export const selectUserState = createFeatureSelector<AppState, UserState>(
+  'profile'
+);
 
 export const selectSettingsState = createFeatureSelector<
   AppState,
@@ -47,6 +53,7 @@ export const selectRouterState = createFeatureSelector<
 
 export interface AppState {
   auth: AuthState;
+  profile: UserState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
 }

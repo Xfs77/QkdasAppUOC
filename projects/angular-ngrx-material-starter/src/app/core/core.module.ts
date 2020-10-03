@@ -78,6 +78,10 @@ import { AngularFireModule } from '@angular/fire';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
+import { UserEffects } from './user/user.effects';
+import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
+import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 
 export {
   TitleService,
@@ -131,6 +135,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([
       AuthEffects,
+      UserEffects,
       SettingsEffects,
       GoogleAnalyticsEffects
     ]),
@@ -191,6 +196,9 @@ export class CoreModule {
     }
     faIconLibrary.addIcons(
       faCog,
+      faUser,
+      faSignInAlt,
+      faSignOutAlt,
       faBars,
       faRocket,
       faPowerOff,

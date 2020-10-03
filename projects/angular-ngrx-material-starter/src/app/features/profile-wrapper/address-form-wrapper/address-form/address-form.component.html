@@ -1,0 +1,123 @@
+
+<div class="container" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.5%" fxLayoutAlign="center">
+
+  <mat-card fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75">
+    <mat-card-title class="title">Edición Dirección</mat-card-title>
+    <form
+      [formGroup]="addressForm"
+      (ngSubmit)="onSave()">
+      <div fxLayout="column" fxLayoutGap="10px">
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Nombre</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="name">
+            <mat-error *ngFor="let validation of validationMessages.name">
+              <mat-error class="error-message"
+                         *ngIf="name.hasError(validation.type) && (name.dirty || name.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Apellidos</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="surname">
+            <mat-error *ngFor="let validation of validationMessages.surname">
+              <mat-error class="error-message"
+                         *ngIf="surname.hasError(validation.type) && (surname.dirty || surname.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Teléfono</mat-label>
+            <input
+              required
+              matInput
+              type="text"
+              formControlName="phone">
+            <mat-error *ngFor="let validation of validationMessages.phone">
+              <mat-error class="error-message"
+                         *ngIf="phone.hasError(validation.type) && (phone.dirty || phone.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Dirección</mat-label>
+            <input
+              required
+              matInput type="text"
+              formControlName="address">
+            <mat-error *ngFor="let validation of validationMessages.address">
+              <mat-error class="error-message"
+                         *ngIf="address.hasError(validation.type) && (address.dirty || address.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Código Postal</mat-label>
+            <input
+              required
+              matInput type="text"
+              formControlName="CP">
+            <mat-error *ngFor="let validation of validationMessages.CP">
+              <mat-error class="error-message"
+                         *ngIf="CP.hasError(validation.type) && (CP.dirty || CP.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Población</mat-label>
+            <input
+              required
+              matInput type="text"
+              formControlName="city">
+            <mat-error *ngFor="let validation of validationMessages.city">
+              <mat-error class="error-message"
+                         *ngIf="city.hasError(validation.type) && (city.dirty || city.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>País</mat-label>
+            <input
+              required
+              matInput type="text"
+              formControlName="country"
+              readonly="readonly">
+            <mat-error *ngFor="let validation of validationMessages.country">
+              <mat-error class="error-message"
+                         *ngIf="country.hasError(validation.type) && (country.dirty || country.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+        <div class="form-buttons">
+          <button
+            mat-raised-button
+            type="reset"
+            color="warn"
+            class="form-buttons__button"
+            (click)="onCancel()">Cancelar</button>
+          <button mat-raised-button type="submit" color="primary" class="form-buttons__button">Guardar</button>
+        </div>
+
+    </form>
+
+  </mat-card>
+
+</div>
+
