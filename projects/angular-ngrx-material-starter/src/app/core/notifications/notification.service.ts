@@ -1,9 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import {
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition
-} from '@angular/material/snack-bar/snack-bar-config';
+
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +27,8 @@ export class NotificationService {
 
   success(message: string) {
     this.show(message, {
-      duration: 2000,
-      panelClass: 'success-notification-overlay'
+      duration: 2500,
+      panelClass: [  'success-notification-overlay']
     });
   }
 
@@ -44,7 +41,7 @@ export class NotificationService {
 
   error(message: string) {
     this.show(message, {
-      duration: 3000,
+      duration: 2500,
       panelClass: 'error-notification-overlay'
     });
   }
@@ -54,7 +51,6 @@ export class NotificationService {
     // https://stackoverflow.com/questions/50101912/snackbar-position-wrong-when-use-errorhandler-in-angular-5-and-material
     configuration.horizontalPosition = 'center';
     configuration.verticalPosition = 'bottom';
-
     this.zone.run(() => this.snackBar.open(message, null, configuration));
   }
 }

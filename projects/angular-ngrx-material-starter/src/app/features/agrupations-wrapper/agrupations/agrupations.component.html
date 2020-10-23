@@ -1,0 +1,177 @@
+<div class="container" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.5%" fxLayoutAlign="center">
+  <mat-card fxFlex="100">
+    <mat-card-title class="title">Catálogo</mat-card-title>
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+      <mat-tree-node
+        *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="20"
+        [ngClass]="isSelected(node.node)"
+        #descriptionItem
+        anmsLongPress (onLongPress) ="onSelectAgrupation(node.node)">
+        <button mat-icon-button disabled></button>
+        <div *ngIf="(!edit) || (edit && currentNode!==node)"
+             class="mr20">{{node.node.description}} </div>
+
+        <!--- Edit Form -->
+        <div class="container-form" fxLayout="row" *ngIf="edit && currentNode === node">
+          <mat-form-field>
+            <input matInput #itemEditValue value="{{node.node.description}}">
+          </mat-form-field>
+          <div class="mr10 ml10 mt10">
+            <button
+              [disabled]="itemEditValue.value===''"
+              mat-raised-button
+              color="primary"
+              (click)="saveAgrupation(node, itemEditValue.value, !hasNoContent(1, node))">
+              Guardar
+            </button>
+          </div>
+          <div class="mt10">
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="cancelAgrupation(node)">
+              Cancelar
+            </button>
+          </div>
+        </div>
+        <!--- Actions -->
+        <div
+          class="container-actions"
+          *ngIf="editionMode">
+          <button
+            [disabled]="this.edit || this.new"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{ node: node }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+      </mat-tree-node>
+
+
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding matTreeNodePaddingIndent="20"
+        class="hand-pointer"
+        [ngClass]="isSelected(node.node)"
+        appLongPress (onLongPress)="onSelectAgrupation(node.node)">
+        <button mat-icon-button disabled></button>
+        <div class="mr20">
+          <div class="container-form" *ngIf="new" fxLayout="row">
+            <mat-form-field>
+              <input matInput #itemValue>
+            </mat-form-field>
+            <div class="mr10 ml10 mt10">
+              <button
+                [disabled]="itemValue.value === ''"
+                mat-raised-button
+                color="primary"
+                (click)="saveAgrupation(node, itemValue.value, !hasNoContent(1, node))">
+                Guardar
+              </button>
+            </div>
+            <div class="mt10">
+              <button
+                mat-raised-button
+                color="warn"
+                (click)="cancelAgrupation(node)">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tree-node>
+
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20"
+        class="hand-pointer"
+        [ngClass]="isSelected(node.node)"
+        appLongPress (onLongPress)="onSelectAgrupation(node.node)">
+        <button mat-icon-button
+                [attr.aria-label]="'toggle ' + node.node.description"
+                matTreeNodeToggle>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <div *ngIf="(!edit) || (edit && currentNode!==node)"
+             class="mr20">{{node.node.description}}</div>
+        <!--- Edit Form -->
+        <div class="container-form" fxLayout="row" *ngIf="edit && currentNode === node">
+          <mat-form-field>
+            <input longPress matInput #itemEditValue value="{{node.node.description}}">
+          </mat-form-field>
+          <div class="mr10 ml10 mt10">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveAgrupation(node, itemEditValue.value, !hasNoContent(1, node))">
+              Guardar
+            </button>
+          </div>
+          <div class="mt10">
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="cancelAgrupation(node)">
+              Cancelar
+            </button>
+          </div>
+        </div>
+
+        <!--- Actions -->
+        <div
+          class="container-actions"
+          *ngIf="editionMode">
+          <button
+            mat-icon-button
+            [disabled]="this.edit || this.new"
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{ node: node }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+      </mat-tree-node>
+
+    </mat-tree>
+
+    <button
+      *ngIf="editionMode"
+      mat-fab
+      color="primary"
+      class="fabicon"
+      [disabled]="this.new || this.edit"
+      (click)="addEmptyAgrupation(null)">
+      <mat-icon>add</mat-icon>
+    </button>
+    <div class="clear"></div>
+  </mat-card>
+</div>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-node="node" >
+    <button
+      mat-menu-item
+      [disabled]="node.node.hasItems || (!treeControl.isExpanded(node) && node.node.hasItems)"
+      (click)="addEmptyAgrupation(node)">
+      <mat-icon>add</mat-icon>
+      <span>Añadir</span>
+    </button>
+    <button
+      mat-menu-item
+      [disabled]="this.new || this.edit"
+      (click)="editAgrupation(node)">
+      <mat-icon>edit</mat-icon>
+      <span>Editar</span>
+    </button>
+    <button
+      mat-menu-item
+      [disabled]="isExpandable(node)"
+      (click)="removeAgrupation(node)">
+      <mat-icon>delete</mat-icon>
+      <span>Eliminar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+

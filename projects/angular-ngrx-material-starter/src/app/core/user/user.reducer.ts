@@ -3,7 +3,7 @@ import { Address, User } from './user.models';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import {
   userAddressDefaultSuccess,
-  userAddressGetSuccess, userAddressRemove, userAddressRemoveSuccess,
+  userAddressGetSuccess, userAddressRemoveSuccess,
   userAddressUpdateSuccess,
   userGetSuccess,
   userUpdateSuccess
@@ -26,7 +26,6 @@ export const {
   selectEntities,
   selectIds,
   selectTotal
-
 } = adapterUser.getSelectors();
 
 

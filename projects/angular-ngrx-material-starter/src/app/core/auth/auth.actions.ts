@@ -8,6 +8,10 @@ export const authLoginSuccess = createAction(
   '[Auth] Login Success',
   props<{payload: {id: string; token: string; }}>(),
 );
+export const authLoginFailure = createAction(
+  '[Auth] Login Failure',
+  props<{payload: {message: string}}>(),
+);
 export const authLogout = createAction(
   '[Auth] Logout'
 );

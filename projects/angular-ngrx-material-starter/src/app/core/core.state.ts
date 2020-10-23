@@ -16,44 +16,46 @@ import { settingsReducer } from './settings/settings.reducer';
 import { SettingsState } from './settings/settings.model';
 import { UserState } from './user/user.models';
 import { userReducer } from './user/user.reducer';
+import { AgrupationState } from './agrupation/agrupation.models';
+import { agrupationReducer } from './agrupation/agrupation.reducer';
+import { GeneralState } from './general/general.models';
+import { generalReducer } from './general/general.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
+  general: generalReducer,
   auth: authReducer,
   settings: settingsReducer,
   router: routerReducer,
-  profile: userReducer
+  profile: userReducer,
+  agrupation: agrupationReducer
 };
 
-export const metaReducers: MetaReducer<AppState>[] = [
-  initStateFromLocalStorage
-];
-
-if (!environment.production) {
-  if (!environment.test) {
-    metaReducers.unshift(debug);
-  }
-}
-
+export const selectGeneralState = createFeatureSelector<AppState, GeneralState>(
+  'general'
+);
 export const selectAuthState = createFeatureSelector<AppState, AuthState>(
   'auth'
 );
 export const selectUserState = createFeatureSelector<AppState, UserState>(
   'profile'
 );
+export const selectAgrupationState = createFeatureSelector<AppState, AgrupationState>(
+  'agrupation'
+);
 
-export const selectSettingsState = createFeatureSelector<
-  AppState,
-  SettingsState
->('settings');
+export const selectSettingsState = createFeatureSelector<AppState, SettingsState>(
+  'settings'
+);
 
-export const selectRouterState = createFeatureSelector<
-  AppState,
-  RouterReducerState<RouterStateUrl>
->('router');
+export const selectRouterState = createFeatureSelector<AppState, RouterReducerState<RouterStateUrl>>(
+  'router'
+);
 
 export interface AppState {
+  general: GeneralState;
   auth: AuthState;
   profile: UserState;
+  agrupation: AgrupationState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
 }

@@ -18,6 +18,11 @@ const routes: Routes = [
       import('./features/profile-wrapper/profile-wrapper.module').then((m) => m.ProfileWrapperModule)
   },
   {
+    path: 'agrupations',
+    loadChildren: () =>
+      import('./features/agrupations-wrapper/agrupations-wrapper.module').then((m) => m.AgrupationsWrapperModule)
+  },
+  {
     path: 'feature-list',
     loadChildren: () =>
       import('./features/feature-list/feature-list.module').then(

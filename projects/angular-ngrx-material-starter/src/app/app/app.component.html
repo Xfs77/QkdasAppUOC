@@ -70,6 +70,7 @@
       </div>
 
       <div class="content" [@routeAnimations]="o.isActivated && o.activatedRoute.routeConfig.data && o.activatedRoute.routeConfig.data.title">
+        <mat-progress-bar  *ngIf="loading$ |async" [color]="'accent'" mode="indeterminate"></mat-progress-bar>
         <router-outlet #o="outlet"></router-outlet>
       </div>
 

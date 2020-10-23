@@ -33,7 +33,7 @@ import { environment } from '../../environments/environment';
 import {
   AppState,
   reducers,
-  metaReducers,
+ // metaReducers,
   selectRouterState
 } from './core.state';
 import { AuthEffects } from './auth/auth.effects';
@@ -82,6 +82,9 @@ import { UserEffects } from './user/user.effects';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
+import { AgrupationEffects } from './agrupation/agrupation.effects';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 export {
   TitleService,
@@ -129,11 +132,18 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatSnackBarModule,
     MatButtonModule,
+    MatProgressBarModule,
 
     // ngrx
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: false,
+      },
+    }),
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([
+      AgrupationEffects,
       AuthEffects,
       UserEffects,
       SettingsEffects,
@@ -160,8 +170,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   declarations: [],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    { provide: ErrorHandler, useClass: AppErrorHandler },
+   /* { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: ErrorHandler, useClass: AppErrorHandler },*/
     { provide: RouterStateSerializer, useClass: CustomSerializer }
   ],
   exports: [
@@ -178,6 +188,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatSnackBarModule,
     MatButtonModule,
+    MatProgressBarModule,
 
     // 3rd party
     FontAwesomeModule,

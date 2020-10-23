@@ -1,0 +1,45 @@
+mat-form-field {
+  max-width: 7em;
+}
+
+mat-tree {
+  border-top: 1px dotted gray;
+}
+
+mat-tree-node {
+  white-space: nowrap; // in order description node text  nowrap
+  height: 55px;
+  border-bottom: 1px dotted gray;
+}
+
+mat-tree-node.isSelected {
+  color: blue;
+}
+
+.container-actions {
+  width: 100%;
+  text-align: right;
+}
+
+.clear {
+  clear: both;
+}
+
+.fabicon {
+  float: right;
+  margin-top: 20px;
+}
+
+.container {
+  min-height: 100%;
+}
+
+@media (min-width: 600px) {
+  mat-form-field {
+    max-width: 15em;
+  }
+
+}
+
+
+

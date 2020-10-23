@@ -2,9 +2,7 @@ import browser from 'browser-detect';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
 import { environment as env } from '../../environments/environment';
-
 import {
   authLogout,
   routeAnimations,
@@ -15,11 +13,12 @@ import {
   selectEffectiveTheme
 } from '../core/core.module';
 import {
-  actionSettingsChangeAnimationsPageDisabled,
+  actionSettingsChangeAnimationsPageDisabled, actionSettingsChangeLanguage
 } from '../core/settings/settings.actions';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.component';
+import { selectLoading } from '../core/general/general.selectors';
 
 @Component({
   selector: 'anms-root',
@@ -43,6 +42,7 @@ export class AppComponent implements OnInit {
   stickyHeader$: Observable<boolean>;
   language$: Observable<string>;
   theme$: Observable<string>;
+  loading$: Observable<boolean>;
 
   constructor(
     private store: Store,
@@ -56,6 +56,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(actionSettingsChangeLanguage({ language: 'es' }));
     this.storageService.testLocalStorage();
     if (AppComponent.isIEorEdgeOrSafari()) {
       this.store.dispatch(
@@ -65,6 +66,7 @@ export class AppComponent implements OnInit {
       );
     }
 
+    this.loading$ = this.store.select(selectLoading);
     this.isAuthenticated$ = this.store.pipe(select(selectIsAuthenticated));
     this.stickyHeader$ = this.store.pipe(select(selectSettingsStickyHeader));
     this.language$ = this.store.pipe(select(selectSettingsLanguage));

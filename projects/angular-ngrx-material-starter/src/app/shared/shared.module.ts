@@ -53,6 +53,8 @@ import { RtlSupportDirective } from './rtl-support/rtl-support.directive';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTreeModule } from '@angular/material/tree';
+import { LongPressDirective } from './directives/longpress.directive';
 
 @NgModule({
   imports: [
@@ -79,13 +81,15 @@ import { MatRadioModule } from '@angular/material/radio';
     MatRadioModule,
     MatDialogModule,
     FlexLayoutModule,
+    MatTreeModule,
 
     FontAwesomeModule
   ],
   declarations: [
     BigInputComponent,
     BigInputActionComponent,
-    RtlSupportDirective
+    RtlSupportDirective,
+    LongPressDirective
   ],
   exports: [
     CommonModule,
@@ -115,12 +119,14 @@ import { MatRadioModule } from '@angular/material/radio';
     MatNativeDateModule,
     MatDialogModule,
     FlexLayoutModule,
+    MatTreeModule,
 
     FontAwesomeModule,
 
     BigInputComponent,
     BigInputActionComponent,
-    RtlSupportDirective
+    RtlSupportDirective,
+    LongPressDirective
   ]
 })
 export class SharedModule {

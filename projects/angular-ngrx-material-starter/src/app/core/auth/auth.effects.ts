@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ofType, createEffect, Actions } from '@ngrx/effects';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 import { LocalStorageService } from '../local-storage/local-storage.service';
 
-import { authLogin, authLoginSuccess, authLogout, authLogoutSuccess } from './auth.actions';
-import { from } from 'rxjs';
+import {
+  authLogin, authLoginFailure,
+  authLoginSuccess,
+  authLogout,
+  authLogoutSuccess
+} from './auth.actions';
+import { from, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { userGet } from '../user/user.actions';
+import { Store } from '@ngrx/store';
+import { loadingEnd, loadingStart } from '../general/general.action';
+import { NotificationService } from '../notifications/notification.service';
 
 export const AUTH_KEY = 'AUTH';
 
@@ -20,20 +28,24 @@ export class AuthEffects {
     private localStorageService: LocalStorageService,
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private store$: Store,
+    private notificationService: NotificationService
   ) {}
 
   login = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(authLogin),
+        tap(_ => this.store$.dispatch(loadingStart())),
         switchMap(res =>
-        from(this.authService.login(res.payload.email, res.payload.password)).pipe(
-          map((logged) =>  {
-           return authLoginSuccess({payload: {id: logged.user.uid, token: null}})
-          })
-      ))
-  ));
+          from(this.authService.login(res.payload.email, res.payload.password)).pipe(
+            map((logged) => {
+              return authLoginSuccess({ payload: { id: logged.user.uid, token: null } });
+            }),
+            catchError(error => of(authLoginFailure({ payload: { message: error.message } })))
+          )));
+    });
   authLoginSuccess = createEffect(
     () =>
       this.actions$.pipe(
@@ -45,10 +57,17 @@ export class AuthEffects {
           this.dialog.closeAll();
         }),
         switchMap(action => [
+          loadingEnd(),
           userGet({payload: {id: action.payload.id}})
           ])
-        )
-  );
+        ));
+  authLoginFailure = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(authLoginFailure),
+        tap(_ => this.notificationService.error('Alguno de los datos introducidos es incorrecto.')),
+        map( action => loadingEnd())
+      ));
   logout = createEffect(
     () =>
       this.actions$.pipe(

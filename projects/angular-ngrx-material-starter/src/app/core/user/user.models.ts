@@ -4,7 +4,6 @@ export interface  UserState extends EntityState<Address> {
   user: User;
 }
 
-
 export interface User {
   id: string;
   name: string;

@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app/app.component';
 import { SharedModule } from './shared/shared.module';
 import { ProfileWrapperComponent } from './features/profile-wrapper/profile-wrapper.component';
+import { AgrupationsWrapperComponent } from './features/agrupations-wrapper/agrupations-wrapper.component';
+import { AgrupationsComponent } from './features/agrupations-wrapper/agrupations/agrupations.component';
 
 @NgModule({
   imports: [
@@ -16,7 +18,7 @@ import { ProfileWrapperComponent } from './features/profile-wrapper/profile-wrap
     // app
     AppRoutingModule
   ],
-  declarations: [AppComponent, ProfileWrapperComponent],
+  declarations: [AppComponent, ProfileWrapperComponent, AgrupationsWrapperComponent, AgrupationsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

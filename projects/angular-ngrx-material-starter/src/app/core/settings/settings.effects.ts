@@ -59,9 +59,9 @@ export class SettingsEffects {
       const hour = new Date().getHours();
       if (hour !== this.hour) {
         this.hour = hour;
-        this.ngZone.run(() =>
+       /* this.ngZone.run(() =>
           this.store.dispatch(actionSettingsChangeHour({ hour }))
-        );
+        );*/
       }
     }, 60_000)
   );

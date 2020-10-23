@@ -23,6 +23,7 @@
 @import './app/features/examples/theming/parent/parent.component.scss-theme';
 @import './app/features/examples/theming/child/child.component.scss-theme';
 @import './app/features/examples/examples/examples.component.scss-theme';
+@import 'styles-utils.scss';
 @import 'styles-app';
 
 @mixin custom-components-theme($theme) {
