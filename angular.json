@@ -48,7 +48,9 @@
               "projects/angular-ngrx-material-starter/src/styles-app-loading.scss",
               "projects/angular-ngrx-material-starter/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "projects/angular-ngrx-material-starter/src/assets/js/image-select.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -128,7 +130,9 @@
               "projects/angular-ngrx-material-starter/src/styles-app-loading.scss",
               "projects/angular-ngrx-material-starter/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "projects/angular-ngrx-material-starter/src/assets/js/image-select.js"
+            ]
           },
           "configurations": {
             "test": {

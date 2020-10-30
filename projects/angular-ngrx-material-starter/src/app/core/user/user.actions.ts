@@ -10,10 +10,21 @@ export const userGetSuccess = createAction(
   props<{payload: {user: User}}>(),
 );
 export const userGetFailure = createAction(
-  '[User] Get User Success',
+  '[User] Get User Failure',
   props<{payload: {message: string}}>(),
 );
-
+export const userCheckEmail = createAction(
+  '[User] Check Email',
+  props<{payload: {email: string}}>(),
+);
+export const userCheckEmailSuccess = createAction(
+  '[User] Check Email Success',
+  props<{payload: {exist: boolean }}>(),
+);
+export const userCheckEmailFailure = createAction(
+  '[User] Check Email Failure',
+  props<{payload: {message: string}}>(),
+);
 export const userUpdate = createAction(
   '[User] Update User',
   props<{payload: {user: User}}>(),
@@ -26,7 +37,18 @@ export const userUpdateFailure = createAction(
   '[User] Update User Failure',
   props<{payload: {message: string}}>(),
 );
-
+export const userChangePassword = createAction(
+  '[User] Change Password User',
+  props<{payload: {password: string}}>(),
+);
+export const userChangePasswordSuccess = createAction(
+  '[User] Change Password User Success',
+  props<{payload: {password: string}}>(),
+);
+export const userChangePasswordFailure = createAction(
+  '[User] Change Password User Failure',
+  props<{payload: {message: string}}>(),
+);
 export const userAddressGet = createAction(
   '[User] Get User Address',
   props<{payload: {user: User}}>(),

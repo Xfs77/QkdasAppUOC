@@ -5,11 +5,9 @@ import { DynamicDatabase } from './agrupations/DynamicDatabase';
 import {
   agrupationRemove,
   agrupationUpdate,
-  currentSelectedAgrupation
+  currentSelectedAgrupation, resetCurrentSelectedAgrupation
 } from '../../core/agrupation/agrupation.action';
-import { $e } from 'codelyzer/angular/styles/chars';
-import { map, take } from 'rxjs/operators';
-import { DynamicFlatNode } from './agrupations/DynamicFlatNode';
+
 
 @Component({
   selector: 'anms-agrupations-wrapper',
@@ -25,8 +23,7 @@ export class AgrupationsWrapperComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // We load first level of our agrupation collection
-    this.database.initialData();
+    this.store$.dispatch(resetCurrentSelectedAgrupation());
   }
 
   selectAgrup($event: Agrupation) {

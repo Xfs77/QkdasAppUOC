@@ -36,9 +36,10 @@ export class UserFormComponent implements OnInit {
       { type: 'email', message: 'El email informado debe ser válido' },
 
     ],
-    phone: [
+    phone1: [
       { type: 'required', message: 'El teléfono debe informarse' }
     ],
+    phone2: [],
     password: [
       { type: 'required', message: 'La contraseña debe informarse' },
       { type: 'minlength', message: 'La contraseña debe tener un mínimo de 6 carácteres' }
@@ -65,7 +66,8 @@ export class UserFormComponent implements OnInit {
       email: [this.user.email, [Validators.required, Validators.email]],
       name: [this.user.name, [Validators.required]],
       surname: [this.user.surname, [Validators.required]],
-      phone: [this.user.phone, [Validators.required]],
+      phone1: [this.user.phone1, [Validators.required]],
+      phone2: [this.user.phone2],
       passwordGroup: this.fb.group({
           password: [null],
           repassword: [null]
@@ -87,8 +89,12 @@ export class UserFormComponent implements OnInit {
     return this.signupForm.get('surname');
   }
 
-  get phone() {
-    return this.signupForm.get('phone');
+  get phone1() {
+    return this.signupForm.get('phone1');
+  }
+
+  get phone2() {
+    return this.signupForm.get('phone2');
   }
 
   get password() {
@@ -113,7 +119,8 @@ export class UserFormComponent implements OnInit {
     user.email = this.email.value;
     user.name = this.name.value;
     user.surname = this.surname.value;
-    user.phone = this.phone.value;
+    user.phone1 = this.phone1.value;
+    user.phone2 = this.phone2.value;
     user.password = this.password.value;
     return user;
   }

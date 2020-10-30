@@ -24,6 +24,11 @@ export class UserService {
     }
   }
 
+  async changePassword(password: string) {
+    const user = await this.afAuth.currentUser;
+    return user.updatePassword(password);
+  }
+
   async userUpdate(user: User) {
     if (!user.id) {
       const auth = await this.updateAuth(user);
@@ -39,6 +44,11 @@ export class UserService {
 
   userGet(id: string): Observable<firebase.firestore.DocumentSnapshot> {
     return this.afFirestore.collection(AppSettings.API_USERS).doc(id).get();
+  }
+
+  userCheckEmail(email: string): Observable<boolean> {
+    return this.afFirestore.collection(AppSettings.API_USERS, ref => ref.where('email', '==', email)).get().pipe(
+      map(res => res.docs.length === 0 ? false : true));
   }
 
   userAddressGet(user: User): Observable<firebase.firestore.QuerySnapshot>  {

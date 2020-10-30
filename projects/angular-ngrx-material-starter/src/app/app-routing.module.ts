@@ -23,6 +23,11 @@ const routes: Routes = [
       import('./features/agrupations-wrapper/agrupations-wrapper.module').then((m) => m.AgrupationsWrapperModule)
   },
   {
+    path: 'products',
+    loadChildren: () =>
+      import('./features/product-list-wrapper/product-list-wrapper.module').then((m) => m.ProductListWrapperModule)
+  },
+  {
     path: 'feature-list',
     loadChildren: () =>
       import('./features/feature-list/feature-list.module').then(

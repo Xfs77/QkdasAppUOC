@@ -1,14 +1,8 @@
 import {
   ActionReducerMap,
-  MetaReducer,
   createFeatureSelector
 } from '@ngrx/store';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
-
-import { environment } from '../../environments/environment';
-
-import { initStateFromLocalStorage } from './meta-reducers/init-state-from-local-storage.reducer';
-import { debug } from './meta-reducers/debug.reducer';
 import { AuthState } from './auth/auth.models';
 import { authReducer } from './auth/auth.reducer';
 import { RouterStateUrl } from './router/router.state';
@@ -20,6 +14,13 @@ import { AgrupationState } from './agrupation/agrupation.models';
 import { agrupationReducer } from './agrupation/agrupation.reducer';
 import { GeneralState } from './general/general.models';
 import { generalReducer } from './general/general.reducer';
+import { productFormReducer } from './product-form/product-form.reducer';
+import { ProductFormState } from './product-form/product.models';
+import {
+  productsFilterReducer,
+  ProductsFilterState
+} from './products-filter/products-filter.reducer';
+import { productListReducer, ProductListState } from './product-list/product-list.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
   general: generalReducer,
@@ -27,7 +28,10 @@ export const reducers: ActionReducerMap<AppState> = {
   settings: settingsReducer,
   router: routerReducer,
   profile: userReducer,
-  agrupation: agrupationReducer
+  agrupation: agrupationReducer,
+  productForm: productFormReducer,
+  productsFilter: productsFilterReducer,
+  productList: productListReducer
 };
 
 export const selectGeneralState = createFeatureSelector<AppState, GeneralState>(
@@ -42,11 +46,18 @@ export const selectUserState = createFeatureSelector<AppState, UserState>(
 export const selectAgrupationState = createFeatureSelector<AppState, AgrupationState>(
   'agrupation'
 );
-
+export const selectProductFormState = createFeatureSelector<AppState, ProductFormState>(
+  'productForm'
+);
+export const selectProductListState = createFeatureSelector<ProductListState>(
+  'productList'
+);
+export const selectProductsFilterState = createFeatureSelector<ProductsFilterState>(
+  'productsFilter'
+);
 export const selectSettingsState = createFeatureSelector<AppState, SettingsState>(
   'settings'
 );
-
 export const selectRouterState = createFeatureSelector<AppState, RouterReducerState<RouterStateUrl>>(
   'router'
 );
@@ -56,6 +67,9 @@ export interface AppState {
   auth: AuthState;
   profile: UserState;
   agrupation: AgrupationState;
+  productForm: ProductFormState;
+  productsFilter: ProductsFilterState;
+  productList: ProductListState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
 }

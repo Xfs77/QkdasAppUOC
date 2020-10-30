@@ -8,7 +8,6 @@ import { BehaviorSubject, merge, Observable, of } from 'rxjs';
 import { Agrupation, rootAgrupation } from '../../../core/agrupation/agrupation.models';
 import { selectChildren } from '../../../core/agrupation/agrupation.selectors';
 import { agrupationGet } from '../../../core/agrupation/agrupation.action';
-import { parseJsonSchemaToCommandDescription } from '@angular/cli/utilities/json-schema';
 
 
 /***

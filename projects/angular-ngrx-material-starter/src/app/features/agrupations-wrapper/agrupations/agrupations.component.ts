@@ -45,7 +45,10 @@ export class AgrupationsComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // We load first level of our agrupation collection
+    this.database.initialData();
+  }
 
 
   getLevel = (node: DynamicFlatNode) => node.level;
@@ -101,6 +104,7 @@ export class AgrupationsComponent implements OnInit, OnChanges {
   }
 
   saveAgrupation(node: DynamicFlatNode, descr: string, edit: boolean) {
+    console.log(node.node)
     this.edit = false;
     this.new = false;
 

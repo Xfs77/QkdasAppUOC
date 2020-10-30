@@ -55,6 +55,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTreeModule } from '@angular/material/tree';
 import { LongPressDirective } from './directives/longpress.directive';
+import { PhotoDirective } from './directives/photo.directive';
 
 @NgModule({
   imports: [
@@ -89,7 +90,8 @@ import { LongPressDirective } from './directives/longpress.directive';
     BigInputComponent,
     BigInputActionComponent,
     RtlSupportDirective,
-    LongPressDirective
+    LongPressDirective,
+    PhotoDirective
   ],
   exports: [
     CommonModule,
@@ -126,7 +128,8 @@ import { LongPressDirective } from './directives/longpress.directive';
     BigInputComponent,
     BigInputActionComponent,
     RtlSupportDirective,
-    LongPressDirective
+    LongPressDirective,
+    PhotoDirective
   ]
 })
 export class SharedModule {

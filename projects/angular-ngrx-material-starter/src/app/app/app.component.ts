@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
   ];
   navigationSideMenu = [
     ...this.navigation,
+    { link: 'agrupations', label: 'Agrupaciones' },
     { link: 'settings', label: 'anms.menu.settings' }
   ];
   dialogRef: MatDialogRef<LoginWrapperComponent, any>;

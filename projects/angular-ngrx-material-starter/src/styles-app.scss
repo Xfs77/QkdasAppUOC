@@ -48,7 +48,7 @@ mat-dialog-container {
 
 .form-buttons {
   margin-top: 16px;
-  float: right;
+  float: right !important;
   &__button {
     margin-left: 8px !important;
   }

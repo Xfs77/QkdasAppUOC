@@ -4,7 +4,7 @@ import { GeneralState } from './general.models';
 import { loadingEnd, loadingStart } from './general.action';
 
 export const initialGeneralState: GeneralState = {
-  loading: false,
+  loading: true,
 };
 
 const reducer = createReducer(

@@ -18,3 +18,7 @@ export const authLogout = createAction(
 export const authLogoutSuccess = createAction(
   '[Auth] Logout Success'
 );
+export const authLogoutFailure = createAction(
+  '[Auth] Logout Failure',
+  props<{payload: {message: string}}>(),
+);

@@ -21,6 +21,7 @@ export const adapterUser: EntityAdapter<Address> =
 export const initialState: UserState = adapterUser.getInitialState({
   user: {} as User
 });
+
 export const {
   selectAll,
   selectEntities,

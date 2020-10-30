@@ -81,6 +81,18 @@
             </div>
           </div>
         </div>
+        <!--- Actions -->
+        <div
+          class="container-actions"
+          *ngIf="editionMode">
+          <button
+            [disabled]="this.edit || this.new"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{ node: node }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
       </mat-tree-node>
 
       <mat-tree-node
@@ -153,7 +165,7 @@
   <ng-template matMenuContent let-node="node" >
     <button
       mat-menu-item
-      [disabled]="node.node.hasItems || (!treeControl.isExpanded(node) && node.node.hasItems)"
+      [disabled]="node.node.hasItems || (!treeControl.isExpanded(node) && node.node.hasItems) || node.level === 4"
       (click)="addEmptyAgrupation(node)">
       <mat-icon>add</mat-icon>
       <span>Añadir</span>

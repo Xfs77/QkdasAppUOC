@@ -1,0 +1,49 @@
+<div class="image_form_container">
+
+  <div
+    id="image_container{{this.id}}"
+    class="image_container"
+    fxLayout="column"
+    fxLayoutWrap
+    fxLayoutGap="0.0%"
+    fxLayoutAlign="center">
+
+    <mat-icon
+      onclick="clickInput(this)"
+      id="camera{{this.id}}"
+      class="camera"
+      aria-hidden="false"
+      aria-label="Example home icon">camera_enhance</mat-icon>
+
+    <mat-icon
+      (click)="onRemove()"
+      id="close{{this.id}}"
+      class="close"
+      aria-hidden="false"
+      aria-label="Example home icon">close</mat-icon>
+
+    <img
+      hidden
+      onclick="clickInput(this)"
+      onload="hideCamera_showClose(this)"
+      #viewImage
+      id="imagen{{this.id}}"
+      src="{{image.urls.imgSM}}"
+      alt="">
+
+    <input
+      #inputImage
+      id="inputImage{{this.id}}"
+      type="file"
+      accept=".png, .jpg"
+      onchange="readURL(this);"
+      (change)="onUpload($event)">
+
+  </div>
+
+  <mat-checkbox
+    #checkbox
+    [checked]="currentImage.isMain"
+    [disabled]="true">Principal
+  </mat-checkbox>
+</div>

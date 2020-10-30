@@ -1,0 +1,41 @@
+<div fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.5%" fxLayoutAlign="start">
+
+  <anms-agrupations
+    fxFlex="30"
+    [currentSelected]="currentSelectedAgrup"
+    (selectedAgrupEvent)="onSelectAgrup($event)"></anms-agrupations>
+
+  <div class="container" fxFlex="70" fxLayout="row" fxLayoutWrap
+       fxLayoutGap="0.5%" fxLayoutAlign="start">
+
+    <mat-card>
+      <mat-card-title class="title">Edición Producto</mat-card-title>
+      <anms-product-form [product$]="product$"
+                        [selectedAgrup$]="selectedAgrup$"
+                        (getImagesEvent)="getImages($event)"
+                        (saveProductEvent)="saveProduct($event)"
+                        (cancelProductEvent)="cancelProduct()"></anms-product-form>
+
+
+      <div class="images" fxLayout="row" fxLayoutWrap
+           fxLayoutGap="0.0%" fxLayoutAlign="start start">
+        <ul>
+          <li *ngFor="let image of this.images$ | async; index as i">
+            <anms-image-form
+              [image]="image"
+              [id]="i"
+              (eventNewImage)="onAddImage($event)"
+              (eventRemoveImage)="onRemoveImage($event)"></anms-image-form>
+          </li>
+        </ul>
+
+        <ng-template appPhotoHost>
+        </ng-template>
+
+      </div>
+
+    </mat-card>
+
+  </div>
+</div>

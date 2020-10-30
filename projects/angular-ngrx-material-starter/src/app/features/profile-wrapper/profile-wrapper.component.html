@@ -5,17 +5,29 @@
     fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75"
     class="user-card">
     <mat-card-title class="title">Datos Personales</mat-card-title>
-    <div class="profile-container">
+    <div class="profile-container" fxLayout="row" fxLayoutWrap
+         fxLayoutGap="0.5%" fxLayoutAlign="center center">
       <div>
-        {{(this.user$|async).name}} {{(this.user$|async).surname}}
+        <div>
+          {{(this.user$|async).name}} {{(this.user$|async).surname}}
+        </div>
+        <div>
+          {{(this.user$|async).email}}
+        </div>
+        <div>
+          {{(this.user$|async).phone1}}
+        </div>
+        <div *ngIf="(this.user$|async).phone2">
+          {{(this.user$|async).phone2}}
+        </div>
+        <button mat-raised-button  color="primary" class="button-modify" [routerLink]="'/profile/edit'">Modificar</button>
       </div>
-      <div>
-        {{(this.user$|async).email}}
+      <div class="ml40 mb40">
+        <button mat-icon-button class="ml40 mb8" (click)="onChangePassword()">
+          <mat-icon class="button-key">vpn_key</mat-icon>
+        </button>
       </div>
-      <div>
-        {{(this.user$|async).phone}}
-      </div>
-      <button mat-raised-button  color="primary" class="button-modify" [routerLink]="'/profile/edit'">Modificar</button>
+
     </div>
   </mat-card>
 
@@ -40,6 +52,9 @@
             </div>
             <div>
               {{address.phone1}}
+            </div>
+            <div *ngIf="address.phone2">
+              {{(this.user$|async).phone2}}
             </div>
             <div>
               <div>
@@ -88,6 +103,7 @@
     </button>
     <button
       mat-menu-item
+      [disabled]="address.default"
       (click)="removeAddress(address)">
       <mat-icon>delete</mat-icon>
       <span>Eliminar</span>

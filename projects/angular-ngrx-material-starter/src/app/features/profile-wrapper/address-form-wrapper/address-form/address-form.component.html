@@ -38,15 +38,28 @@
         </div>
         <div fxFlex="100">
           <mat-form-field floatLabel="always">
-            <mat-label>Teléfono</mat-label>
+            <mat-label>Teléfono 1</mat-label>
             <input
               required
               matInput
               type="text"
-              formControlName="phone">
-            <mat-error *ngFor="let validation of validationMessages.phone">
+              formControlName="phone1">
+            <mat-error *ngFor="let validation of validationMessages.phone1">
               <mat-error class="error-message"
-                         *ngIf="phone.hasError(validation.type) && (phone.dirty || phone.touched)">{{validation.message}}</mat-error>
+                         *ngIf="phone1.hasError(validation.type) && (phone1.dirty || phone1.touched)">{{validation.message}}</mat-error>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field floatLabel="always">
+            <mat-label>Teléfono 2</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="phone2">
+            <mat-error *ngFor="let validation of validationMessages.phone2">
+              <mat-error class="error-message"
+                         *ngIf="phone2.hasError(validation.type) && (phone2.dirty || phone2.touched)">{{validation.message}}</mat-error>
             </mat-error>
           </mat-form-field>
         </div>

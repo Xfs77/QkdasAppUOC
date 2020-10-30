@@ -85,6 +85,9 @@ import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 import { AgrupationEffects } from './agrupation/agrupation.effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ProductFormEffects } from './product-form/product-form.effects';
+import { ProductListEffects } from './product-list/product-list.effects';
+import { ProductsFilterEffects } from './products-filter/products-filter.effects';
 
 export {
   TitleService,
@@ -146,6 +149,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       AgrupationEffects,
       AuthEffects,
       UserEffects,
+      ProductFormEffects,
+      ProductListEffects,
+      ProductsFilterEffects,
       SettingsEffects,
       GoogleAnalyticsEffects
     ]),

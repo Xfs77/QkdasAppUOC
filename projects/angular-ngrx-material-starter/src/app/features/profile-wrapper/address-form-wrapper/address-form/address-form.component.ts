@@ -32,7 +32,10 @@ export class AddressFormComponent implements OnInit {
     surname: [
       { type: 'required', message: 'Los apellidos deben informarse' }
     ],
-    phone: [
+    phone1: [
+      { type: 'required', message: 'La dirección debe informarse' }
+    ],
+    phone2: [
       { type: 'required', message: 'La dirección debe informarse' }
     ],
     address: [
@@ -61,7 +64,8 @@ export class AddressFormComponent implements OnInit {
     this.addressForm = this.fb.group({
       name: [this.addressEntity.name, [Validators.required]],
       surname: [this.addressEntity.surname, [Validators.required]],
-      phone: [this.addressEntity.phone1, [Validators.required]],
+      phone1: [this.addressEntity.phone1, [Validators.required]],
+      phone2: [this.addressEntity.phone2],
       address: [this.addressEntity.address, [Validators.required]],
       city: [this.addressEntity.city, [Validators.required]],
       CP: [this.addressEntity.CP, [Validators.required]],
@@ -77,8 +81,12 @@ export class AddressFormComponent implements OnInit {
     return this.addressForm.get('surname') ;
   }
 
-  get phone() {
-    return this.addressForm.get('phone') ;
+  get phone1() {
+    return this.addressForm.get('phone1') ;
+  }
+
+  get phone2() {
+    return this.addressForm.get('phone2') ;
   }
 
   get address() {
@@ -114,7 +122,8 @@ export class AddressFormComponent implements OnInit {
       ...this.addressEntity,
       name: this.name.value,
       surname: this.surname.value,
-      phone: this.phone.value,
+      phone1: this.phone1.value,
+      phone2: this.phone2.value,
       address: this.address.value,
       city: this.city.value,
       CP: this.CP.value,
