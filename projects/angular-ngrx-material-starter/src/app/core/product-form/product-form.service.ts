@@ -25,13 +25,9 @@ export class ProductFormService {
 
     const batch = this.afFirestore.firestore.batch();
     const operation = (refItem) => {
-      console.log('addserv')
-
       if (edit) {
-        console.log('addserv')
         return batch.update(refItem, product);
       } else {
-        console.log('addserv')
         return batch.set(refItem, product);
       }
   }
@@ -44,7 +40,6 @@ export class ProductFormService {
     }
 
     const ref = this.afFirestore.collection(AppSettings.API_PRODUCT).doc(product.reference);
-    console.log('addserv')
     operation(ref.ref);
 
     let agr: any = this.afFirestore.collection(AppSettings.API_AGRUP);
@@ -125,6 +120,7 @@ export class ProductFormService {
   }
 
   addStorageImage(product: Product, image: ImageData): Observable<string> {
+    console.log(image)
     const filePath = `${product.reference}/${image.id}/${ORIGINAL_IMAGE}.jpeg`;
     const ref = this.afStorage.ref(filePath);
     return this.afStorage.upload(filePath, image.file).snapshotChanges().pipe(

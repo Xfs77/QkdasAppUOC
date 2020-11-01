@@ -27,7 +27,6 @@ import {
   storageImageRemoveSuccess
 } from './product-form.action';
 import { of } from 'rxjs';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { ImageData } from './product.models';
 
 @Injectable()
@@ -193,8 +192,7 @@ export class ProductFormEffects {
           return of(productFormSaveFailure({payload: {message: error.message}}));
         })
       );
-    },
-    {dispatch: false});
+    });
 
   productRemove = createEffect(
     () => {

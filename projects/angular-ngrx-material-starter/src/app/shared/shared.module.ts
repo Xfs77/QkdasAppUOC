@@ -56,6 +56,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTreeModule } from '@angular/material/tree';
 import { LongPressDirective } from './directives/longpress.directive';
 import { PhotoDirective } from './directives/photo.directive';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -84,7 +86,10 @@ import { PhotoDirective } from './directives/photo.directive';
     FlexLayoutModule,
     MatTreeModule,
 
-    FontAwesomeModule
+    FontAwesomeModule,
+
+    LazyLoadImageModule,
+    ScrollingModule
   ],
   declarations: [
     BigInputComponent,
@@ -129,7 +134,10 @@ import { PhotoDirective } from './directives/photo.directive';
     BigInputActionComponent,
     RtlSupportDirective,
     LongPressDirective,
-    PhotoDirective
+    PhotoDirective,
+
+    LazyLoadImageModule,
+    ScrollingModule
   ]
 })
 export class SharedModule {

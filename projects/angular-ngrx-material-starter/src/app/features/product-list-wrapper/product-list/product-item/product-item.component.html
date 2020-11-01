@@ -1,0 +1,37 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <img class="image_thumb_list"
+       [useSrcset]="true"
+       [lazyLoad]="this.image$|async"
+       [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
+       [errorImage]="'/assets/img/empty-image/empty-image-100.png'"
+       alt="">
+  <div  class="ml20">
+    <div>{{product.reference}}</div>
+    <div fxFlexAlign="stretch">xx:{{this.product.mainImage && this.product.mainImage.urls && this.product.mainImage.urls.imgSM ? true : false}} {{product.agrupation.pathDescription}} </div>
+  </div>
+  <div fxFlex="auto" class="text-align-right">{{product.price}}€</div>
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    [matMenuTriggerData]="{ product: product }">
+    <mat-icon class="ml10" aria-hidden="false" aria-label="Example home icon">more_vert</mat-icon>
+  </button>
+</div>
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-node="node">
+    <button
+      mat-menu-item
+      (click)="editProduct(product)">
+      <mat-icon>edit</mat-icon>
+      <span>Editar</span>
+    </button>
+    <button
+      mat-menu-item
+      (click)="removeProduct(product)">
+      <mat-icon>delete</mat-icon>
+      <span>Eliminar</span>
+    </button>
+  </ng-template>
+</mat-menu>

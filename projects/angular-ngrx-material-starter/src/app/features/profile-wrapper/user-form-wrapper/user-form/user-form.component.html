@@ -1,4 +1,4 @@
-<div class="container" fxLayout="row" fxLayoutWrap
+<div class="env" fxLayout="row" fxLayoutWrap
      fxLayoutGap="0" fxLayoutAlign="center">
 
   <mat-card fxFlex="50" fxFlex.xs="100" fxFlex.sm="80" flexFlex.md="75">
@@ -6,7 +6,7 @@
     <form
       [formGroup]="signupForm"
       (ngSubmit)="onSave()">
-      <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="column" fxLayoutGap="0px">
         <div fxFlex="100">
           <mat-form-field floatLabel="always">
             <mat-label>Email</mat-label>
@@ -84,6 +84,7 @@
               <input
                 matInput
                 type="password"
+                required
                 formControlName="password">
               <mat-error *ngFor="let validation of validationMessages.password">
                 <mat-error class="error-message"
@@ -97,6 +98,7 @@
               <input
                 matInput
                 type="password"
+                required
                 formControlName="repassword">
               <mat-error
                 *ngFor="let validation of validationMessages.repassword">

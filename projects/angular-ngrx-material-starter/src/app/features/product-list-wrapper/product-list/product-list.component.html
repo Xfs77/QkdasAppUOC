@@ -1,1 +1,42 @@
-<p>product-list works!</p>
+<div fxLayout="row" fxLayoutWrap fxFill
+     fxLayoutGap="0.0%" fxLayoutAlign="center center">
+  <mat-card
+    class="expand text-align-center"
+    fxFlex="100"
+    fxFill
+    *ngIf="(products$ | async).length === 0">
+    <div fxFlexFill
+         fxLayoutAlign="center center">
+      Seleccione algún elemento del catálogo
+    </div>
+    <button mat-fab
+            color="primary"
+            class="fabicon"
+            (click)="newProduct()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-card>
+
+  <div class="expand" *ngIf="(products$ | async).length !== 0" fxFlex="100" fxLayout="column" fxLayoutWrap
+       fxLayoutGap="0.5%" fxLayoutAlign="center">
+    <cdk-virtual-scroll-viewport class="expand" itemSize="100">
+      <div  *cdkVirtualFor="let product of products$ |async; let i = index; trackBy: trackByIdx">
+        <mat-card class="product-edition-card mb5" fxFlex="100">
+          <anms-product-item
+            [product]="product"
+            (editEmitter)="editProduct($event)"
+            (removeEmitter)="removeProduct($event)"></anms-product-item>
+          <div class="clear"></div>
+        </mat-card>
+      </div>
+    </cdk-virtual-scroll-viewport>
+
+    <button mat-fab
+            color="primary"
+            class="fabicon"
+            (click)="newProduct()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+</div>

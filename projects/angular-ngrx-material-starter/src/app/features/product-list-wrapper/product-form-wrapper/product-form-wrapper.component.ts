@@ -20,6 +20,8 @@ import { selectProductsFilter } from '../../../core/products-filter/products-fil
 import { productsFilterIsLoading } from '../../../core/products-filter/products-filter.action';
 import { productFormSave, productImagesGet } from '../../../core/product-form/product-form.action';
 import { ImageFormComponent } from '../image-form/image-form.component';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { AgrupationsComponent } from '../../agrupations-wrapper/agrupations/agrupations.component';
 
 @Component({
   selector: 'anms-product-form-wrapper',
@@ -28,7 +30,7 @@ import { ImageFormComponent } from '../image-form/image-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductFormWrapperComponent implements OnInit {
-
+  dialogRefAgrup: MatDialogRef<AgrupationsComponent, any>;
   product$: Observable<Product>;
   private selectedAgrupSource = new BehaviorSubject<Agrupation>(null);
   selectedAgrup$ = this.selectedAgrupSource.asObservable();
@@ -47,6 +49,7 @@ export class ProductFormWrapperComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private store$: Store,
+    private dialog: MatDialog,
     private componentFactoryResolver: ComponentFactoryResolver,
 
   ) {
@@ -83,13 +86,12 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   saveProduct($event) {
-    console.log($event)
     // Set filter isLoading: true in order to wait in the list for the new item;
     this.store$.dispatch(productsFilterIsLoading({payload: {isLoading: true}}));
     this.store$.dispatch(
       productFormSave({
         payload: {
-          product: $event.product,
+          product:  $event.product,
           imagesToRemove: Object.values(this.imagesToRemove),
           imagesToUpload: Object.values(this.imagesToUpload),
           imageToUpdateIsMain: this.imageToUpdateIsMain,
@@ -102,9 +104,22 @@ export class ProductFormWrapperComponent implements OnInit {
     this.router.navigate(['products']);
   }
 
-  onSelectAgrup($event: Agrupation) {
-    this.selectedAgrupSource.next($event);
+  onAgrupations() {
+    if (window.innerWidth < 960) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.closeOnNavigation = true;
+      dialogConfig.width = '90vw';
+      dialogConfig.maxWidth = '500px';
+
+      this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
+      this.dialogRefAgrup.afterClosed().subscribe(result => {
+        this.selectedAgrupSource.next(result);
+      });
+    }
+
   }
+
 
   getImages($event: Product) {
     if ($event) {
@@ -165,4 +180,7 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
 
+  onSelectAgrup($event: Agrupation) {
+    this.selectedAgrupSource.next($event);
+  }
 }

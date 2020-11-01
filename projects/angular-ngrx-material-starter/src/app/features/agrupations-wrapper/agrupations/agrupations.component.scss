@@ -21,17 +21,10 @@ mat-tree-node.isSelected {
   text-align: right;
 }
 
-.clear {
-  clear: both;
-}
-
 .fabicon {
-  float: right;
-  margin-top: 20px;
-}
-
-.container {
-  min-height: 100px;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
 }
 
 @media (min-width: 600px) {
@@ -40,6 +33,7 @@ mat-tree-node.isSelected {
   }
 
 }
+
 
 
 

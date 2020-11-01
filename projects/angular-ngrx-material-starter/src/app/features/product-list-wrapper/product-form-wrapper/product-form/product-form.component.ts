@@ -24,6 +24,7 @@ export class ProductFormComponent implements OnInit {
   @Input() product$: Observable<Product> = of(emptyProduct() as Product);
   @Input() selectedAgrup$: Observable<Agrupation>;
   @Output() saveProductEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onAgrupationEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() cancelProductEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() getImagesEvent: EventEmitter<Product> = new EventEmitter<Product>();
 
@@ -183,5 +184,7 @@ export class ProductFormComponent implements OnInit {
 
   }
 
-
+  onAgrupation() {
+    this.onAgrupationEvent.emit(true);
+  }
 }

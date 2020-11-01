@@ -38,11 +38,11 @@ const reducer = createReducer(
   on(productFormEdit, produce((draft, action) => {
     draft = initialProductFormState;
     draft.product = action.payload.product;
-    adapterImagesData.removeAll(draft);
+    return adapterImagesData.removeAll(draft);
   })),
   on(productFormAdd, produce((draft, action) => {
     draft = initialProductFormState;
-    adapterImagesData.removeAll(draft);
+    return adapterImagesData.removeAll(draft);
   })),
   on(productFormSaveSuccess, produce((draft, action) => {
     draft.product = action.payload.product;
@@ -51,16 +51,16 @@ const reducer = createReducer(
     draft.existMain = action.payload.existMain;
   })),
   on(productImagesGetSuccess, produce((draft, action) =>  {
-    adapterImagesData.addMany(action.payload.images, draft);
+    return adapterImagesData.addMany(action.payload.images, draft);
   })),
   on(productImageAddSuccess, produce((draft, action) =>  {
-    adapterImagesData.addOne(action.payload.image, draft);
+    return adapterImagesData.addOne(action.payload.image, draft);
   })),
   on(productImageUpdateSuccess, produce((draft, action) =>  {
-    adapterImagesData.updateOne(action.payload.image, draft);
+    return adapterImagesData.updateOne(action.payload.image, draft);
   })),
   on(productImageRemoveSuccess, produce((draft, action) =>  {
-    adapterImagesData.removeOne(action.payload.imageKey, draft);
+    return adapterImagesData.removeOne(action.payload.imageKey, draft);
   })),
   );
 

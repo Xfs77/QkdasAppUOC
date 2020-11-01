@@ -7,6 +7,9 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductFormComponent } from './product-form-wrapper/product-form/product-form.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { AgrupationsWrapperModule } from '../agrupations-wrapper/agrupations-wrapper.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ProductsFilterWrapperModule } from '../products-filter-wrapper/products-filter-wrapper.module';
+import { ProductItemComponent } from './product-list/product-item/product-item.component';
 
 
 
@@ -16,11 +19,16 @@ import { AgrupationsWrapperModule } from '../agrupations-wrapper/agrupations-wra
     ProductFormWrapperComponent,
     ProductFormComponent,
     ProductListComponent,
-    ImageFormComponent],
+    ImageFormComponent,
+    ProductItemComponent],
   imports: [
     SharedModule,
     ProductListWrapperRoutingModule,
-    AgrupationsWrapperModule
-  ]
+    ProductsFilterWrapperModule,
+    AgrupationsWrapperModule,
+  ],
+  exports: [
+    ProductListWrapperComponent
+  ],
 })
 export class ProductListWrapperModule { }

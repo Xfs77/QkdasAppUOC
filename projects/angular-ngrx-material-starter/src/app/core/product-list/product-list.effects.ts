@@ -66,7 +66,7 @@ export class ProductListEffects {
           withLatestFrom(this.store$.select(selectProductsFilterIsLoading)),
           mergeMap(([res, isLoading]) => {
             if (isLoading) {
-              res.push(productsFilterIsLoading({payload: {isLoading: false}}));
+               res.push(productsFilterIsLoading({payload: {isLoading: false}}));
             }
             return (res);
           }));

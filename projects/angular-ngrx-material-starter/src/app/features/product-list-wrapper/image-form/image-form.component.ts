@@ -47,6 +47,7 @@ export class ImageFormComponent implements OnInit {
     }
     this.currentImage.id = uuidv1();
     this.currentImage.file = $event.target.files[0];
+    console.log(this.currentImage)
     this.eventNewImage.emit({image: this.currentImage, id: this.id.toString()});
   }
 

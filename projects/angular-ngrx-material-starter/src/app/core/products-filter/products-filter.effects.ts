@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { mergeMap, withLatestFrom } from 'rxjs/operators';
-import { productsFilterApply, productsFilterIsLoading } from './products-filter.action';
+import { map, mergeMap, withLatestFrom } from 'rxjs/operators';
+import {
+  productsFilterApply,
+  productsFilterIsLoading,
+  productsFilterSetAgrupation
+} from './products-filter.action';
 import { selectProductsFilter } from './products-filter.selector';
 import { productListGet, productListReset } from '../product-list/product-list.action';
+import { loadingEnd, loadingStart } from '../general/general.action';
 
 @Injectable()
 export class ProductsFilterEffects {
@@ -33,12 +38,29 @@ export class ProductsFilterEffects {
             ];
           }
         ));
+    })
+
+  productsFilterSetAgrupation = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(productsFilterSetAgrupation),
+        mergeMap(_ => [
+          productsFilterApply()
+        ]));
+    })
+
+  productsFilerIsLoading = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(productsFilterIsLoading),
+        map(action => {
+          if (action.payload.isLoading) {
+            return loadingStart();
+          } else {
+            return loadingEnd();
+          }
+        }))
     }
-
   )
-
-
-
-
 
 }

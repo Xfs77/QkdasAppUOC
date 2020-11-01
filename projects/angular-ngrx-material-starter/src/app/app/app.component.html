@@ -40,6 +40,7 @@
           </span>
 
           <div class="login-actions pl-5">
+
             <button
               mat-button
               *ngIf="!(isAuthenticated$ | async)"
@@ -58,7 +59,6 @@
                 <span [routerLink]="['/profile']">Datos Usuario</span>
               </button>
             </mat-menu>
-
             <button *ngIf="(isAuthenticated$ | async)"
                     mat-icon-button
                     (click)="onLogout()">
@@ -70,8 +70,9 @@
       </div>
 
       <div class="content" [@routeAnimations]="o.isActivated && o.activatedRoute.routeConfig.data && o.activatedRoute.routeConfig.data.title">
-        <mat-progress-bar  *ngIf="loading$ |async" [color]="'accent'" mode="indeterminate"></mat-progress-bar>
-        <router-outlet #o="outlet"></router-outlet>
+        <div class="envelope">
+          <router-outlet #o="outlet"></router-outlet>
+        </div>
       </div>
 
       <div class="footer">

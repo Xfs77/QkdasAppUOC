@@ -32,7 +32,6 @@ const reducer = createReducer(
   on(productsFilterSetAgrupation, produce((draft, action) => {
     draft.filter.agrupation = action.payload.agrupation;
     draft.filter.offset = null;
-    draft.isLoading = false;
     draft.isEnded = false;
   })),
   on(productsFilterSetOffset, produce((draft, action) => {
@@ -45,10 +44,10 @@ const reducer = createReducer(
     draft.filter.sort = action.payload.sort;
   })),
   on(productsFilterIsLoading, produce((draft, action) => {
-    draft.filter.isLoading = action.payload.isLoading;
+    draft.isLoading = action.payload.isLoading;
   })),
   on(productsFilterIsEnded, produce((draft, action) => {
-    draft.filter.isEnded = action.payload.isEnded;
+    draft.isEnded = action.payload.isEnded;
   })),
 );
 

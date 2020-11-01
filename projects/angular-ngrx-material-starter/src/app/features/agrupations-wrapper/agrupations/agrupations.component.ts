@@ -4,13 +4,14 @@ import {
   ChangeDetectionStrategy,
   Input,
   Output,
-  EventEmitter, OnChanges, SimpleChanges
+  EventEmitter, OnChanges, SimpleChanges, Inject, Optional
 } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { DynamicFlatNode } from './DynamicFlatNode';
 import { DynamicDatabase, DynamicDataSource } from './DynamicDatabase';
 import { Agrupation, rootAgrupation } from '../../../core/agrupation/agrupation.models';
 import { Store } from '@ngrx/store';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -36,7 +37,11 @@ export class AgrupationsComponent implements OnInit, OnChanges {
 
   constructor(
     public database: DynamicDatabase,
-    public store$: Store
+    public store$: Store,
+    @Optional() private dialogRef: MatDialogRef<AgrupationsComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) data
+
+
   ) {
 
     this.treeControl = this.database.treeControl;
@@ -129,6 +134,9 @@ export class AgrupationsComponent implements OnInit, OnChanges {
   }
 
   onSelectAgrupation(node: Agrupation)  {
+    if (this.dialogRef) {
+      this.dialogRef.close(node);
+    }
     this.currentSelected = node;
     this.selectedAgrupEvent.emit(node);
   }

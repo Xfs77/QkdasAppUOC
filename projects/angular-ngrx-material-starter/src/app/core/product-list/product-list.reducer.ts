@@ -40,19 +40,20 @@ export const {
 const reducer = createReducer(
   initialProductListState,
   on(productListAdd, produce((draft, action) => {
-    adapterProductList.addOne(action.payload.product, draft);
+    return adapterProductList.addOne(action.payload.product, draft);
   })),
   on(productListUpdate, produce((draft, action) => {
-    adapterProductList.updateOne(action.payload.product, draft);
+    console.log('pp')
+    return adapterProductList.updateOne(action.payload.product, draft);
   })),
   on(productListRemove, produce((draft, action) => {
-    adapterProductList.removeOne(action.payload.product.reference, draft);
+    return adapterProductList.removeOne(action.payload.product.reference, draft);
   })),
   on(productListReset, produce((draft, action) => {
-    adapterProductList.removeAll(draft);
+    return adapterProductList.removeAll(draft);
   })),
   on(productListGetImagesSuccess, produce((draft, action) => {
-    adapterProductList.updateOne(action.payload.product, draft);
+    return adapterProductList.updateOne(action.payload.product, draft);
   })),
   on(productListEmpty, produce((draft, action) => {
     draft.isEmptyResult = true;

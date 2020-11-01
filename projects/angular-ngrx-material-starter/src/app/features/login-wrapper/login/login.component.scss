@@ -9,6 +9,7 @@ button {
 
 mat-dialog-content {
   margin: 0 !important;
+  padding: 16px !important;
 }
 .register {
   font-size: 0.9em;
@@ -16,4 +17,8 @@ mat-dialog-content {
   margin-left: 12px !important;
   margin-right: 12px !important;
   float: right;
+}
+
+.login_container {
+  padding: 16px;
 }

@@ -2,12 +2,28 @@ mat-form-field {
   width: 100%;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+.envelope {
+  margin: 16px;
+  height: calc(100% - 32px);
+}
+
+.expand {
+  height: 100%;
+  min-width: 100%;
+}
+
 .spinner_container {
   z-index: 30000 !important;
 }
 
 mat-dialog-container {
   z-index: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .mat-simple-snackbar {
@@ -27,8 +43,11 @@ mat-dialog-container {
   color: #0000EE !important;
 }
 
-.container {
-  margin: 16px auto;
+/** {
+  overflow-y: hidden;
+}*/
+.container, .env {
+  margin: 0px;
 }
 
 .title {

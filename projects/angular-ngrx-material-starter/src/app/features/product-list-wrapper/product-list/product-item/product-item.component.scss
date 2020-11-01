@@ -1,0 +1,24 @@
+
+.image_thumb_list {
+  width: 61px;
+  height: 80px;
+  border-radius: 6px;
+}
+
+img.ng-lazyloaded {
+  animation: fadein 1.5s;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.hidden-sm {
+  display: none;
+}
+
+@media screen and (min-width: 576px) {
+  .hidden-sm {
+    display: block;
+  }
+}

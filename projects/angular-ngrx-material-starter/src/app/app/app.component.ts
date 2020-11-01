@@ -19,6 +19,8 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.component';
 import { selectLoading } from '../core/general/general.selectors';
+import { AgrupationsComponent } from '../features/agrupations-wrapper/agrupations/agrupations.component';
+import { loadingEnd } from '../core/general/general.action';
 
 @Component({
   selector: 'anms-root',
@@ -57,6 +59,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(loadingEnd());
     this.store.dispatch(actionSettingsChangeLanguage({ language: 'es' }));
     this.storageService.testLocalStorage();
     if (AppComponent.isIEorEdgeOrSafari()) {
@@ -84,6 +87,7 @@ export class AppComponent implements OnInit {
     this.dialogRef = this.dialog.open(LoginWrapperComponent, dialogConfig );
 
   }
+
 
   onLogout() {
     this.store.dispatch(authLogout());

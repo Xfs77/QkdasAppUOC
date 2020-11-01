@@ -14,7 +14,10 @@ h2 {
 .background {
   padding: 80px 0 0 0;
   height: 100vh;
-  position: relative;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 
   .actions {
     text-align: center;

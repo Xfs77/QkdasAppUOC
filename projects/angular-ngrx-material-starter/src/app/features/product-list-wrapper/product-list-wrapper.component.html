@@ -1,1 +1,27 @@
-<anms-product-list></anms-product-list>
+<div class="expand" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.0%" fxLayoutAlign="center">
+
+  <anms-products-filter-wrapper
+    class="mr16"
+    [nextBatchId]="nextBatchId"
+    [filter]="filter"
+    [batch$]="batch$"
+    (isEndedEvent)="onIsEnded($event)"
+    (isLoadingEvent)="onIsLoading($event)"
+    (productsEvent)="setProductsObservable($event)"
+    fxFlex="30">
+  </anms-products-filter-wrapper>
+
+  <anms-product-list
+    [products$]="products$"
+    [isLoading$]="isLoading$"
+    [isEnded$]="isEnded$"
+    (batchEvent)="onBatch($event)"
+    (nextBatchEvent)="onNextBatch()"
+    (newEvent)="onNew()"
+    (editEvent)="onEdit($event)"
+    (removeEvent)="onRemove($event)"
+    fxFlex="70">
+  </anms-product-list>
+
+</div>
