@@ -1,5 +1,4 @@
 <div class="image_form_container">
-
   <div
     id="image_container{{this.id}}"
     class="image_container"
@@ -23,12 +22,12 @@
       aria-label="Example home icon">close</mat-icon>
 
     <img
-      hidden
       onclick="clickInput(this)"
       onload="hideCamera_showClose(this)"
       #viewImage
       id="imagen{{this.id}}"
       src="{{image.urls.imgSM}}"
+      style="display: none"
       alt="">
 
     <input
@@ -40,7 +39,6 @@
       (change)="onUpload($event)">
 
   </div>
-
   <mat-checkbox
     #checkbox
     [checked]="currentImage.isMain"

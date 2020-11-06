@@ -7,7 +7,7 @@ function readURL(input) {
     reader.onload = function (e) {
       var img= document.getElementById("imagen" + index);
       img.src=e.target.result;
-      img.hidden = false;
+      img.style.display = "inline";
       var icon= document.getElementById('camera' + index);
       icon.style.display="none";
       var close = document.getElementById('close' + index);
@@ -27,6 +27,7 @@ function clickInput(e) {
 }
 
 function hideCamera_showClose(image) {
+  image.style.display = "inline"
   var id = image.id;
   var index = id.substring(6);
   var icon = document.getElementById("camera"+index);

@@ -14,7 +14,6 @@ import {v1 as uuidv1} from 'uuid';
   selector: 'anms-image-form',
   templateUrl: './image-form.component.html',
   styleUrls: ['./image-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageFormComponent implements OnInit {
 
@@ -22,6 +21,7 @@ export class ImageFormComponent implements OnInit {
   @Input() id: number;
   @Output() eventNewImage: EventEmitter<{ image: ImageData, id: string }> = new EventEmitter();
   @Output() eventRemoveImage: EventEmitter<ImageData> = new EventEmitter();
+  @Output() eventRemoveComponent: EventEmitter<ImageData> = new EventEmitter();
 
   component: ComponentRef<ImageFormComponent>;
   currentImage: ImageData;
@@ -42,19 +42,21 @@ export class ImageFormComponent implements OnInit {
   }
 
   onUpload($event) {
+
     if (this.currentImage.urls.imgXL) {
       this.eventRemoveImage.emit({...this.currentImage});
     }
     this.currentImage.id = uuidv1();
     this.currentImage.file = $event.target.files[0];
-    console.log(this.currentImage)
     this.eventNewImage.emit({image: this.currentImage, id: this.id.toString()});
   }
 
   onRemove() {
     if (this.currentImage.urls.imgXL) {
-      this.eventRemoveImage.emit(this.currentImage);
+      this.eventRemoveComponent.emit(this.currentImage);
     }
     this.component.destroy();
   }
+
+
 }

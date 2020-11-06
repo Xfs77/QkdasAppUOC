@@ -23,6 +23,7 @@ import {
   selectProductsProductList
 } from '../../core/product-list/product-list.selectors';
 import { Agrupation } from '../../core/agrupation/agrupation.models';
+import { selectAgrupationSelected } from '../../core/agrupation/agrupation.selectors';
 
 @Component({
   selector: 'anms-products-filter-wrapper',
@@ -45,6 +46,7 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
   private batchSub: Subscription; // Subscription to batch size observable.
   private products$: Observable<Product[]>;
 
+  private productsSub: Subscription;
 
   constructor(
     private store$: Store,
@@ -69,6 +71,10 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
     sort.field = 'reference';
     sort.direction = 'asc';
 
+    /*this.store$.select(selectAgrupationSelected).subscribe(res => {
+      this.onSelectAgrup(res);
+    })
+*/
     this.store$.dispatch(productsFilterSetSort({payload: {sort}}));
 
     this.batchSub = this.batch$.subscribe(res => {
@@ -85,7 +91,7 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
     this.productsEvent.emit(this.products$);
 
     // We control last product loaded with var lastLoadedProduct
-    this.products$.subscribe(res => {
+    this.productsSub = this.products$.subscribe(res => {
       if (res && res.length > 0) {
         this.lastLoadedProduct = res[res.length - 1];
         this.productsLengthEvent.emit(res.length);
@@ -121,11 +127,14 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
   }
 
   onSelectAgrup($event: Agrupation) {
+    console.log('aa')
     this.isEndedEvent.emit(false);
     this.store$.dispatch(productsFilterSetAgrupation({payload: {agrupation: $event}}));
   }
 
   ngOnDestroy(): void {
-    console.log(this.router.routerState.snapshot.url);
+    if (this.router.routerState.snapshot.url.substr(0, 10) !== '/products/') {
+      this.productsSub.unsubscribe();
+    }
   }
 }

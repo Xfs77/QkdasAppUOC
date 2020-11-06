@@ -106,7 +106,9 @@ export class AddressFormComponent implements OnInit {
   }
 
   onSave() {
-    this.saveAddressEvent.emit({address: this.getFormData(), edit: this.edit});
+    if (this.addressForm.valid) {
+      this.saveAddressEvent.emit({address: this.getFormData(), edit: this.edit});
+    }
   }
 
   onCancel() {

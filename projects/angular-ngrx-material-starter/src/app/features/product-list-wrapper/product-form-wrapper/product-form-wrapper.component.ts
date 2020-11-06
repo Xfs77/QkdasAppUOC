@@ -3,7 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
-  ComponentFactoryResolver
+  ComponentFactoryResolver, ElementRef, ViewContainerRef
 } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { emptyProduct, ImageData, Product } from '../../../core/product-form/product.models';
@@ -18,7 +18,11 @@ import {
 import { map, take } from 'rxjs/operators';
 import { selectProductsFilter } from '../../../core/products-filter/products-filter.selector';
 import { productsFilterIsLoading } from '../../../core/products-filter/products-filter.action';
-import { productFormSave, productImagesGet } from '../../../core/product-form/product-form.action';
+import {
+  productFormSave,
+  productImageRemove, productImageRemoveSuccess,
+  productImagesGet, productImageUpdateSuccess
+} from '../../../core/product-form/product-form.action';
 import { ImageFormComponent } from '../image-form/image-form.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AgrupationsComponent } from '../../agrupations-wrapper/agrupations/agrupations.component';
@@ -36,6 +40,7 @@ export class ProductFormWrapperComponent implements OnInit {
   selectedAgrup$ = this.selectedAgrupSource.asObservable();
   currentSelectedAgrup: Agrupation;
   images$: Observable<ImageData[]>;
+  images: ImageData[];
   imagesToUpload = {} as { id: ImageData };
   imagesToRemove = {} as { id: ImageData };
   imageToUpdateIsMain: ImageData;
@@ -71,7 +76,7 @@ export class ProductFormWrapperComponent implements OnInit {
     this.product$.pipe(
       take(1),
       map(res => {
-        if (res.reference) {
+        if (res && res.reference) {
           this.currentSelectedAgrup = res.agrupation;
           this.selectedAgrupSource.next(res.agrupation);
         } else {
@@ -86,8 +91,6 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   saveProduct($event) {
-    // Set filter isLoading: true in order to wait in the list for the new item;
-    this.store$.dispatch(productsFilterIsLoading({payload: {isLoading: true}}));
     this.store$.dispatch(
       productFormSave({
         payload: {
@@ -117,32 +120,37 @@ export class ProductFormWrapperComponent implements OnInit {
         this.selectedAgrupSource.next(result);
       });
     }
-
   }
-
 
   getImages($event: Product) {
     if ($event) {
       this.store$.dispatch(productImagesGet({payload: {product: $event}}));
       this.images$ = this.store$.select(selectProductImages);
       this.store$.select(selectProductImages).pipe(take(2)).subscribe(
-        res => {
-          if (res.length > 0 && this.index === 0) {
+      res => {
+        console.log(res)
+        if (res.length > 0 && this.index === 0) {
+
             this.index = res.length;
-            this.addNewImage();
+            this.images = res;
+            this.addNewImage(null);
           }
         });
     } else {
-      this.addNewImage();
+      this.addNewImage(null);
     }
   }
 
-  addNewImage() {
+  addNewImage(image: ImageData) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ImageFormComponent);
-    const viewContainerRef = this.photoHost.viewContainerRef;
+    const viewContainerRef: ViewContainerRef = this.photoHost.viewContainerRef;
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as ImageFormComponent).component = componentRef;
     (componentRef.instance as ImageFormComponent).id = this.index;
+    if (image) {
+      (componentRef.instance as ImageFormComponent).image = image;
+
+    }
     (componentRef.instance as ImageFormComponent).eventNewImage.subscribe(res => {
       this.onAddImage(res);
     });
@@ -154,7 +162,7 @@ export class ProductFormWrapperComponent implements OnInit {
 
   onAddImage(e) {
     if (e.id === (this.index - 1).toString()) {
-      this.addNewImage();
+      this.addNewImage(null);
     }
     if (e.image) {
       this.imagesToUpload = {
@@ -168,10 +176,14 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   onRemoveImage(image: ImageData) {
+
+
     if (image != null) {
       delete this.imagesToUpload[image.id];
     }
+
     if (image && image.urls.imgXL) {
+
       this.imagesToRemove = {
         ...this.imagesToRemove,
         [image.id]: image
@@ -182,5 +194,10 @@ export class ProductFormWrapperComponent implements OnInit {
 
   onSelectAgrup($event: Agrupation) {
     this.selectedAgrupSource.next($event);
+  }
+
+  onRemoveComponent($event: ImageData) {
+    this.onRemoveImage($event);
+    this.store$.dispatch(productImageRemoveSuccess({payload: {product: null, imageKey: $event.id}}));
   }
 }

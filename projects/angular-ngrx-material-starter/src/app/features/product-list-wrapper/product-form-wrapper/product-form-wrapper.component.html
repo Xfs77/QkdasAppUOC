@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutWrap
-     fxLayoutGap="0.5%" fxLayoutAlign="start">
+<div class="expand" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0%" fxLayoutAlign="center">
 
   <anms-agrupations
     fxFlex="30"
@@ -7,33 +7,31 @@
     [currentSelected]="currentSelectedAgrup"
     (selectedAgrupEvent)="onSelectAgrup($event)"></anms-agrupations>
 
-  <div class="container" fxFlex="70" fxLayout="row" fxLayoutWrap
-       fxLayoutGap="0.5%" fxLayoutAlign="start">
+  <div class="expand" fxFlex="70" fxFlex.sm="100" fxFlex-xs="100" fxLayout="row wrap" fxLayoutWrap
+       fxLayoutGap="0.0%" fxLayoutAlign="start">
 
-    <mat-card>
+    <mat-card class="container expand">
       <mat-card-title class="title">Edición Producto</mat-card-title>
       <anms-product-form [product$]="product$"
-                        [selectedAgrup$]="selectedAgrup$"
+                         [selectedAgrup$]="selectedAgrup$"
                          (onAgrupationEvent)="onAgrupations()"
-                        (getImagesEvent)="getImages($event)"
-                        (saveProductEvent)="saveProduct($event)"
-                        (cancelProductEvent)="cancelProduct()"></anms-product-form>
+                         (getImagesEvent)="getImages($event)"
+                         (saveProductEvent)="saveProduct($event)"
+                         (cancelProductEvent)="cancelProduct()"></anms-product-form>
 
 
-      <div class="images" fxLayout="row" fxLayoutWrap
+      <div class="images clear" fxLayout="row wrap"
            fxLayoutGap="0.0%" fxLayoutAlign="start start">
-        <ul>
-          <li *ngFor="let image of this.images$ | async; index as i">
             <anms-image-form
+              *ngFor="let image of this.images$ |async; index as i"
               [image]="image"
               [id]="i"
               (eventNewImage)="onAddImage($event)"
-              (eventRemoveImage)="onRemoveImage($event)"></anms-image-form>
-          </li>
-        </ul>
-
-        <ng-template appPhotoHost>
-        </ng-template>
+              (eventRemoveImage)="onRemoveImage($event)"
+              (eventRemoveComponent)="onRemoveComponent($event)">
+            </anms-image-form>
+          <ng-template appPhotoHost>
+          </ng-template>
 
       </div>
 

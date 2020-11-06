@@ -5,26 +5,22 @@ import {
   AfterViewInit,
   Input,
   Output,
-  EventEmitter, ViewChild
+  EventEmitter, ViewChild, OnChanges, SimpleChanges
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { Product } from '../../../core/product-form/product.models';
-import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { Store } from '@ngrx/store';
-import { filter, withLatestFrom } from 'rxjs/operators';
-import {
-  productFormAdd,
-  productFormEdit,
-  productFormRemove
-} from '../../../core/product-form/product-form.action';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { take } from 'rxjs/operators';
+
 
 @Component({
   selector: 'anms-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class ProductListComponent implements OnInit, AfterViewInit {
+export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() products$: Observable<Product[]>; // product list
   @Input() isLoading$; // indicates if it's loading data and we have to wait to do next call
   @Input() isEnded$; // indicates if we have gotten all product list data
@@ -34,31 +30,26 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   @Output() editEvent = new EventEmitter<Product>();
   @Output() removeEvent = new EventEmitter<Product>();
 
-  @ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport; // viewport where we are displaying items
+  @ViewChild('viewer') viewport: CdkVirtualScrollViewport; // viewport where we are displaying items
 
-  constructor(
-    private store$: Store,
-    private scrollDispatcher: ScrollDispatcher,
-  ) {}
+  constructor() {}
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
+    this.batchEvent.emit(Math.round(this.availableViewerHeight() / 100) + 3 );
+  }
 
-    this.batchEvent.emit(Math.round(this.availableViewerHeight() / 100) + 1 );
+  checkBatch() {
 
-    const scroll$ = this.scrollDispatcher.scrolled().pipe(
-      filter(event => {
-          return this.viewport.getRenderedRange().end === this.viewport.getDataLength();
+    if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
+      combineLatest([this.isLoading$, this.isEnded$]).pipe(take(1)).subscribe(res => {
+        if (!res[0] && !res[1]) {
+          this.nextBatchEvent.emit(true);
         }
-      ));
-
-    scroll$.pipe(withLatestFrom(this.isLoading$, this.isEnded$)).subscribe(res => {
-      if (!res[1] && !res[2]) {
-        this.nextBatchEvent.emit(true);
-      }
-    });
+      });
+    }
   }
 
   trackByIdx(index, item) {
@@ -79,9 +70,12 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   availableViewerHeight() {
     if (window.innerWidth < 600) {
-      return (window.innerHeight - 56 - 105);
+      return (window.innerHeight - 56 - 90 - 105);
     } else {
-      return (window.innerHeight - 64 - 105);
+      return (window.innerHeight - 64 - 90 - 105);
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
   }
 }

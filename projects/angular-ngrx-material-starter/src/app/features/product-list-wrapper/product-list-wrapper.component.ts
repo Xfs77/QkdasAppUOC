@@ -55,7 +55,6 @@ export class ProductListWrapperComponent implements OnInit {
     this.nextBatchId = uuidv4();
   }
 
-
   onBatch($event) {
     this.batchSource.next($event);
   }
@@ -65,9 +64,8 @@ export class ProductListWrapperComponent implements OnInit {
   }
 
   setProductsObservable($event: Observable<Product[]>) {
-    if (!this.products$) {
       this.products$ = $event;
-    }
+
   }
 
   onIsLoading($event: boolean) {

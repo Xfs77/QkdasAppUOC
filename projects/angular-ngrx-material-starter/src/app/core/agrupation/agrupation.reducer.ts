@@ -43,10 +43,10 @@ const reducer = createReducer(
   })),
   on(currentSelectedAgrupation, produce((draft, action) =>  {
     draft.currentSelectedAgrup[action.payload.agrupation.id] = action.payload.agrupation;
-  }, initialAgrupationState)),
+  })),
   on(resetCurrentSelectedAgrupation, produce((draft, action) =>  {
     draft.currentSelectedAgrup = {};
-  }, initialAgrupationState))
+  }))
 );
 
 export function agrupationReducer(

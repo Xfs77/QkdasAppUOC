@@ -36,13 +36,14 @@ export const {
 const reducer = createReducer(
   initialProductFormState,
   on(productFormEdit, produce((draft, action) => {
-    draft = initialProductFormState;
     draft.product = action.payload.product;
-    return adapterImagesData.removeAll(draft);
+    draft.existMain = false;
+    adapterImagesData.removeAll(draft);
   })),
   on(productFormAdd, produce((draft, action) => {
-    draft = initialProductFormState;
-    return adapterImagesData.removeAll(draft);
+    draft.product = null;
+    draft.existMain = false;
+    adapterImagesData.removeAll(draft);
   })),
   on(productFormSaveSuccess, produce((draft, action) => {
     draft.product = action.payload.product;
@@ -51,7 +52,7 @@ const reducer = createReducer(
     draft.existMain = action.payload.existMain;
   })),
   on(productImagesGetSuccess, produce((draft, action) =>  {
-    return adapterImagesData.addMany(action.payload.images, draft);
+    return adapterImagesData.setAll(action.payload.images, draft);
   })),
   on(productImageAddSuccess, produce((draft, action) =>  {
     return adapterImagesData.addOne(action.payload.image, draft);

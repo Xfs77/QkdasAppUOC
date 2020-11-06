@@ -32,13 +32,16 @@ export class ProductFormComponent implements OnInit {
 
   private product = {} as Product;
   private selectedAgrup: Agrupation;
-  private edit = false;
+  edit = false;
 
 
   imageToUpdateIsMain: ImageData;
 
 
   productForm: FormGroup;
+
+  descrMaxLength = 150;
+  refMaxLength = 13;
 
   validationMessages = {
     active: [
@@ -48,11 +51,11 @@ export class ProductFormComponent implements OnInit {
     ],
     reference: [
       {type: 'required', message: 'La referencia debe informarse'},
-      {type: 'maxlength', message: 'La referencia como máximo puede tener 13 carácteres'}
+      {type: 'maxlength', message: `La referencia como máximo puede tener ${this.refMaxLength} carácteres`}
     ],
     descr: [
       {type: 'required', message: 'La descripción debe informarse'},
-      {type: 'maxlength', message: 'La descripción como máximo puede tener 150 carácteres'}
+      {type: 'maxlength', message: `La descripción como máximo puede tener ${this.descrMaxLength} carácteres`}
     ],
     quantity: [
       {type: 'required', message: 'La cantidad debe informarse'},
@@ -76,7 +79,7 @@ export class ProductFormComponent implements OnInit {
     this.product$.pipe(
       take(1),
       map(product => {
-        if (product.reference) {
+        if (product && product.reference) {
           this.edit = true;
           this.getImagesEvent.emit(product);
         } else {
@@ -88,8 +91,7 @@ export class ProductFormComponent implements OnInit {
   private agrupationDataSubscription() {
     this.selectedAgrup$.subscribe(
       res => {
-        console.log(res)
-        if (res) {
+        if (res && !this.edit) {
           this.selectedAgrup = res;
           this.agrupation.setValue(res.pathDescription);
         }
@@ -143,7 +145,7 @@ export class ProductFormComponent implements OnInit {
   onSave() {
     const product = {
             ...this.getFormData()};
-    console.log(product)
+    if (this.productForm.valid)
     this.saveProductEvent.emit({
         product
       },
@@ -185,6 +187,8 @@ export class ProductFormComponent implements OnInit {
   }
 
   onAgrupation() {
-    this.onAgrupationEvent.emit(true);
+    if (!this.edit) {
+      this.onAgrupationEvent.emit(true);
+    }
   }
 }

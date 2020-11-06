@@ -5,6 +5,13 @@
   border-radius: 6px;
 }
 
+.description {
+  text-overflow: ellipsis;
+}
+
+.item {
+  text-align: left;
+}
 img.ng-lazyloaded {
   animation: fadein 1.5s;
 }

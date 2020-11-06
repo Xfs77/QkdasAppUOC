@@ -21,6 +21,8 @@ import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.c
 import { selectLoading } from '../core/general/general.selectors';
 import { AgrupationsComponent } from '../features/agrupations-wrapper/agrupations/agrupations.component';
 import { loadingEnd } from '../core/general/general.action';
+import { selectAgrupationSelected } from '../core/agrupation/agrupation.selectors';
+import { currentSelectedAgrupation } from '../core/agrupation/agrupation.action';
 
 @Component({
   selector: 'anms-root',
@@ -32,14 +34,18 @@ export class AppComponent implements OnInit {
   version = env.versions.app;
   year = new Date().getFullYear();
   logo = require('../../assets/logo.png').default;
+  logoBlack = require('../../assets/logo_black.png').default;
   navigation = [
     { link: 'about', label: 'anms.menu.about' },
   ];
   navigationSideMenu = [
     ...this.navigation,
     { link: 'agrupations', label: 'Agrupaciones' },
+    { link: 'products', label: 'Productos' },
     { link: 'settings', label: 'anms.menu.settings' }
   ];
+
+  dialogRefAgrup: MatDialogRef<AgrupationsComponent, any>;
   dialogRef: MatDialogRef<LoginWrapperComponent, any>;
   isAuthenticated$: Observable<boolean>;
   stickyHeader$: Observable<boolean>;
@@ -88,8 +94,23 @@ export class AppComponent implements OnInit {
 
   }
 
-
   onLogout() {
     this.store.dispatch(authLogout());
+  }
+
+  onAgrupations() {
+    if (window.innerWidth < 960) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.autoFocus = true;
+      dialogConfig.closeOnNavigation = true;
+      dialogConfig.width = '90vw';
+      dialogConfig.maxWidth = '500px';
+
+      this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
+      this.dialogRefAgrup.afterClosed().subscribe(res => {
+        this.store.dispatch(currentSelectedAgrupation({payload: {agrupation: res}}))
+      });
+    }
+
   }
 }

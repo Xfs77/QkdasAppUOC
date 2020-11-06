@@ -2,13 +2,7 @@
   *ngIf="product$|async"
   [formGroup]="productForm"
   (ngSubmit)="onSave()">
-  <div fxLayout="column" fxLayoutGap="20px">
-
-    <div fxFlex="100">
-      <mat-checkbox
-        formControlName="active"
-        class="example-margin">Activo</mat-checkbox>
-    </div>
+  <div fxLayout="column" fxLayoutGap="8px">
 
     <div fxFlex="100">
       <mat-form-field floatLabel="always">
@@ -31,10 +25,13 @@
       <mat-form-field floatLabel="always">
         <mat-label>Referencia</mat-label>
         <input
+          [readonly]="this.edit"
           required
           matInput
+          #refText
           type="text"
           formControlName="reference">
+        <mat-hint align="end">{{refText.value.length}} / {{refMaxLength}}</mat-hint>
         <mat-error *ngFor="let validation of validationMessages.reference">
           <mat-error class="error-message"
                      *ngIf="reference.hasError(validation.type) && (reference.dirty || reference.touched)">{{validation.message}}</mat-error>
@@ -45,11 +42,14 @@
     <div fxFlex="100">
       <mat-form-field floatLabel="always">
         <mat-label>Descripción</mat-label>
-        <input
+        <textarea
           required
           matInput
+          #descrText
           type="text"
-          formControlName="descr">
+          rows="4"
+          formControlName="descr"></textarea>
+        <mat-hint align="end">{{descrText.value.length}} / {{descrMaxLength}}</mat-hint>
         <mat-error *ngFor="let validation of validationMessages.descr">
           <mat-error class="error-message"
                      *ngIf="descr.hasError(validation.type) && (descr.dirty || descr.touched)">{{validation.message}}</mat-error>
@@ -57,8 +57,8 @@
       </mat-form-field>
     </div>
 
-    <div fxLayout="row" fxLayoutGap="20px">
-      <div fxFlex="50">
+    <div fxLayout="row" fxLayoutGap="3%">
+      <div fxFlex="47">
         <mat-form-field floatLabel="always" class="text-align-right">
           <mat-label>Cantidad</mat-label>
           <input
@@ -87,6 +87,12 @@
           </mat-error>
         </mat-form-field>
       </div>
+    </div>
+
+    <div fxFlex="100">
+      <mat-checkbox
+        formControlName="active"
+        class="example-margin">Activo</mat-checkbox>
     </div>
 
   </div>

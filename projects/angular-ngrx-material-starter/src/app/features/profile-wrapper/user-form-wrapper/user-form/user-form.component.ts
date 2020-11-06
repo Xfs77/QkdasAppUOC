@@ -107,7 +107,9 @@ export class UserFormComponent implements OnInit {
   }
 
   onSave() {
-    this.saveUserEvent.emit(this.getFormData());
+    if (this.signupForm.valid) {
+      this.saveUserEvent.emit(this.getFormData());
+    }
   }
 
   onCancel() {

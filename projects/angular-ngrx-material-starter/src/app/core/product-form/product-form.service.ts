@@ -20,8 +20,6 @@ export class ProductFormService {
 
 
   addProduct(product: Product, imageIsMain: ImageData, edit: boolean) {
-    console.log('addserv', product.reference
-    )
 
     const batch = this.afFirestore.firestore.batch();
     const operation = (refItem) => {
@@ -120,7 +118,6 @@ export class ProductFormService {
   }
 
   addStorageImage(product: Product, image: ImageData): Observable<string> {
-    console.log(image)
     const filePath = `${product.reference}/${image.id}/${ORIGINAL_IMAGE}.jpeg`;
     const ref = this.afStorage.ref(filePath);
     return this.afStorage.upload(filePath, image.file).snapshotChanges().pipe(

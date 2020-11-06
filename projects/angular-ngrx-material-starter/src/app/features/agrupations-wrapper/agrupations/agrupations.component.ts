@@ -109,7 +109,6 @@ export class AgrupationsComponent implements OnInit, OnChanges {
   }
 
   saveAgrupation(node: DynamicFlatNode, descr: string, edit: boolean) {
-    console.log(node.node)
     this.edit = false;
     this.new = false;
 

@@ -28,18 +28,24 @@ import {
 } from './product-form.action';
 import { of } from 'rxjs';
 import { ImageData } from './product.models';
+import { productListRemoveMainImage } from '../product-list/product-list.action';
+import { Store } from '@ngrx/store';
+import { loadingEnd, loadingStart } from '../general/general.action';
+import { authLoginFailure } from '../auth/auth.actions';
+import { NotificationService } from '../notifications/notification.service';
 
 @Injectable()
 export class ProductFormEffects {
 
   constructor(
     private actions$: Actions,
+    private store$: Store,
     private productFormService: ProductFormService,
+    private notificationService: NotificationService,
     private router: Router,
     private route: ActivatedRoute
   ) {
   }
-
 
 
   producFormAdd = createEffect(
@@ -47,14 +53,15 @@ export class ProductFormEffects {
       this.actions$.pipe(
         ofType(productFormAdd),
         tap(action => this.router.navigate(['/products/add']))),
-    {dispatch: false});
+    { dispatch: false });
 
   producFormEdit = createEffect(
     () =>
       this.actions$.pipe(
         ofType(productFormEdit),
+        map(action => productImagesGet({ payload: { product: action.payload.product } })),
         tap(action => this.router.navigate([`/products/edit`, action.payload.product.reference]))),
-    {dispatch: false});
+    { dispatch: false });
 
   storageImageAdd = createEffect(
     () => {
@@ -71,7 +78,8 @@ export class ProductFormEffects {
                 }
               };
 
-              return storageImageAddSuccess({payload:
+              return storageImageAddSuccess({
+                payload:
                   {
                     product: action.payload.product,
                     image
@@ -79,7 +87,7 @@ export class ProductFormEffects {
               });
             }),
             catchError(error => {
-              return of(productFormSaveFailure({payload: {message: error.message}}));
+              return of(productFormSaveFailure({ payload: { message: error.message } }));
             })
           );
         }));
@@ -90,7 +98,12 @@ export class ProductFormEffects {
       return this.actions$.pipe(
         ofType(storageImageAddSuccess),
         map(action =>
-          productImageAdd({payload: {product: action.payload.product, image: action.payload.image}})
+          productImageAdd({
+            payload: {
+              product: action.payload.product,
+              image: action.payload.image
+            }
+          })
         )
       );
     });
@@ -101,23 +114,51 @@ export class ProductFormEffects {
         ofType(storageImageRemove),
         mergeMap(action => {
           return of(this.productFormService.removeStorageImage(action.payload.product, action.payload.image)).pipe(
-            map(_ => storageImageRemoveSuccess({payload: {
-              product: action.payload.product,
-              image: action.payload.image
-            }
+            map(_ => storageImageRemoveSuccess({
+              payload: {
+                product: action.payload.product,
+                image: action.payload.image
+              }
             })));
         }),
         catchError(error => {
-          return of(storageImageRemoveFailure({payload: {message: error.message}}));
+          return of(storageImageRemoveFailure({ payload: { message: error.message } }));
         })
-      )});
+      );
+    });
 
   storageRemoveSuccess = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(storageImageRemoveSuccess),
-        map(action =>
-          productImageRemove({payload: {product: action.payload.product, imageKey: action.payload.image.id}})
+        mergeMap(action => {
+            if (action.payload.image.isMain) {
+              return [
+                productListRemoveMainImage({
+                  payload: {
+                    product:
+                      {
+                        id: action.payload.product.reference,
+                        changes: { mainImage: null }
+                      }
+                  }
+                }),
+                productImageRemove({
+                  payload: {
+                    product: action.payload.product,
+                    imageKey: action.payload.image.id
+                  }
+                })];
+            } else {
+              return [productImageRemove({
+                payload: {
+                  product: action.payload.product,
+                  imageKey: action.payload.image.id
+                }
+              })];
+            }
+
+          }
         )
       );
     });
@@ -137,7 +178,7 @@ export class ProductFormEffects {
               });
             }),
             catchError(error => {
-              return of(productImageAddFailure({payload: {message: error.message}}));
+              return of(productImageAddFailure({ payload: { message: error.message } }));
             })
           )));
     });
@@ -146,15 +187,18 @@ export class ProductFormEffects {
     () => {
       return this.actions$.pipe(
         ofType(productFormSave),
+        tap(_ => this.store$.dispatch(loadingStart())),
         mergeMap(action =>
           of(this.productFormService.addProduct(action.payload.product, action.payload.imageToUpdateIsMain, action.payload.edit)).pipe(
-            map(_ => productFormSaveSuccess({payload: {
+            map(_ => productFormSaveSuccess({
+              payload: {
                 product: action.payload.product,
                 imagesToRemove: action.payload.imagesToRemove,
-                imagesToUpload: action.payload.imagesToUpload}
+                imagesToUpload: action.payload.imagesToUpload
+              }
             })),
             catchError(error => {
-              return of(productFormSaveFailure({payload: {message: error.message}}));
+              return of(productFormSaveFailure({ payload: { message: error.message } }));
             })
           )));
     });
@@ -163,21 +207,22 @@ export class ProductFormEffects {
     () => {
       return this.actions$.pipe(
         ofType(productFormSaveSuccess),
-        tap(_ => this.router.navigate(['products'], {relativeTo: this.route})),
+        tap(_ => this.router.navigate(['products'], { relativeTo: this.route })),
         mergeMap(action => {
           const add = [];
           for (const image of action.payload.imagesToUpload) {
-            const tmp = storageImageAdd({payload: {
-              product: action.payload.product,
-              image
-            }
-          });
+            const tmp = storageImageAdd({
+              payload: {
+                product: action.payload.product,
+                image
+              }
+            });
             add.push(tmp);
           }
 
           const remove = [];
           for (const image of action.payload.imagesToRemove) {
-            const tmp = storageImageAddSuccess({
+            const tmp = storageImageRemove({
               payload: {
                 product: action.payload.product,
                 image
@@ -186,13 +231,19 @@ export class ProductFormEffects {
             remove.push(tmp);
           }
           const obs = add.concat(remove);
-          return obs;
+          return obs.concat(loadingEnd());
         }),
         catchError(error => {
-          return of(productFormSaveFailure({payload: {message: error.message}}));
+          return of(productFormSaveFailure({ payload: { message: error.message } }));
         })
       );
     });
+
+  productSaveFailure = this.actions$.pipe(
+    ofType(productFormSaveFailure),
+    tap(_ => this.notificationService.error('Se ha producido un error al guardar los datos')),
+    map(action => loadingEnd())
+  );
 
   productRemove = createEffect(
     () => {
@@ -207,7 +258,7 @@ export class ProductFormEffects {
         ));
     });
 
-  imagesDataGet = createEffect(
+  productImagesGet = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(productImagesGet),
@@ -215,10 +266,10 @@ export class ProductFormEffects {
           of(this.productFormService.getProductImages(action.payload.product)).pipe(
             mergeMap(imagesData => imagesData.get()),
             map(response => response.docs.map(item => item.data())),
-            map((images: ImageData[]) => productImagesGetSuccess({payload: {images: images}})
+            map((images: ImageData[]) => productImagesGetSuccess({ payload: { images: images } })
             ))),
         catchError(error => {
-          return of(productImagesGetFailure({payload: {message: error.message}}));
+          return of(productImagesGetFailure({ payload: { message: error.message } }));
         }));
     });
 
@@ -236,7 +287,7 @@ export class ProductFormEffects {
               })
             ),
             catchError(error => {
-              return of(productImageRemoveFailure({payload: {message: error.message}}));
+              return of(productImageRemoveFailure({ payload: { message: error.message } }));
             })
           )));
     });

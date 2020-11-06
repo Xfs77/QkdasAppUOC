@@ -24,7 +24,6 @@ export class UserFormWrapperComponent {
   }
 
   onSave(user: User) {
-    console.log(user)
     this.store$.dispatch(userUpdate({payload: {user}}));
   }
 

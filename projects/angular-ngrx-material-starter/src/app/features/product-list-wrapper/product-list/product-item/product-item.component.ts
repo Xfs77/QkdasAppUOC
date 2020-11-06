@@ -26,7 +26,6 @@ export class ProductItemComponent implements OnInit, OnChanges {
   srcSet = ``;
   sendedSrcSet = false;
 
-
   constructor() { }
 
   ngOnInit() {
@@ -36,7 +35,12 @@ export class ProductItemComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (this.product.reference === '001') {
+      console.log(this.isImages(changes.product.currentValue))
+    }
+    this.image$.next('')
     if (this.isImages(changes.product.currentValue)) {
+
       this.generateSrcSet();
     }
   }
@@ -51,9 +55,10 @@ export class ProductItemComponent implements OnInit, OnChanges {
 
   generateSrcSet() {
     const keys = Object.keys(this.product.mainImage.urls);
-    keys.forEach(item => {
+    this.srcSet = '';
+    for (const item of keys) {
       this.srcSet = this.srcSet.concat(`${this.product.mainImage.urls[item]} ${imagesMap[item]},`);
-    });
+    }
     this.image$.next(this.srcSet);
     this.sendedSrcSet = true;
   }
@@ -61,10 +66,9 @@ export class ProductItemComponent implements OnInit, OnChanges {
   isImages(product: Product): boolean {
     return this.product.mainImage &&
       this.product.mainImage.urls &&
-      this.product.mainImage.urls.imgSM !== null &&
-      this.product.mainImage.urls.imgM !== null &&
-      this.product.mainImage.urls.imgL !== null &&
-      this.product.mainImage.urls.imgXL !== null &&
-      !this.sendedSrcSet;
+      this.product.mainImage.urls.imgSM !== null && this.product.mainImage.urls.imgSM.toString().indexOf(this.product.mainImage.id) !== -1 &&
+      this.product.mainImage.urls.imgM !== null && this.product.mainImage.urls.imgM.toString().indexOf(this.product.mainImage.id) !== -1 &&
+      this.product.mainImage.urls.imgL !== null && this.product.mainImage.urls.imgL.toString().indexOf(this.product.mainImage.id) !== -1 &&
+      this.product.mainImage.urls.imgXL !== null && this.product.mainImage.urls.imgXL.toString().indexOf(this.product.mainImage.id) !== -1;
   }
 }

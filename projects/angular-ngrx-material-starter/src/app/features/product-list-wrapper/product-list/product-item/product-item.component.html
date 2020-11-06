@@ -1,20 +1,20 @@
-<div fxLayout="row" fxLayoutAlign="start center">
+<div class="item" fxLayout="row" fxLayoutAlign="start center">
   <img class="image_thumb_list"
        [useSrcset]="true"
        [lazyLoad]="this.image$|async"
        [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
        [errorImage]="'/assets/img/empty-image/empty-image-100.png'"
        alt="">
-  <div  class="ml20">
-    <div>{{product.reference}}</div>
-    <div fxFlexAlign="stretch">xx:{{this.product.mainImage && this.product.mainImage.urls && this.product.mainImage.urls.imgSM ? true : false}} {{product.agrupation.pathDescription}} </div>
+  <div  class="description ml20 ">
+    <div class="text-sm"><span class="bold ">Ref: </span>{{product.reference}} / {{product.agrupation.pathDescription}}</div>
+    <div class="text-xs" fxFlexAlign="stretch"> {{product.descr}}  </div>
   </div>
-  <div fxFlex="auto" class="text-align-right">{{product.price}}€</div>
+  <div fxFlex="auto" class="text-align-right ml5">{{product.price}}€</div>
   <button
     mat-icon-button
     [matMenuTriggerFor]="menu"
     [matMenuTriggerData]="{ product: product }">
-    <mat-icon class="ml10" aria-hidden="false" aria-label="Example home icon">more_vert</mat-icon>
+    <mat-icon class="ml5" aria-hidden="false" aria-label="Example home icon">more_vert</mat-icon>
   </button>
 </div>
 
