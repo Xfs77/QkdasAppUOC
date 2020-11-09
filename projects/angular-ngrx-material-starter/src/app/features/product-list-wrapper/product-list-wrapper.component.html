@@ -3,7 +3,7 @@
 
   <anms-products-filter-wrapper
     class="mr16"
-    fxHide.lt-sm
+    fxHide.lt-md
     [nextBatchId]="nextBatchId"
     [filter]="filter"
     [batch$]="batch$"
@@ -23,8 +23,7 @@
     (editEvent)="onEdit($event)"
     (removeEvent)="onRemove($event)"
     fxFlex="70"
-    fxFlex.sm="100"
-    fxFlex.xs="100">
+    fxFlex.lt-md="100">
   </anms-product-list>
 
 </div>

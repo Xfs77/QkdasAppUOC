@@ -1,0 +1,50 @@
+.item {
+  background-color: white;
+  padding: 3px;
+  margin: 0 8px 8px;
+  width: 100%;
+}
+
+.example-card {
+  margin: 0 12px 12px;
+
+}
+
+
+
+.aspect-ratio-box {
+  height: 0;
+  overflow: hidden;
+  padding-top: calc(1600*100%/1200);
+  background: white;
+  position: relative;
+}
+
+
+.aspect-ratio-box-inside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+button {
+  text-align: center;
+  width: 100%;
+}
+
+.info {
+  margin: 0;
+  padding: 8px;
+  height:  50px;
+  font-size: 0.75em;
+  background-color: #ffa726;
+}
+

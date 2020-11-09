@@ -1,0 +1,54 @@
+<div class="image-viewer"
+     fxLayout="column"
+     fxLayoutAlign="center center">
+
+  <div class="image-container"
+       fxLayout="column"
+       fxLayoutAlign="center center"
+       (swiperight)="onLeft($event)"
+       (swipeleft)="onRight($event)">
+
+    <img class="photo"
+         (load)="activate()"
+         [class.photo--active]="active"
+         [lazyLoad]="images[index].urls.imgXL"
+         alt="">
+
+    <button class="control_left"
+            (click)="onLeft()"
+            [disabled]="index === 0"
+            mat-icon-button >
+      <mat-icon class="control-icon-images">chevron_left</mat-icon>
+    </button>
+
+    <button class="control_right"
+            [disabled]="index === images.length - 1"
+            (click)="onRight()"
+            mat-icon-button>
+      <mat-icon class="control-icon-images">chevron_right</mat-icon>
+    </button>
+
+  </div>
+
+  <ul fxLayout="row" fxLayoutAlign="center center">
+    <li *ngFor="let image of  images; let i = index">
+      <anms-indicator
+        [activeIndex]="index"
+        [index]="i">
+      </anms-indicator>
+    </li>
+  </ul>
+
+  <div class="description">
+    <mat-card class="description">
+      {{description}} </mat-card>
+  </div>
+
+  <button class="control_close"
+          (click)="onClose()"
+          mat-icon-button>
+    <mat-icon class="control-icon-close">close</mat-icon>
+  </button>
+
+</div>
+

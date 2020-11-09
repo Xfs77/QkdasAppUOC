@@ -3,7 +3,7 @@ import { Product } from '../product-form/product.models';
 import { Action, createReducer, on } from '@ngrx/store';
 import produce from 'immer';
 import {
-  productListAdd, productListEmpty,
+  productListAdd, productListEmpty, productListGetImagesSuccess,
   productListRemove, productListRemoveMainImage,
   productListReset,
   productListUpdate
@@ -46,12 +46,11 @@ const reducer = createReducer(
     return adapterProductList.updateOne(action.payload.product, draft);
   })),
   on(productListReset, produce((draft, action) => {
-    draft.isEmptyResult = false;
-    return adapterProductList.removeAll(draft);
+    return adapterProductList.removeAll({...draft, isEmptyResult: false});
   })),
- /* on(productListGetImagesSuccess, produce((draft, action) => {
+  on(productListGetImagesSuccess, produce((draft, action) => {
     return adapterProductList.updateOne(action.payload.product, draft);
-  })),*/
+  })),
   on(productListEmpty, produce((draft, action) => {
     draft.isEmptyResult = true;
   })),

@@ -58,6 +58,7 @@ import { LongPressDirective } from './directives/longpress.directive';
 import { PhotoDirective } from './directives/photo.directive';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   imports: [
@@ -89,7 +90,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     FontAwesomeModule,
 
     LazyLoadImageModule,
-    ScrollingModule
+    ScrollingModule,
+    VirtualScrollerModule
   ],
   declarations: [
     BigInputComponent,
@@ -137,7 +139,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     PhotoDirective,
 
     LazyLoadImageModule,
-    ScrollingModule
+    ScrollingModule,
+    VirtualScrollerModule
   ]
 })
 export class SharedModule {

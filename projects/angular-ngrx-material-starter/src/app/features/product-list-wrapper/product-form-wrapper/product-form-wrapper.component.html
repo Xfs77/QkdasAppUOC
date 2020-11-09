@@ -7,10 +7,12 @@
     [currentSelected]="currentSelectedAgrup"
     (selectedAgrupEvent)="onSelectAgrup($event)"></anms-agrupations>
 
-  <div class="expand" fxFlex="70" fxFlex.sm="100" fxFlex-xs="100" fxLayout="row wrap" fxLayoutWrap
+  <div [ngClass.gt-sm]="'ml16'"
+       [ngClass.lt-md]= "'expand ml0'"
+       fxFlex.sm="100" fxFlex-xs="100" fxFlex="70"  fxLayout="row" fxLayoutWrap
        fxLayoutGap="0.0%" fxLayoutAlign="start">
 
-    <mat-card class="container expand">
+    <mat-card>
       <mat-card-title class="title">Edición Producto</mat-card-title>
       <anms-product-form [product$]="product$"
                          [selectedAgrup$]="selectedAgrup$"

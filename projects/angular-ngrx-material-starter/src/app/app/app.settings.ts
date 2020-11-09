@@ -9,16 +9,16 @@ export class AppSettings {
 }
 
 export enum imageSizes  {
-  imgL = 'thumb_168.jpeg',
+  imgSM = 'thumb_168.jpeg',
   imgM = 'thumb_288.jpeg',
-  imgSM = 'thumb_576.jpeg',
+  imgL = 'thumb_576.jpeg',
   imgXL = 'thumb_896.jpeg'
 }
 
 export enum imagesMap  {
-  imgL = '168w',
+  imgSM = '168w',
   imgM = '288w',
-  imgSM = '576w',
+  imgL = '576w',
   imgXL = '896w'
 }
 

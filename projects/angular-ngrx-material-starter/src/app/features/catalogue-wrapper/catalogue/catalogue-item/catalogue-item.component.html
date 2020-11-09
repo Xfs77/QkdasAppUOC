@@ -1,0 +1,24 @@
+
+<mat-card class="example-card">
+  <div class="aspect-ratio-box">
+    <div class="aspect-ratio-box-inside">
+      <img class="image_thumb_list"
+           (click)="openImageViewer()"
+           [useSrcset]="true"
+           [srcset]="this.srcSet"
+           [sizes]="this.sizes"
+           [lazyLoad]="this.image$|async"
+           [defaultImage]="'/assets/img/empty-image/empty-image.jpg'"
+           [errorImage]="'/assets/img/empty-image/empty-image.jpg'"
+           alt="">
+    </div>
+  </div>
+  <mat-card-actions class="info">
+    <button
+      mat-button
+      (click)="addToCart()">
+      Añadir a la cesta
+    </button>
+  </mat-card-actions>
+</mat-card>
+

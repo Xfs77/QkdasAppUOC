@@ -37,7 +37,6 @@ export const productListRemoveMainImage = createAction(
   '[Product List] Remove Main Image',
   props<{payload: {product: Update<Product>}}>()
 );
-/*
 export const productListGetImages = createAction(
   '[Product List] Get Images',
   props<{payload: {product: Product}}>()
@@ -50,4 +49,3 @@ export const productListGetImagesFailure = createAction(
   '[Product List] Get Images Failure',
   props<{payload: {message: string}}>()
 );
-*/

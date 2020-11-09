@@ -1,0 +1,17 @@
+<div class="expand" *ngIf="(products$ | async).length === 0" fxLayoutAlign="center center">
+  Seleccione algún elemento del catálogo
+</div>
+
+<div fxLayoutGap="0.0%" fxLayoutAlign="center" class="expand" *ngIf="(products$ | async).length !== 0">
+  <virtual-scroller   class="scroll"  #scroll   [items]="products$ |async" (vsEnd)="fetchMore($event)">
+    <anms-catalogue-item
+      (imagesViewerEvent) = openImageViewer($event)
+      (addCartEvent)="addToCart($event)"
+      class="item"
+      *ngFor="let product of scroll.viewPortItems"
+      [product]="product">
+    </anms-catalogue-item>
+  </virtual-scroller>
+
+
+</div>

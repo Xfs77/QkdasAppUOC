@@ -12,6 +12,7 @@ import { DynamicDatabase, DynamicDataSource } from './DynamicDatabase';
 import { Agrupation, rootAgrupation } from '../../../core/agrupation/agrupation.models';
 import { Store } from '@ngrx/store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { selectAgrupationSelected } from '../../../core/agrupation/agrupation.selectors';
 
 
 @Component({
@@ -53,6 +54,11 @@ export class AgrupationsComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     // We load first level of our agrupation collection
     this.database.initialData();
+    this.store$.select(selectAgrupationSelected).subscribe(res => {
+      if (res) {
+        this.currentSelected = res;
+      }
+    })
   }
 
 

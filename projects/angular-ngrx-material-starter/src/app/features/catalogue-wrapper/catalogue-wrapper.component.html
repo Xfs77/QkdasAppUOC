@@ -1,1 +1,32 @@
-<p>catalogue-wrapper works!</p>
+<div class="expand" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0%" fxLayoutAlign="center">
+
+  <anms-products-filter-wrapper
+    class="mr16"
+    fxFlex="30"
+    fxHide.lt-md
+    [nextBatchId]="nextBatchId"
+    [filter]="filter"
+    [batch$]="batch$"
+    (isEndedEvent)="onIsEnded($event)"
+    (isLoadingEvent)="onIsLoading($event)"
+    (productsEvent)="setProductsObservable($event)">
+  </anms-products-filter-wrapper>
+
+  <div [ngClass.lt-md]="'expand ml0'"
+       fxFlex.lt-md="100" fxFlex="70" fxLayout="row" fxLayoutWrap
+       fxLayoutGap="0.0%" fxLayoutAlign="start">
+
+    <anms-catalogue
+      class="expand"
+      [products$]="products$"
+      [isLoading$]="isLoading$"
+      [isEnded$]="isEnded$"
+      (batchEvent)="onBatch($event)"
+      (nextBatchEvent)="onNextBatch()"
+      (productImagesEvent)="getProductImages($event)">
+    </anms-catalogue>
+
+  </div>
+
+</div>

@@ -9,7 +9,7 @@ import {
 import {
   productListAdd,
   productListEmpty,
-  productListGet,
+  productListGet, productListGetImages, productListGetImagesFailure, productListGetImagesSuccess,
   productListRemove,
   productListUpdate
 } from './product-list.action';
@@ -70,7 +70,7 @@ export class ProductListEffects {
       }));
     });
 
- /* productImagesGet = createEffect(
+  productImagesGet = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(productListGetImages),
@@ -89,7 +89,7 @@ export class ProductListEffects {
             }),
             catchError(error => of(productListGetImagesFailure({payload: {message: error.message}})))
           )));
-    })*/
+    })
 
 
 

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AgrupationsWrapperRoutingModule } from './agrupations-wrapper-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AgrupationsWrapperComponent } from './agrupations-wrapper.component';

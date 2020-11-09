@@ -1,0 +1,61 @@
+
+mat-grid-tile {
+  background-color: white;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+virtual-scroller {
+
+  height: calc(100% );
+  width: 100%;
+
+}
+
+.scroll {
+  height: calc(100vh - 56px - 32px);
+  width: 100%;
+}
+
+.item {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  border: 0px;
+  margin: 0px;
+  width: calc(100%);
+}
+
+@media only screen and (min-width: 600px) {
+  .scroll {
+    height: calc(100%);
+  }
+  .item {
+    width: calc(100% / 4);
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .item {
+    width: calc(100% / 4);
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .item {
+    width: calc(100% / 6);
+  }
+}
+
+
+
+
+// 900px - 12 => 266.4px i 633.6px
+// 266.4px - 12px =
+// 633.6px -12  = 621.6px --- 617.172px
+// 621.6px - (12 + 16)*2 =
+//•	xs: screen and (max-width: 599px)
+//•	sm: screen and (min-width: 600px) and (max-width: 959px)
+//•	md: screen and (min-width: 960px) and (max-width: 1279px)
+//•	lg: screen and (min-width: 1280px)

@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
     ...this.navigation,
     { link: 'agrupations', label: 'Agrupaciones' },
     { link: 'products', label: 'Productos' },
+    { link: 'catalogue', label: 'Catálogo'},
     { link: 'settings', label: 'anms.menu.settings' }
   ];
 
