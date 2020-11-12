@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ofType, createEffect, Actions } from '@ngrx/effects';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import { LocalStorageService } from '../local-storage/local-storage.service';
 
@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import { loadingEnd, loadingStart } from '../general/general.action';
 import { NotificationService } from '../notifications/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { cartListGet, cartListReset } from '../cart/cart.action';
 
 export const AUTH_KEY = 'AUTH';
 
@@ -61,7 +62,8 @@ export class AuthEffects {
         }),
         switchMap(action => [
           loadingEnd(),
-          userGet({ payload: { id: action.payload.id } })
+          userGet({ payload: { id: action.payload.id } }),
+          cartListGet()
         ])
       ));
 
@@ -91,7 +93,9 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(authLogoutSuccess),
-        map(_ => loadingEnd()),
+        mergeMap(_ => [
+          cartListReset(),
+          loadingEnd()]),
         tap(() => {
           this.router.navigate(['']);
           this.localStorageService.removeItem(AUTH_KEY);

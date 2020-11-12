@@ -25,11 +25,12 @@ export class CatalogueItemComponent implements OnInit, OnChanges {
   @Input() product: Product;
   @Output() imagesViewerEvent = new EventEmitter<Product>();
   @Output() addCartEvent = new EventEmitter<{ cart: CartLine }>();
+  @Output() favoriteEvent = new EventEmitter<{ product: Product }>();
 
   image$: BehaviorSubject<string> = new BehaviorSubject(``);
   srcSet = ``;
   sizes = ``;
-
+  favoriteClick = false;
   sendedSrcSet = false;
 
   constructor() {
@@ -43,6 +44,7 @@ export class CatalogueItemComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
     if (this.isImages(changes.product.currentValue)) {
       this.generateSizes();
       this.generateSrcSet();
@@ -90,5 +92,10 @@ export class CatalogueItemComponent implements OnInit, OnChanges {
     cartLine.quantity = 1;
     cartLine.id = uuidv1();
     this.addCartEvent.emit({ cart: cartLine });
+  }
+
+  favorite($event: Product) {
+    this.favoriteClick = true;
+      this.favoriteEvent.emit({product: $event});
   }
 }

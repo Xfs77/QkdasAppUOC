@@ -7,6 +7,8 @@ export interface ProductsFilterInterface {
   batch: number;
   offset: string;
   sort?: Sort;
+  isActive: boolean;
+  isStock: boolean;
 }
 
 export interface Sort {

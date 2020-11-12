@@ -5,7 +5,7 @@ import {
   productsFilterIsEnded,
   productsFilterIsLoading,
   productsFilterSetAgrupation,
-  productsFilterSetBatch,
+  productsFilterSetBatch, productsFilterSetIsActive, productsFilterSetIsStock,
   productsFilterSetOffset, productsFilterSetSort
 } from './products-filter.action';
 import { UserState } from '../user/user.reducer';
@@ -42,6 +42,12 @@ const reducer = createReducer(
   })),
   on(productsFilterSetSort, produce((draft, action) => {
     draft.filter.sort = action.payload.sort;
+  })),
+  on(productsFilterSetIsActive, produce((draft, action) => {
+    draft.filter.isActive = action.payload.isActive;
+  })),
+  on(productsFilterSetIsStock, produce((draft, action) => {
+    draft.filter.isStock = action.payload.isStock;
   })),
   on(productsFilterIsLoading, produce((draft, action) => {
     draft.isLoading = action.payload.isLoading;

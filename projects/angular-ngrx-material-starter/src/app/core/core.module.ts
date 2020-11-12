@@ -46,10 +46,8 @@ import {
   routeAnimations
 } from './animations/route.animations';
 import { AnimationsService } from './animations/animations.service';
-import { AppErrorHandler } from './error-handler/app-error-handler.service';
 import { CustomSerializer } from './router/custom-serializer';
 import { LocalStorageService } from './local-storage/local-storage.service';
-import { HttpErrorInterceptor } from './http-interceptors/http-error.interceptor';
 import { GoogleAnalyticsEffects } from './google-analytics/google-analytics.effects';
 import { NotificationService } from './notifications/notification.service';
 import { SettingsEffects } from './settings/settings.effects';
@@ -83,11 +81,11 @@ import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons/faSignInAlt';
 import { AgrupationEffects } from './agrupation/agrupation.effects';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ProductFormEffects } from './product-form/product-form.effects';
 import { ProductListEffects } from './product-list/product-list.effects';
 import { ProductsFilterEffects } from './products-filter/products-filter.effects';
+import { CartEffects } from './cart/cart.effects';
 
 export {
   TitleService,
@@ -152,6 +150,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       ProductFormEffects,
       ProductListEffects,
       ProductsFilterEffects,
+      CartEffects,
       SettingsEffects,
       GoogleAnalyticsEffects
     ]),

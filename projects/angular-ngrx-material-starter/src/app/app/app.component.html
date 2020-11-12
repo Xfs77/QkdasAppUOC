@@ -22,7 +22,6 @@
         <mat-toolbar color="primary">
           <button mat-icon-button class="pr20" (click)="sidenav.open()">
             <fa-icon icon="bars"></fa-icon>
-
           </button>
 
           <span routerLink="" class="branding spacer center d-inline d-sm-none">
@@ -42,8 +41,27 @@
           <div>
             <button
               mat-icon-button
+              [routerLink]="['/cart']">
+              <mat-icon
+                *ngIf="(cartSize|async)?.length!==0"
+                matBadge="{{(cartSize|async)?.length}}"
+                matBadgeColor="warn"
+                matBadgeOverlap="true"
+                matBadgePosition="after"
+                matBadgeSize="small">shopping_cart</mat-icon>
+
+              <mat-icon
+                *ngIf="(cartSize|async)?.length===0"
+                matBadgeSize="small">shopping_cart</mat-icon>
+
+            </button>
+          </div>
+
+          <div>
+            <button
+              mat-icon-button
               (click)="onAgrupations()">
-              <fa-icon icon=filter></fa-icon>
+              <mat-icon>filter_alt</mat-icon>
             </button>
           </div>
 

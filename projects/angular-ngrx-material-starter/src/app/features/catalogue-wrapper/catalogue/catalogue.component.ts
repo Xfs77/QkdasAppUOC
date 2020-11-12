@@ -30,7 +30,9 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
   @Output() batchEvent = new EventEmitter<number>(); // calculates batch number depending of the viewer
   @Output() nextBatchEvent = new EventEmitter<boolean>(); // indicates that needs more data
   @Output() productImagesEvent = new EventEmitter<Product>();
-  @Output() addCartEvent = new EventEmitter<{cartLine: CartLine}>();
+  @Output() addCartEvent = new EventEmitter<{cart: CartLine}>();
+  @Output() favoriteEvent = new EventEmitter<{product: Product}>();
+
   private productsLength: number;
 
   constructor(
@@ -46,17 +48,18 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (window.innerWidth < 600) {
-      const pictureHeight = (window.innerWidth - 32 - 24 - 32 ) * 1600 / 1200 + 16 * 2 + 12 * 2 +  50 ;
-      this.batchEvent.emit(Math.round((window.innerHeight - 56) / pictureHeight ) + 2);
+      const pictureHeight = (window.innerWidth - 32 - 24 - 32 ) * 1600 / 1200 + 16 * 2 + 12 * 2 +  100 ;
+      this.batchEvent.emit(Math.ceil((window.innerHeight - 56) / pictureHeight ) + 2);
     } else if (window.innerWidth >= 600 && window.innerWidth < 960) {
-      const pictureHeight = (window.innerWidth - 32 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  50;
-      this.batchEvent.emit(Math.round((window.innerHeight - 64 - 105) / pictureHeight ) + 4);
+      const pictureHeight = (window.innerWidth - 32 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  100;
+      console.log('a', Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) + 4)
+      this.batchEvent.emit(Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) * 4 + 4);
     } else if (window.innerWidth >= 960 && window.innerWidth < 1280) {
-      const pictureHeight = ((window.innerWidth - 32 ) * 0.7 - 16 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  50;
-      this.batchEvent.emit(Math.round((window.innerHeight - 64 - 105) / pictureHeight ) + 4);
+      const pictureHeight = ((window.innerWidth - 32 ) * 0.7 - 16 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  100;
+      this.batchEvent.emit(Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) *  4 + 4);
     } else if (window.innerWidth >= 1280) {
-      const pictureHeight = ((window.innerWidth - 32 ) * 0.7 - 16 - 32 * 6 - 24 * 6) / 6 * 1600 / 1200 + 16 * 2 + 12 * 2 +  50;
-      this.batchEvent.emit(Math.round((window.innerHeight - 64 - 105) / pictureHeight ) + 6);
+      const pictureHeight = ((window.innerWidth - 32 ) * 0.7 - 16 - 32 * 6 - 24 * 6) / 6 * 1600 / 1200 + 16 * 2 + 12 * 2 +  100;
+      this.batchEvent.emit(Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) * 6 + 6);
     }
   }
 
@@ -107,8 +110,15 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
       })).subscribe();
   }
 
-
   addToCart($event: {cart: CartLine}) {
-    
+    this.addCartEvent.emit($event);
+  }
+
+  favorite($event: { product: Product }) {
+      this.favoriteEvent.emit($event);
+  }
+
+  trackBy(index: number, product: Product): string {
+    return product.reference;
   }
 }

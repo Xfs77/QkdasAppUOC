@@ -19,19 +19,21 @@ export class ProductListService {
 
 
   getProducts(filter: ProductsFilterInterface): AngularFirestoreCollection<Product> {
+    console.log('getproducts')
     if (filter.agrupation) {
       let agr: any = this.afFirestore.collection(AppSettings.API_AGRUP);
 
       for (const agrupId of filter.agrupation.path) {
         agr = agr.doc(agrupId).collection(AppSettings.API_AGRUP);
       }
+
       agr = agr.doc(filter.agrupation.id).collection(AppSettings.API_PRODUCT,
         ref => ref
           .orderBy(filter.sort.field, filter.sort.direction)
           .startAfter(filter.offset)
           .limit(filter.batch)
       );
-
+      agr.stateChanges().subscribe(res => console.log(res))
       return agr;
     } else {
       return this.afFirestore.collection(AppSettings.API_PRODUCT,

@@ -19,6 +19,14 @@ export const productsFilterSetSort = createAction(
   '[Products Filter] Set Sort',
   props<{payload: {sort: Sort}}>()
 );
+export const productsFilterSetIsStock = createAction(
+  '[Products Filter] Set isStock',
+  props<{payload: {isStock: boolean}}>()
+);
+export const productsFilterSetIsActive = createAction(
+  '[Products Filter] Set isActive',
+  props<{payload: {isActive: boolean}}>()
+);
 export const productsFilterIsLoading = createAction(
   '[Products Filter] Is Loading',
   props<{payload: {isLoading: boolean}}>()

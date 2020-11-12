@@ -1,4 +1,3 @@
-
 <mat-card class="example-card">
   <div class="aspect-ratio-box">
     <div class="aspect-ratio-box-inside">
@@ -14,10 +13,24 @@
     </div>
   </div>
   <mat-card-actions class="info">
+    <div class="main-info">
+      <div class="favorite">
+        {{product.likes ?  product.likes : 0}}
+        <button class="ml5" type="button" disabled="{{this.favoriteClick}}" class="favorite" mat-icon-button (click)="favorite(product)">
+          <mat-icon class="icon_favorite">favorite</mat-icon>
+        </button>
+      </div>
+
+
+      <div class="price">{{product.price}}€</div>
+    </div>
+
     <button
-      mat-button
+      class="buy"
+      mat-raised-button
+      color="accent"
       (click)="addToCart()">
-      Añadir a la cesta
+      Comprar
     </button>
   </mat-card-actions>
 </mat-card>

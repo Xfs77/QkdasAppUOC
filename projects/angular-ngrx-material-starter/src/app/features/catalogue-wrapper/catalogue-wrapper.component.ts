@@ -10,7 +10,12 @@ import {
 } from '../../core/products-filter/products-filter.selector';
 import { take } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
-import { productListGetImages } from '../../core/product-list/product-list.action';
+import {
+  productListFavorite,
+  productListGetImages
+} from '../../core/product-list/product-list.action';
+import { CartLine } from '../../core/cart/cart.models';
+import { cartAdd } from '../../core/cart/cart.action';
 
 @Component({
   selector: 'anms-catalogue-wrapper',
@@ -60,7 +65,9 @@ export class CatalogueWrapperComponent implements OnInit {
   }
 
   setProductsObservable($event: Observable<Product[]>) {
-    this.products$ = $event;
+    if (!this.products$) {
+      this.products$ = $event;
+    }
   }
 
   onIsLoading($event: boolean) {
@@ -69,6 +76,14 @@ export class CatalogueWrapperComponent implements OnInit {
 
   getProductImages($event: Product) {
     this.store$.dispatch(productListGetImages({payload: {product: $event}}));
+  }
+
+  onFavorite($event: {product: Product}) {
+    this.store$.dispatch(productListFavorite({payload: $event}));
+  }
+
+  addToCart($event: {cart: CartLine}) {
+    this.store$.dispatch(cartAdd({payload: $event}));
   }
 }
 

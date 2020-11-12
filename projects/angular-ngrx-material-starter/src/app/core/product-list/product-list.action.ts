@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Product } from '../product-form/product.models';
+import { ImageData, Product } from '../product-form/product.models';
 import { Update } from '@ngrx/entity';
 import { ProductsFilterInterface } from '../products-filter/products-filter.models';
 
@@ -47,5 +47,21 @@ export const productListGetImagesSuccess = createAction(
 );
 export const productListGetImagesFailure = createAction(
   '[Product List] Get Images Failure',
+  props<{payload: {message: string}}>()
+);
+export const productListFavorite = createAction(
+  '[Product List] Favorite',
+  props<{payload: {
+      product: Product
+    }}>()
+);
+export const productListFavoriteSuccess = createAction(
+  '[Product List] Favorite Success',
+  props<{payload: {
+      product: Product
+    }}>()
+);
+export const productListFavoriteFailure = createAction(
+  '[Product List] Favorite Failure',
   props<{payload: {message: string}}>()
 );

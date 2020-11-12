@@ -37,14 +37,50 @@ img {
 
 button {
   text-align: center;
-  width: 100%;
+  width:70%;
 }
 
 .info {
-  margin: 0;
-  padding: 8px;
-  height:  50px;
+  margin: 0px 0;
+  height:  100px;
   font-size: 0.75em;
-  background-color: #ffa726;
+
+  .main-info {
+    margin: 0px 18px 0px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .buy {
+    width: 100%;
+    margin: 0px 0px 6px 0px !important ;
+  }
 }
 
+mat-card-actions {
+  padding-top: 0px !important;
+}
+.favorite, .main-info {
+  margin-left: 0px;
+  font-size: 16px;
+}
+.price {
+
+  font-size: 18px;
+  margin-right: 0px;
+}
+div.favorite {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button.favorite {
+  display: inline-block !important;
+  margin-bottom: 12px;
+
+}
+
+.icon_favorite {
+  width: 12px;
+  height: 12px;
+}

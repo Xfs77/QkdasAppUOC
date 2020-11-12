@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { Product } from '../../../core/product-form/product.models';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { take } from 'rxjs/operators';
+import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { filter, take, withLatestFrom } from 'rxjs/operators';
 
 
 @Component({
@@ -32,19 +32,34 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('viewer') viewport: CdkVirtualScrollViewport; // viewport where we are displaying items
 
-  constructor() {}
+  constructor(
+    private scrollDispatcher: ScrollDispatcher,
+  ) {}
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.batchEvent.emit(Math.round(this.availableViewerHeight() / 100) + 3 );
+    this.batchEvent.emit(Math.round(this.availableViewerHeight() / 100) + 5 );
   }
 
   checkBatch() {
+/*    this.scrollDispatcher.scrolled().subscribe(_ => console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength()))
+    const scroll$ = this.scrollDispatcher.scrolled().pipe(
+      filter(event => {
+          return this.viewport.getRenderedRange().end === this.viewport.getDataLength();
+        }
+      ));
 
+    scroll$.pipe(withLatestFrom(this.isLoading$, this.isEnded$)).subscribe(res => {
+      if (!res[1] && !res[2]) {
+        this.nextBatchEvent.emit(true);
+      }
+    });*/
+console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength())
     if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
       combineLatest([this.isLoading$, this.isEnded$]).pipe(take(1)).subscribe(res => {
+        console.log(res, this.viewport.getRenderedRange(), this.viewport.getDataLength())
         if (!res[0] && !res[1]) {
           this.nextBatchEvent.emit(true);
         }
@@ -70,7 +85,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
 
   availableViewerHeight() {
     if (window.innerWidth < 600) {
-      return (window.innerHeight - 56 - 90 - 105);
+      return (window.innerHeight - 56 - 90 );
     } else {
       return (window.innerHeight - 64 - 90 - 105);
     }

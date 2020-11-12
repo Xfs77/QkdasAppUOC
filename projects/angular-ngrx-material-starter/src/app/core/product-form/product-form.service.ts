@@ -20,7 +20,6 @@ export class ProductFormService {
 
 
   addProduct(product: Product, imageIsMain: ImageData, edit: boolean) {
-
     const batch = this.afFirestore.firestore.batch();
     const operation = (refItem) => {
       if (edit) {

@@ -3,11 +3,12 @@ import { Product } from '../product-form/product.models';
 import { Action, createReducer, on } from '@ngrx/store';
 import produce from 'immer';
 import {
-  productListAdd, productListEmpty, productListGetImagesSuccess,
+  productListAdd, productListEmpty, productListFavorite, productListGetImagesSuccess,
   productListRemove, productListRemoveMainImage,
   productListReset,
   productListUpdate
 } from './product-list.action';
+
 
 export interface ProductListState extends EntityState<Product> {
   isEmptyResult: boolean;

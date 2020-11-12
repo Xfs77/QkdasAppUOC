@@ -21,6 +21,7 @@ import {
   ProductsFilterState
 } from './products-filter/products-filter.reducer';
 import { productListReducer, ProductListState } from './product-list/product-list.reducer';
+import { cartReducer, CartState } from './cart/cart.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
   general: generalReducer,
@@ -31,7 +32,8 @@ export const reducers: ActionReducerMap<AppState> = {
   agrupation: agrupationReducer,
   productForm: productFormReducer,
   productsFilter: productsFilterReducer,
-  productList: productListReducer
+  productList: productListReducer,
+  cartList: cartReducer,
 };
 
 export const selectGeneralState = createFeatureSelector<AppState, GeneralState>(
@@ -52,6 +54,9 @@ export const selectProductFormState = createFeatureSelector<AppState, ProductFor
 export const selectProductListState = createFeatureSelector<ProductListState>(
   'productList'
 );
+export const selectCartState = createFeatureSelector<CartState>(
+  'cartList'
+);
 export const selectProductsFilterState = createFeatureSelector<ProductsFilterState>(
   'productsFilter'
 );
@@ -70,6 +75,7 @@ export interface AppState {
   productForm: ProductFormState;
   productsFilter: ProductsFilterState;
   productList: ProductListState;
+  cartList: CartState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
 }

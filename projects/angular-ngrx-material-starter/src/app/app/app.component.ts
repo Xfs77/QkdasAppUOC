@@ -21,8 +21,8 @@ import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.c
 import { selectLoading } from '../core/general/general.selectors';
 import { AgrupationsComponent } from '../features/agrupations-wrapper/agrupations/agrupations.component';
 import { loadingEnd } from '../core/general/general.action';
-import { selectAgrupationSelected } from '../core/agrupation/agrupation.selectors';
 import { currentSelectedAgrupation } from '../core/agrupation/agrupation.action';
+import { selectCartListState } from '../core/cart/cart.selectors';
 
 @Component({
   selector: 'anms-root',
@@ -54,6 +54,9 @@ export class AppComponent implements OnInit {
   theme$: Observable<string>;
   loading$: Observable<boolean>;
 
+  cartSize;
+
+
   constructor(
     private store: Store,
     private storageService: LocalStorageService,
@@ -68,6 +71,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(loadingEnd());
     this.store.dispatch(actionSettingsChangeLanguage({ language: 'es' }));
+    this.cartSize = this.store.select(selectCartListState);
+
     this.storageService.testLocalStorage();
     if (AppComponent.isIEorEdgeOrSafari()) {
       this.store.dispatch(
@@ -106,6 +111,7 @@ export class AppComponent implements OnInit {
       dialogConfig.closeOnNavigation = true;
       dialogConfig.width = '90vw';
       dialogConfig.maxWidth = '500px';
+      dialogConfig.position = {top: '74px'}
 
       this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
       this.dialogRefAgrup.afterClosed().subscribe(res => {

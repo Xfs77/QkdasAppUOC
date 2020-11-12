@@ -33,6 +33,11 @@ const routes: Routes = [
       import('./features/catalogue-wrapper/catalogue-wrapper.module').then((m) => m.CatalogueWrapperModule)
   },
   {
+    path: 'cart',
+    loadChildren: () =>
+      import('./features/cart-wrapper/cart-wrapper.module').then((m) => m.CartWrapperModule)
+  },
+  {
     path: 'feature-list',
     loadChildren: () =>
       import('./features/feature-list/feature-list.module').then(

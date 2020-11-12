@@ -32,7 +32,9 @@
               "@firebase/firestore",
               "@firebase/functions",
               "@firebase/performance",
-              "@firebase/remote-config"
+              "@firebase/remote-config",
+              "hammerjs",
+
             ],
             "outputPath": "dist/angular-ngrx-material-starter",
             "index": "projects/angular-ngrx-material-starter/src/index.html",

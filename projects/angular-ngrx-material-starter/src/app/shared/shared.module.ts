@@ -59,6 +59,7 @@ import { PhotoDirective } from './directives/photo.directive';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   imports: [
@@ -84,6 +85,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
     MatDividerModule,
     MatRadioModule,
     MatDialogModule,
+    MatBadgeModule,
     FlexLayoutModule,
     MatTreeModule,
 
@@ -127,6 +129,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
+    MatBadgeModule,
     FlexLayoutModule,
     MatTreeModule,
 

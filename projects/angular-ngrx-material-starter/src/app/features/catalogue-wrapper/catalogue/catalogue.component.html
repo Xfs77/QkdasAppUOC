@@ -1,17 +1,23 @@
-<div class="expand" *ngIf="(products$ | async).length === 0" fxLayoutAlign="center center">
+<div class="expand" *ngIf="(products$ | async).length === 0">
+  <mat-card
+    fxLayout="column"
+    fxFlex="100"
+    fxLayoutGap="0.0%"
+    fxLayoutAlign="center center"
+    class="expand text-align-center">
   Seleccione algún elemento del catálogo
+  </mat-card>
 </div>
 
 <div fxLayoutGap="0.0%" fxLayoutAlign="center" class="expand" *ngIf="(products$ | async).length !== 0">
   <virtual-scroller   class="scroll"  #scroll   [items]="products$ |async" (vsEnd)="fetchMore($event)">
     <anms-catalogue-item
+      (favoriteEvent)="favorite($event)"
       (imagesViewerEvent) = openImageViewer($event)
       (addCartEvent)="addToCart($event)"
       class="item"
-      *ngFor="let product of scroll.viewPortItems"
+      *ngFor="let product of scroll.viewPortItems; trackBy: trackBy"
       [product]="product">
     </anms-catalogue-item>
   </virtual-scroller>
-
-
 </div>
