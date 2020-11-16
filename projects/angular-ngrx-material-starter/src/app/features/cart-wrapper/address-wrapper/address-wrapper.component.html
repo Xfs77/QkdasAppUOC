@@ -1,0 +1,7 @@
+<anms-address
+  [currentAddress$]="currentAddress$"
+  [address$]="address$"
+  (selectedAddressEvent)="setAddress($event)"
+  (confirmEvent)="setAddress($event)"
+  (cancelEvent)="cancel()">
+</anms-address>

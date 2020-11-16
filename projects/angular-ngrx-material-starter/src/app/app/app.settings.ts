@@ -5,6 +5,7 @@ export class AppSettings {
   public static readonly API_PRODUCT = 'products';
   public static readonly API_IMAGES = 'images';
   public static readonly API_ADDRESS = 'address';
+  public static readonly USER_KEY = 'user'
 
 }
 

@@ -9,6 +9,7 @@ import {
   productsFilterSetOffset, productsFilterSetSort
 } from './products-filter.action';
 import { UserState } from '../user/user.reducer';
+import { act } from '@ngrx/effects';
 
 export interface  ProductsFilterState {
   filter: ProductsFilterInterface;
@@ -22,6 +23,8 @@ export const initialProductsFilterState: ProductsFilterState = {
     batch: 0,
     offset: null,
     sort: null,
+    isActive: null,
+    isStock: null
   } as ProductsFilterInterface,
   isLoading: false,
   isEnded: false

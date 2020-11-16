@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import * as CryptoJS from 'crypto-js'
+import { environment } from '../../../environments/environment';
+
 
 const APP_PREFIX = 'ANMS-';
 
@@ -40,11 +43,11 @@ export class LocalStorageService {
   }
 
   setItem(key: string, value: any) {
-    localStorage.setItem(`${APP_PREFIX}${key}`, JSON.stringify(value));
+    localStorage.setItem(`${APP_PREFIX}${key}`, CryptoJS.AES.encrypt(JSON.stringify(value), environment.criptoKey).toString() );
   }
 
   getItem(key: string) {
-    return JSON.parse(localStorage.getItem(`${APP_PREFIX}${key}`));
+    return JSON.parse(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt(localStorage.getItem(`${APP_PREFIX}${key}`), environment.criptoKey)));
   }
 
   removeItem(key: string) {

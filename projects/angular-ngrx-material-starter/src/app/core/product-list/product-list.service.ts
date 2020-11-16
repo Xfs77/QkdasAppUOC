@@ -19,7 +19,6 @@ export class ProductListService {
 
 
   getProducts(filter: ProductsFilterInterface): AngularFirestoreCollection<Product> {
-    console.log('getproducts')
     if (filter.agrupation) {
       let agr: any = this.afFirestore.collection(AppSettings.API_AGRUP);
 
@@ -33,7 +32,7 @@ export class ProductListService {
           .startAfter(filter.offset)
           .limit(filter.batch)
       );
-      agr.stateChanges().subscribe(res => console.log(res))
+
       return agr;
     } else {
       return this.afFirestore.collection(AppSettings.API_PRODUCT,

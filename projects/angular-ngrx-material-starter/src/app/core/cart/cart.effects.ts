@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { CartService } from './cart.service';
-import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { loadingEnd, loadingStart } from '../general/general.action';
 import {
   cartAdd,
   cartAddFailure,
-  cartAddSuccess,
+  cartAddSuccess, cartCheckStock, cartCheckStockFailure, cartCheckStockSuccess,
   cartListAdd,
   cartListGet,
   cartListGetFailure,
@@ -25,6 +25,8 @@ import { Update } from '@ngrx/entity';
 import { CartLine } from './cart.models';
 import { from, of } from 'rxjs';
 import { NotificationService } from '../notifications/notification.service';
+import { create } from 'domain';
+import { userAddressGet, userGetFailure } from '../user/user.actions';
 
 @Injectable()
 export class CartEffects {
@@ -127,6 +129,38 @@ export class CartEffects {
     tap(_ => this.notificationService.error('Se ha producido un error al añadir el producto a la cesta')),
     map(action => loadingEnd())
   );
+
+  cartCheckStock = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(cartCheckStock),
+        tap(_ => {
+          return this.store$.dispatch(loadingStart());
+        }),
+        mergeMap(action =>
+          this.cartService.checkStock(action.payload.cart.product, action.payload.quantity).pipe(
+            map(isStock => cartCheckStockSuccess({payload: {cart: action.payload.cart, isStock}}))
+          )),
+          catchError((error => of(cartCheckStockFailure({payload: {message: error.message}}))))
+          )
+    });
+
+  cartCheckStockSuccess = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(cartCheckStockSuccess),
+        switchMap(action => [
+          loadingEnd()
+        ])
+      )});
+
+  cartCheckStockFailure = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(cartCheckStockFailure),
+        tap(_ => this.notificationService.error('Error al comprobar el stock del artículo')),
+        map(action => loadingEnd())
+      ));
 
   cartUpdate = createEffect(
     () => {

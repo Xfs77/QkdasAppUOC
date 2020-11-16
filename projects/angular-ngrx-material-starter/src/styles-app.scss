@@ -10,6 +10,16 @@ input, textarea, mat-checkbox {
   box-sizing: border-box;
 }
 
+.center {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.border {
+  border: 1px solid black;
+}
 .envelope {
   margin: 16px;
   height: calc(100% - 32px);

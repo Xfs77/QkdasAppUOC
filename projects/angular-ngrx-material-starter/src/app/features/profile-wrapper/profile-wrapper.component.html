@@ -43,7 +43,7 @@
       fxLayout="row wrap"
       class="radio-group"
       (change)="updateDefaultAddress($event)">
-      <mat-radio-button  fxFlex="100" fxFlex.md="50" fxFlex.lg="33" class="radio-button pb-3" *ngFor="let address of address$|async"
+      <mat-radio-button  fxLayoutAlign="center center" fxFlex="100" fxFlex.md="50" fxFlex.lg="33" class="radio-button pb-3" *ngFor="let address of address$|async"
                          [checked]="address.default" [value]="address">
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <div>
@@ -51,10 +51,7 @@
               {{address.name}} {{address.surname}}
             </div>
             <div>
-              {{address.phone1}}
-            </div>
-            <div *ngIf="address.phone2">
-              {{(this.user$|async).phone2}}
+              {{address.phone1}}  <span *ngIf="address.phone2"> / {{this.address.phone2}}</span>
             </div>
             <div>
               <div>

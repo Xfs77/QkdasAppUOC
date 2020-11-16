@@ -19,7 +19,7 @@
         <cdk-virtual-scroll-viewport #viewer class="expand" [itemSize]="100"
                                      (scrolledIndexChange)="checkBatch()">
           <div *cdkVirtualFor="let product of products$ |async; let i = index; trackBy: trackByIdx">
-            <mat-card class="product-edition-card mb5" [ngClass]="{'muted': !product.active}"
+            <mat-card class="product-edition-card mb5" [ngClass]="{'muted': !product.active,  'nostock': product.quantity <= 0}"
                       fxFlex="100">
               <anms-product-item
                 [product]="product"

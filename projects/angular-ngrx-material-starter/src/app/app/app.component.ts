@@ -10,7 +10,7 @@ import {
   selectIsAuthenticated,
   selectSettingsStickyHeader,
   selectSettingsLanguage,
-  selectEffectiveTheme
+  selectEffectiveTheme, authLogin
 } from '../core/core.module';
 import {
   actionSettingsChangeAnimationsPageDisabled, actionSettingsChangeLanguage
@@ -23,6 +23,8 @@ import { AgrupationsComponent } from '../features/agrupations-wrapper/agrupation
 import { loadingEnd } from '../core/general/general.action';
 import { currentSelectedAgrupation } from '../core/agrupation/agrupation.action';
 import { selectCartListState } from '../core/cart/cart.selectors';
+import { AUTH_KEY } from '../core/auth/auth.effects';
+import { AppSettings } from './app.settings';
 
 @Component({
   selector: 'anms-root',
@@ -60,6 +62,7 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store,
     private storageService: LocalStorageService,
+    private lss: LocalStorageService,
     private router: Router,
     private dialog: MatDialog,
   ) {}
@@ -69,6 +72,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    try {
+      const tmp = this.lss.getItem(AppSettings.USER_KEY);
+      console.log(tmp)
+      this.store.dispatch(authLogin({payload: {email: tmp.email, password: tmp.password}}));
+    } catch (e) {
+    }
     this.store.dispatch(loadingEnd());
     this.store.dispatch(actionSettingsChangeLanguage({ language: 'es' }));
     this.cartSize = this.store.select(selectCartListState);

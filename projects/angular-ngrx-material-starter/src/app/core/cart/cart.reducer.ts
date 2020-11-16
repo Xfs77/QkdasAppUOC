@@ -2,9 +2,17 @@ import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { CartLine } from './cart.models';
 import { Action, createReducer, on } from '@ngrx/store';
 import produce from 'immer';
-import { cartListAdd, cartListRemove, cartListReset, cartListUpdate } from './cart.action';
+import {
+  cartCheckStock, cartCheckStockSuccess,
+  cartListAdd,
+  cartListRemove,
+  cartListReset,
+  cartListUpdate, cartSetAddress
+} from './cart.action';
+import { Address } from '../user/user.models';
 
 export interface CartState extends EntityState<CartLine> {
+  address: Address;
 }
 
 export const adapterCart: EntityAdapter<CartLine> =
@@ -13,6 +21,7 @@ export const adapterCart: EntityAdapter<CartLine> =
   });
 
 export const initialCartState: EntityState<CartLine> = adapterCart.getInitialState({
+  address: null
 });
 
 export const {
@@ -26,7 +35,6 @@ export const {
 const reducer = createReducer(
   initialCartState,
   on(cartListAdd, produce((draft, action) => {
-    console.log(draft.cart)
     return adapterCart.addOne(action.payload.cart, draft);
   })),
   on(cartListUpdate, produce((draft, action) => {
@@ -36,8 +44,16 @@ const reducer = createReducer(
     return adapterCart.removeOne(action.payload.cart.id, draft);
   })),
   on(cartListReset, produce((draft, action) => {
-    console.log('FDD')
     return adapterCart.removeAll(draft);
+  })),
+  on(cartCheckStock, produce((draft, action) => {
+    return adapterCart.updateOne({id: action.payload.cart.id, changes: {isStock: null}}, draft);
+  })),
+  on(cartCheckStockSuccess, produce((draft, action) => {
+    return adapterCart.updateOne({id: action.payload.cart.id, changes: {isStock: action.payload.isStock}}, draft);
+  })),
+  on(cartSetAddress, produce((draft, action) => {
+    draft.address  = action.payload.address;
   })),
 );
 

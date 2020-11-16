@@ -13,7 +13,17 @@ export const selectAddressProfileById = createSelector(
   (state, props) => state.entities[props.id]
 );
 
+export const selectDefaultAddress = createSelector(
+  selectUserState,
+  state => Object.values(state.entities).filter(item => item.default === true)[0]
+);
+
 export const selectUserProfile = createSelector(
   selectUserState,
   state => state.user
+);
+
+export const selectUserId = createSelector(
+  selectUserState,
+  state => state.user.id
 );

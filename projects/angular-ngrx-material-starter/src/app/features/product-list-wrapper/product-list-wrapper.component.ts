@@ -47,7 +47,13 @@ export class ProductListWrapperComponent implements OnInit {
     this.isLoading$ = this.store$.select(selectProductsFilterIsLoading);
     this.isEnded$ = this.store$.select(selectProductsFilterIsEnded);
     this.store$.select(selectProductsFilter).pipe(take(1)).subscribe(res => {
-      this.filter = res;
+      if (res) {
+        this.filter = res;
+      }
+     this.filter = {
+        ...this.filter,
+        isActive: false,
+        isStock: false}
     });
   }
 

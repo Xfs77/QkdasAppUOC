@@ -3,6 +3,7 @@ const packageJson = require('../../../../package.json');
 export const environment = {
   appName: 'Qkdas Art',
   envName: 'PROD',
+  criptoKey: 'ashdafdfjk22323jadsad',
   production: true,
   test: false,
   i18nPrefix: '/angular-ngrx-material-starter',
@@ -19,5 +20,18 @@ export const environment = {
     angularCli: packageJson.devDependencies['@angular/cli'],
     typescript: packageJson.devDependencies['typescript'],
     cypress: packageJson.devDependencies['cypress']
+  },
+  pkStripeTest: 'pk_test_51HnPcFIjHFJYs4LUjgsSfS4xIcGucoSeYjopLOLcmgaGw0R5JQE29ZGvCy8RCKGUSGtp50TCgdMesZpR1uglP7nk008VmSSMxk',
+  skStripeTest: 'sk_test_51HnPcFIjHFJYs4LUvmXiBnG8uCvscynq1cpGBnkTLLQwQrfOg6Us4LyLvBmwvL0aFLxBV3dH830jb3i4VtkaAz3N00yiELayqs',
+  firebaseConfig: {
+    apiKey: 'AIzaSyAgvA8lyIGILOZwn5yZr6MyenTgqIDdRiY',
+    authDomain: 'qkdasartuoc.firebaseapp.com',
+    databaseURL: 'https://qkdasartuoc.firebaseio.com',
+    projectId: 'qkdasartuoc',
+    storageBucket: 'qkdasartuoc.appspot.com',
+    messagingSenderId: '429277145752',
+    appId: '1:429277145752:web:2a5394022eeb27ebeabeed',
+    measurementId: 'G-0L6GZKF89N'
   }
 };
+

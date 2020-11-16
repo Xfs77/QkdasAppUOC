@@ -13,8 +13,12 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import {
   productsFilterApply,
-  productsFilterIsEnded, productsFilterSetAgrupation,
-  productsFilterSetBatch, productsFilterSetOffset,
+  productsFilterIsEnded,
+  productsFilterSetAgrupation,
+  productsFilterSetBatch,
+  productsFilterSetIsActive,
+  productsFilterSetIsStock,
+  productsFilterSetOffset,
   productsFilterSetSort
 } from '../../core/products-filter/products-filter.action';
 import { selectProductsFilterIsLoading } from '../../core/products-filter/products-filter.selector';
@@ -129,6 +133,8 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
 
   onSelectAgrup($event: Agrupation) {
     this.isEndedEvent.emit(false);
+    this.store$.dispatch(productsFilterSetIsStock({payload: {isStock: this.filter.isStock}}));
+    this.store$.dispatch(productsFilterSetIsActive({payload: {isActive: this.filter.isActive}}));
     this.store$.dispatch(productsFilterSetAgrupation({payload: {agrupation: $event}}));
   }
 

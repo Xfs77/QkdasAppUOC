@@ -20,6 +20,7 @@ import { loadingEnd, loadingStart } from '../general/general.action';
 import { NotificationService } from '../notifications/notification.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { cartListGet, cartListReset } from '../cart/cart.action';
+import { AppSettings } from '../../app/app.settings';
 
 export const AUTH_KEY = 'AUTH';
 
@@ -99,6 +100,7 @@ export class AuthEffects {
         tap(() => {
           this.router.navigate(['']);
           this.localStorageService.removeItem(AUTH_KEY);
+          this.localStorageService.removeItem(AppSettings.USER_KEY);
         })
       ));
 

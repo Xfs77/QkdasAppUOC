@@ -3,6 +3,9 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { AppSettings } from '../../app/app.settings';
 import { CartLine } from './cart.models';
 import {firestore} from 'firebase';
+import { Product } from '../product-form/product.models';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +23,6 @@ export class CartService {
   }
 
   addCart(idUser: string, cartLine: CartLine) {
-    console.log(cartLine)
-    console.log(idUser, cartLine)
     const timestamp: firestore.FieldValue = firestore.FieldValue.serverTimestamp();
     cartLine = {...cartLine };
     const query = this.afFirestore.collection(AppSettings.API_USERS).doc(idUser).collection(AppSettings.API_CART).doc(cartLine.id);
@@ -29,6 +30,18 @@ export class CartService {
         ...cartLine,
         timestamp
       });
+  }
+
+  checkStock(product: Product, quantity: number): Observable<boolean> {
+    return this.afFirestore.collection(AppSettings.API_PRODUCT).doc(product.reference).get().pipe(
+      map(res => {
+        const p = res.data() as Product;
+        if (p.quantity >= quantity) {
+          return true;
+        } else {
+          return false;
+        }
+      }));
   }
 
   async updateCart(idUser: string, cartLine: CartLine): Promise<void> {

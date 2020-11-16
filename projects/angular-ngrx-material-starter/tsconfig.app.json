@@ -1,9 +1,22 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/app",
-    "types": ["node"]
+    "outDir": "./out-tsc/app",
+    "types": [
+      "@types/stripe-checkout",
+      "@types/node"
+    ]
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.d.ts"]
+  "angularCompilerOptions": {
+    "enableIvy": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "typings.d.ts",
+    "../../node_modules/@types/node/globals.d.ts"
+  ],
+  "exclude": [
+    "src/test.ts",
+    "src/**/*.spec.ts"
+  ]
 }

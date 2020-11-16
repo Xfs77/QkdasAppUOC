@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { Product } from '../product-form/product.models';
 import { Agrupation } from '../agrupation/agrupation.models';
 import { Sort } from './products-filter.models';
 

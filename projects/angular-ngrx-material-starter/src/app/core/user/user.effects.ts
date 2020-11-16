@@ -32,7 +32,6 @@ import {
 import { Address, User } from './user.models';
 import { Store } from '@ngrx/store';
 import { loadingEnd, loadingStart } from '../general/general.action';
-import { authLoginFailure, authLogoutFailure } from '../auth/auth.actions';
 import { NotificationService } from '../notifications/notification.service';
 
 @Injectable()

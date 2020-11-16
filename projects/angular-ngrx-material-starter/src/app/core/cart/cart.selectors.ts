@@ -18,3 +18,16 @@ export const  selectTotalCartListState = createSelector(
   }
 )
 
+export const  selectCartlineById = createSelector(
+  selectCartListState,
+  (cart, props) => {
+    return cart.filter(item => item.id === props.id)[0];
+  }
+);
+
+export const  selectCartAddress = createSelector(
+  selectCartState,
+  state => {
+    return state.address;
+  }
+)

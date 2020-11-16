@@ -41,8 +41,6 @@ export class AgrupationsComponent implements OnInit, OnChanges {
     public store$: Store,
     @Optional() private dialogRef: MatDialogRef<AgrupationsComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) data
-
-
   ) {
 
     this.treeControl = this.database.treeControl;

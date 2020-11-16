@@ -4,6 +4,7 @@ const imageResize = require('./ImageResize/imageResize');
 const agrupationsHasChildren = require('./Agrupations/agrupationsHasChildren');
 const agrupationsHasItems = require('./Agrupations/agrupationsHasItems');
 const agrupationsUpdatePath = require('./Agrupations/agrupationsUpdatePath');
+const stripeFunctions = require('./Stripe/stripeFunctions');
 const functions = require("firebase-functions");
 
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
@@ -33,3 +34,5 @@ exports.agrupationUpdatePathLevel1 = agrupationsUpdatePath.agrupationUpdatePathL
 exports.agrupationUpdatePathLevel2 = agrupationsUpdatePath.agrupationUpdatePathLevel2;
 exports.agrupationUpdatePathLevel3 = agrupationsUpdatePath.agrupationUpdatePathLevel3;
 exports.agrupationUpdatePathLevel4 = agrupationsUpdatePath.agrupationUpdatePathLevel4;
+
+exports.checkout = stripeFunctions.checkout;

@@ -1,5 +1,8 @@
 <anms-cart
   [cart$]="cart$"
   [totalImport]="total$"
+  [userId]="userId"
   (removeEvent)="removeCart($event)"
-  (updateEvent)="updateCart($event)"></anms-cart>
+  (updateEvent)="updateCart($event)"
+  (shippingEvent)="shippingAddress()"
+  (payEvent)="pay()"></anms-cart>

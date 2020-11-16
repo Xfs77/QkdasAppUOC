@@ -42,6 +42,13 @@ export class ProductListEffects {
         withLatestFrom(this.store$.select(selectProductsFilter)),
         mergeMap(([action, filter]) => {
           return this.productsService.getProducts(filter).stateChanges().pipe(
+            map(res => {
+              if (filter.isActive === true && filter.isStock === true) {
+                return res.filter(item => item.payload.doc.data().active && item.payload.doc.data().quantity > 0)
+              } else {
+                return res;
+              }
+            }),
             map((res: DocumentChangeAction<Product>[]) => {
               const actions = [];
               if (!res || res.length === 0) {

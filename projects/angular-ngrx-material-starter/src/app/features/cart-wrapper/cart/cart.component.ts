@@ -1,6 +1,21 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild, ElementRef
+} from '@angular/core';
 import { CartLine } from '../../../core/cart/cart.models';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { MatStepper } from '@angular/material/stepper';
+import { MatButton } from '@angular/material/button';
+import { CdkStepper } from '@angular/cdk/stepper';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { catchError, map } from 'rxjs/operators';
+import { LocalStorageService } from '../../../core/local-storage/local-storage.service';
 
 @Component({
   selector: 'anms-cart',
@@ -12,9 +27,15 @@ export class CartComponent implements OnInit {
 
   @Input() cart$: Observable<CartLine[]>;
   @Input() totalImport: Observable<number>;
+  @Input() userId: string;
   @Output() removeEvent = new EventEmitter<CartLine>();
   @Output() updateEvent: EventEmitter<{quantity: number, cartLine: CartLine}> = new EventEmitter();
-  @Output() paymentEvent: EventEmitter<{totalAmount: number}> = new EventEmitter();
+  @Output() shippingEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() payEvent: EventEmitter<boolean> = new EventEmitter();
+
+  @ViewChild('stepper') stepper: MatStepper;
+
+  isCreateOrder = false;
 
   constructor() { }
 
@@ -25,16 +46,42 @@ export class CartComponent implements OnInit {
     this.removeEvent.emit($event);
   }
 
-  arrayOne(n: number): any[] {
-    const tmp = [];
-    for (let i = 1; i < 11; i++) {
-      tmp.push(i);
-    }
-    return tmp;
-  }
-
   updateCart($event, item: CartLine) {
     this.updateEvent.emit({quantity: $event, cartLine: item});
   }
 
+  iniOrder() {
+    this.isCreateOrder = true;
+  }
+
+  createOrder() {
+    this.shippingEvent.emit(true);
+  }
+
+  cancelOrder() {
+   (this.stepper.reset());
+
+    this.isCreateOrder = false;
+  }
+
+  next() {
+    this.stepper.next();
+    switch (this.stepper._getFocusIndex()) {
+      case 1:
+        this.shippingEvent.emit(true);
+        break;
+      case 2:
+        this.onPay();
+        break;
+    }
+  }
+
+  back() {
+    this.stepper.previous();
+  }
+
+  private onPay() {
+    this.payEvent.emit(true);
+
+  }
 }

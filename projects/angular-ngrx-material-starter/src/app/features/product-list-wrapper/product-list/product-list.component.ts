@@ -56,10 +56,8 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
         this.nextBatchEvent.emit(true);
       }
     });*/
-console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength())
     if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
       combineLatest([this.isLoading$, this.isEnded$]).pipe(take(1)).subscribe(res => {
-        console.log(res, this.viewport.getRenderedRange(), this.viewport.getDataLength())
         if (!res[0] && !res[1]) {
           this.nextBatchEvent.emit(true);
         }
