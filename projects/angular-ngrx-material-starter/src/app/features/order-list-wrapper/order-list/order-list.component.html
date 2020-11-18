@@ -1,0 +1,9 @@
+
+<div *ngFor="let order of order$ |async">
+  <div>
+    {{order.id}}
+  </div>
+  <div  *ngFor ="let line of order.orderLines">
+    referencia: {{line.product.reference}}
+  </div>
+</div>

@@ -8,6 +8,11 @@ const routes: Routes = [
     component: CartWrapperComponent,
     data:  {title: 'Cesta'},
     pathMatch: 'full'
+  },
+  {
+    path: 'done/:checkout',
+    component: CartWrapperComponent,
+    data:  {title: 'Cesta'},
   }
 ];
 

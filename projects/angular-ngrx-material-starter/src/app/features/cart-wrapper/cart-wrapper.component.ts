@@ -9,14 +9,20 @@ import {
   selectTotalCartListState
 } from '../../core/cart/cart.selectors';
 import { cartCheckStock, cartRemove, cartUpdate } from '../../core/cart/cart.action';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, filter, map, take } from 'rxjs/operators';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { AddressWrapperComponent } from './address-wrapper/address-wrapper.component';
 import { CartComponent } from './cart/cart.component';
-import { selectUserId } from '../../core/user/user.selectors';
+import { selectUserId, selectUserProfile } from '../../core/user/user.selectors';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { loadingEnd, loadingStart } from '../../core/general/general.action';
 import { environment } from '../../../environments/environment';
+import { CartService } from '../../core/cart/cart.service';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../core/user/user.models';
+import { orderCreate } from '../../core/order/order.action';
+import { Order, OrderLine } from '../../core/order/order.models';
+import { selectProductListState } from '../../core/core.state';
 
 @Component({
   selector: 'anms-cart-wrapper',
@@ -27,8 +33,9 @@ import { environment } from '../../../environments/environment';
 export class CartWrapperComponent implements OnInit {
 
   cart$: Observable<CartLine[]>;
+  order = {} as Order;
   total$: Observable<number>;
-  userId: string
+  userId: string;
   dialogRef: MatDialogRef<AddressWrapperComponent, any>;
 
   @ViewChild(CartComponent) cartComponent: CartComponent;
@@ -36,17 +43,21 @@ export class CartWrapperComponent implements OnInit {
   constructor(
     private store$: Store,
     private dialog: MatDialog,
-    private notificationService: NotificationService,
     private http: HttpClient,
-    private notificationService: NotificationService
+    private route: ActivatedRoute,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe(res => {
+      console.log(res.checkout);
+    })
+
     this.cart$ = this.store$.select(selectCartListState);
     this.total$ = this.store$.select(selectTotalCartListState);
-    this.store$.select(selectUserId).pipe(take(1)).subscribe(res => {
-      this.userId = res;
-    })
+    this.store$.select(selectUserProfile).subscribe(res => {
+      this.order.user = res;
+    });
   }
 
   removeCart($event: CartLine) {
@@ -79,12 +90,14 @@ export class CartWrapperComponent implements OnInit {
     dialogConfig.closeOnNavigation = true;
     dialogConfig.width = '90vw';
     dialogConfig.maxWidth = '500px';
+    dialogConfig.disableClose = true;
 
     this.dialogRef = this.dialog.open(AddressWrapperComponent, dialogConfig );
     this.dialogRef.afterClosed().subscribe(res => {
-      console.log(res);
       if (res && res.next) {
         this.cartComponent.next();
+        this.order.shippingAddress = res.address;
+        this.order.date = new Date();
       } else {
         this.cartComponent.back();
       }
@@ -92,21 +105,41 @@ export class CartWrapperComponent implements OnInit {
   }
 
   pay() {
+    this.createOrderContent();
+
     this.store$.dispatch(loadingStart());
-    const header = new HttpHeaders({'Content-Type':  'application/json'});
-    this.http.post<any>('https://us-central1-qkdasartuoc.cloudfunctions.net/checkout', {userId: this.userId}, { headers: header}).pipe(
-      map( session => {
-        return Stripe(environment.pkStripeTest).redirectToCheckout({ sessionId: session.id });
-      }),
-      catchError(error => {
-        this.store$.dispatch(loadingEnd());
-        return of(error);
-      } ))
-      .subscribe(result => {
-        this.store$.dispatch(loadingEnd());
-        if (result.error) {
-          this.notificationService.error('No se ha podido un error al efectuar el pago')
-        }
-      });
+        const header = new HttpHeaders({'Content-Type':  'application/json'});
+        this.http.post<any>('https://us-central1-qkdasartuoc.cloudfunctions.net/checkout', {userId: this.order.user.id}, { headers: header}).pipe(
+          map( session => {
+            this.order.checkout = session.id;
+            this.store$.dispatch(orderCreate({payload: {order: this.order}}));
+          //  return Stripe(environment.pkStripeTest).redirectToCheckout({ sessionId: session.id });
+          }),
+          catchError(error => {
+            this.store$.dispatch(loadingEnd());
+            return of(error);
+          } ))
+          .subscribe(result => {
+            this.store$.dispatch(loadingEnd());
+            if (result.error) {
+              this.notificationService.error('No se ha podido un error al efectuar el pago')
+            }
+          });
+  }
+
+  private createOrderContent() {
+    this.order.orderLines = [];
+    this.cart$.pipe(take(1)).subscribe(async res => {
+      for (const line of res) {
+        const orderLine = {} as OrderLine;
+        orderLine.id = line.id;
+        orderLine.product = line.product;
+        orderLine.quantity = line.quantity;
+        orderLine.price = line.price;
+        this.order.orderLines.push(orderLine);
+
+
+      }
+    })
   }
 }

@@ -38,6 +38,11 @@ const routes: Routes = [
       import('./features/cart-wrapper/cart-wrapper.module').then((m) => m.CartWrapperModule)
   },
   {
+    path: 'orders',
+    loadChildren: () =>
+      import('./features/order-list-wrapper/order-list-wrapper.module').then((m) => m.OrderListWrapperModule)
+  },
+  {
     path: 'feature-list',
     loadChildren: () =>
       import('./features/feature-list/feature-list.module').then(

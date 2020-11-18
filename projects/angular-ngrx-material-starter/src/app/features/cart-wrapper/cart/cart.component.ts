@@ -10,12 +10,6 @@ import {
 import { CartLine } from '../../../core/cart/cart.models';
 import { Observable, of } from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
-import { MatButton } from '@angular/material/button';
-import { CdkStepper } from '@angular/cdk/stepper';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { catchError, map } from 'rxjs/operators';
-import { LocalStorageService } from '../../../core/local-storage/local-storage.service';
 
 @Component({
   selector: 'anms-cart',

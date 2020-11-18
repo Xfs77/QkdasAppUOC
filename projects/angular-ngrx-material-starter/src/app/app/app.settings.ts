@@ -2,6 +2,8 @@ export class AppSettings {
   public static readonly API_AGRUP = 'agrupations';
   public static readonly API_USERS = 'users';
   public static readonly API_CART = 'cart';
+  public static readonly API_ORDER = 'orders';
+  public static readonly DOC_ORDER_INFO = 'orderInfo';
   public static readonly API_PRODUCT = 'products';
   public static readonly API_IMAGES = 'images';
   public static readonly API_ADDRESS = 'address';

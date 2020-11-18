@@ -3,7 +3,6 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app/app.component';
 import { SharedModule } from './shared/shared.module';
-import { LoginWrapperComponent } from './features/login-wrapper/login-wrapper.component';
 
 @NgModule({
   imports: [

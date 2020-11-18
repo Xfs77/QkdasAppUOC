@@ -21,11 +21,12 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
   styleUrls: ['./address-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddressWrapperComponent implements OnInit, OnDestroy {
+export class AddressWrapperComponent implements OnInit {
 
   currentAddress$: Observable<Address>;
   address$: Observable<Address[]>;
   next = false;
+  currentAddress: Address;
 
   constructor(
     private store$: Store,
@@ -41,24 +42,19 @@ export class AddressWrapperComponent implements OnInit, OnDestroy {
     });
 
     this.currentAddress$ = this.store$.select(selectCartAddress);
+    this.currentAddress$.subscribe(res => this.currentAddress = res);
     this.address$ = this.store$.select(selectAddressProfile);
   }
 
   setAddress($event: Address) {
     this.store$.dispatch(cartSetAddress({payload: {address: $event}}));
     this.next = true;
-    this.dialogRef.close({next: this.next});
+    this.dialogRef.close({next: this.next, address: this.currentAddress});
   }
 
   cancel() {
     this.store$.dispatch(cartSetAddress({payload: {address: null}}));
     this.dialogRef.close({next: this.next});
   }
-
-  ngOnDestroy(): void {
-    this.store$.dispatch(cartSetAddress({payload: {address: null}}));
-    this.dialogRef.close({next: this.next});
-  }
-
 
 }

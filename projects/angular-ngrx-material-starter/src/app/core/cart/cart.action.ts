@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { CartLine } from './cart.models';
 import { Update } from '@ngrx/entity';
-import { Address } from '../user/user.models';
+import { Address, User } from '../user/user.models';
 
 
 export const cartListGet = createAction(
@@ -28,6 +28,15 @@ export const cartListRemove = createAction(
 );
 export const cartListReset = createAction(
   '[Cart List] Reset',
+  props<{payload: {user: User}}>()
+);
+export const cartListResetSuccess = createAction(
+  '[Cart List] Reset Success',
+  props<{payload: {user: User}}>()
+);
+export const cartListResetFailure = createAction(
+  '[Cart List] Reset Failure',
+  props<{payload: {message: string}}>()
 );
 export const cartAdd = createAction(
   '[Cart] Add',
@@ -63,7 +72,7 @@ export const cartRemoveSuccess = createAction(
 );
 export const cartRemoveFailure = createAction(
   '[Cart] Remove Failure',
-  props<{payload: {cart: CartLine}}>()
+  props<{payload: {message: string}}>()
 );
 export const cartCheckStock = createAction(
   '[Cart] Check Stock',

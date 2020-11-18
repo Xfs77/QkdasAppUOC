@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
     { link: 'agrupations', label: 'Agrupaciones' },
     { link: 'products', label: 'Productos' },
     { link: 'catalogue', label: 'Catálogo'},
+    { link: 'orders', label: 'Pedidos' },
     { link: 'settings', label: 'anms.menu.settings' }
   ];
 
@@ -57,7 +58,6 @@ export class AppComponent implements OnInit {
   loading$: Observable<boolean>;
 
   cartSize;
-
 
   constructor(
     private store: Store,
@@ -74,7 +74,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     try {
       const tmp = this.lss.getItem(AppSettings.USER_KEY);
-      console.log(tmp)
       this.store.dispatch(authLogin({payload: {email: tmp.email, password: tmp.password}}));
     } catch (e) {
     }

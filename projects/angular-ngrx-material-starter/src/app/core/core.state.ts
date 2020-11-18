@@ -22,6 +22,7 @@ import {
 } from './products-filter/products-filter.reducer';
 import { productListReducer, ProductListState } from './product-list/product-list.reducer';
 import { cartReducer, CartState } from './cart/cart.reducer';
+import { orderReducer, OrderState } from './order/order.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
   general: generalReducer,
@@ -34,6 +35,7 @@ export const reducers: ActionReducerMap<AppState> = {
   productsFilter: productsFilterReducer,
   productList: productListReducer,
   cartList: cartReducer,
+  orderList: orderReducer
 };
 
 export const selectGeneralState = createFeatureSelector<AppState, GeneralState>(
@@ -57,6 +59,9 @@ export const selectProductListState = createFeatureSelector<ProductListState>(
 export const selectCartState = createFeatureSelector<CartState>(
   'cartList'
 );
+export const selectOrderState = createFeatureSelector<OrderState>(
+  'orderList'
+);
 export const selectProductsFilterState = createFeatureSelector<ProductsFilterState>(
   'productsFilter'
 );
@@ -75,6 +80,7 @@ export interface AppState {
   productForm: ProductFormState;
   productsFilter: ProductsFilterState;
   productList: ProductListState;
+  orderList: OrderState;
   cartList: CartState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;

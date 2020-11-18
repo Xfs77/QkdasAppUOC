@@ -124,6 +124,9 @@ export class UserFormComponent implements OnInit {
     user.phone1 = this.phone1.value;
     user.phone2 = this.phone2.value;
     user.password = this.password.value;
+    if (user.admin === undefined) {
+      user.admin = false;
+    }
     return user;
   }
 

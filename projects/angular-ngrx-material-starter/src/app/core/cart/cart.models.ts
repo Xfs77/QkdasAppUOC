@@ -8,6 +8,7 @@ export interface CartLine {
   id: string;
   product: Product;
   quantity: number;
+  price: number;
   isStock: boolean;
 }
 

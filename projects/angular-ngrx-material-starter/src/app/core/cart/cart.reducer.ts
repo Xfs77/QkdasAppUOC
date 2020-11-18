@@ -6,7 +6,7 @@ import {
   cartCheckStock, cartCheckStockSuccess,
   cartListAdd,
   cartListRemove,
-  cartListReset,
+  cartListReset, cartListResetSuccess,
   cartListUpdate, cartSetAddress
 } from './cart.action';
 import { Address } from '../user/user.models';

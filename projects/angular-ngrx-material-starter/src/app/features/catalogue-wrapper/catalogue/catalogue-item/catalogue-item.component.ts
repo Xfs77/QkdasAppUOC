@@ -90,6 +90,7 @@ export class CatalogueItemComponent implements OnInit, OnChanges {
     const cartLine: CartLine = {} as CartLine;
     cartLine.product = this.product;
     cartLine.quantity = 1;
+    cartLine.price = this.product.price;
     cartLine.isStock = null;
     cartLine.id = uuidv1();
     this.addCartEvent.emit({ cart: cartLine });

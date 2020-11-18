@@ -12,7 +12,7 @@ export const  selectTotalCartListState = createSelector(
   (cart) => {
     let total = 0;
     for (const item of cart) {
-      total = total + item.quantity * item.product.price;
+      total = total + item.quantity * item.price;
     }
     return total;
   }
