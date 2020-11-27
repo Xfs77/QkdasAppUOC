@@ -23,6 +23,8 @@ import {
 import { productListReducer, ProductListState } from './product-list/product-list.reducer';
 import { cartReducer, CartState } from './cart/cart.reducer';
 import { orderReducer, OrderState } from './order/order.reducer';
+import { StripeState } from './stripe/stripe.models';
+import { stripeReducer } from './stripe/stripe.reducer';
 
 export const reducers: ActionReducerMap<AppState> = {
   general: generalReducer,
@@ -35,7 +37,8 @@ export const reducers: ActionReducerMap<AppState> = {
   productsFilter: productsFilterReducer,
   productList: productListReducer,
   cartList: cartReducer,
-  orderList: orderReducer
+  orderList: orderReducer,
+  stripe: stripeReducer
 };
 
 export const selectGeneralState = createFeatureSelector<AppState, GeneralState>(
@@ -65,6 +68,9 @@ export const selectOrderState = createFeatureSelector<OrderState>(
 export const selectProductsFilterState = createFeatureSelector<ProductsFilterState>(
   'productsFilter'
 );
+export const selectStripeState = createFeatureSelector<StripeState>(
+  'stripe'
+);
 export const selectSettingsState = createFeatureSelector<AppState, SettingsState>(
   'settings'
 );
@@ -82,6 +88,7 @@ export interface AppState {
   productList: ProductListState;
   orderList: OrderState;
   cartList: CartState;
+  stripe: StripeState;
   settings: SettingsState;
   router: RouterReducerState<RouterStateUrl>;
 }

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { AuthGuardService } from './core/core.module';
+import { AdminGuardService } from './core/auth/admin-guard.service';
 
 const routes: Routes = [
   {
@@ -19,11 +21,13 @@ const routes: Routes = [
   },
   {
     path: 'agrupations',
+    canActivate: [AdminGuardService],
     loadChildren: () =>
       import('./features/agrupations-wrapper/agrupations-wrapper.module').then((m) => m.AgrupationsWrapperModule)
   },
   {
     path: 'products',
+    canActivate: [AdminGuardService],
     loadChildren: () =>
       import('./features/product-list-wrapper/product-list-wrapper.module').then((m) => m.ProductListWrapperModule)
   },
@@ -34,11 +38,13 @@ const routes: Routes = [
   },
   {
     path: 'cart',
+    canActivate: [AuthGuardService],
     loadChildren: () =>
       import('./features/cart-wrapper/cart-wrapper.module').then((m) => m.CartWrapperModule)
   },
   {
     path: 'orders',
+    canActivate: [AuthGuardService],
     loadChildren: () =>
       import('./features/order-list-wrapper/order-list-wrapper.module').then((m) => m.OrderListWrapperModule)
   },

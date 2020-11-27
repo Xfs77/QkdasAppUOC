@@ -15,7 +15,7 @@ import {
 import {
   actionSettingsChangeAnimationsPageDisabled, actionSettingsChangeLanguage
 } from '../core/settings/settings.actions';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { LoginWrapperComponent } from '../features/login-wrapper/login-wrapper.component';
 import { selectLoading } from '../core/general/general.selectors';
@@ -23,8 +23,10 @@ import { AgrupationsComponent } from '../features/agrupations-wrapper/agrupation
 import { loadingEnd } from '../core/general/general.action';
 import { currentSelectedAgrupation } from '../core/agrupation/agrupation.action';
 import { selectCartListState } from '../core/cart/cart.selectors';
-import { AUTH_KEY } from '../core/auth/auth.effects';
 import { AppSettings } from './app.settings';
+import { User } from '../core/user/user.models';
+import { selectUserProfile } from '../core/user/user.selectors';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'anms-root',
@@ -38,32 +40,50 @@ export class AppComponent implements OnInit {
   logo = require('../../assets/logo.png').default;
   logoBlack = require('../../assets/logo_black.png').default;
   navigation = [
-    { link: 'about', label: 'anms.menu.about' },
+    { link: 'catalogue', label: 'Catálogo'  },
+    { link: 'start', label: 'Inicio' },
+
   ];
-  navigationSideMenu = [
-    ...this.navigation,
-    { link: 'agrupations', label: 'Agrupaciones' },
-    { link: 'products', label: 'Productos' },
-    { link: 'catalogue', label: 'Catálogo'},
-    { link: 'orders', label: 'Pedidos' },
-    { link: 'settings', label: 'anms.menu.settings' }
+
+  navigationSideMenuAdmin = [
+    { link: 'agrupations', label: 'Agrupaciones' , icon: 'view_list'},
+    { link: 'products', label: 'Productos', icon: 'reorder' }
   ];
+
+  navigationSideMenuLogged = [
+    { link: 'cart', label: 'Cesta' , icon: 'shopping_cart'},
+    { link: 'orders', label: 'Pedidos', icon: 'receipt' },
+    { link: 'profile', label: 'Perfil Usuario', icon: 'person' },
+    { link: '', label: 'Desconectar', icon: 'logout', action: 'onLogout()' },
+
+  ];
+
+  navigationSideMenuVisitor = [
+    { link: 'start', label: 'Inicio', icon: 'home' },
+    { link: 'catalogue', label: 'Catálogo', icon: 'menu_book'},
+    { link: 'profile', label: 'Entrar', icon: 'login', action: 'onLogin()' },
+  ];
+
+  navigationSideMenu = [];
 
   dialogRefAgrup: MatDialogRef<AgrupationsComponent, any>;
   dialogRef: MatDialogRef<LoginWrapperComponent, any>;
   isAuthenticated$: Observable<boolean>;
+  userProfile$: Observable<User>;
   stickyHeader$: Observable<boolean>;
   language$: Observable<string>;
   theme$: Observable<string>;
   loading$: Observable<boolean>;
 
   cartSize;
+  filter = false;
 
   constructor(
     private store: Store,
     private storageService: LocalStorageService,
     private lss: LocalStorageService,
     private router: Router,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
   ) {}
 
@@ -72,6 +92,15 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.router.events.pipe(filter((event: any) => event instanceof NavigationEnd )).subscribe(event => {
+      if (window.innerWidth < 960 &&
+        (event.url === '/catalogue' || event.url.startsWith( '/products' ))) {
+        this.filter = true;
+      } else {
+        this.filter = false;
+      }
+    });
+
     try {
       const tmp = this.lss.getItem(AppSettings.USER_KEY);
       this.store.dispatch(authLogin({payload: {email: tmp.email, password: tmp.password}}));
@@ -95,6 +124,24 @@ export class AppComponent implements OnInit {
     this.stickyHeader$ = this.store.pipe(select(selectSettingsStickyHeader));
     this.language$ = this.store.pipe(select(selectSettingsLanguage));
     this.theme$ = this.store.pipe(select(selectEffectiveTheme));
+    this.userProfile$ = this.store.select(selectUserProfile);
+    this.userProfile$.subscribe(user => {
+      this.navigationSideMenu = [];
+      if (user && user.admin) {
+        this.navigationSideMenu = [
+          ...this.navigationSideMenuAdmin
+        ]
+      }
+      this.navigationSideMenu = [
+          ...this.navigationSideMenu,
+          ...this.navigationSideMenuVisitor
+        ]
+      if (user.id) {
+        this.navigationSideMenu = [
+          ...this.navigationSideMenu,
+          ...this.navigationSideMenuLogged]
+      }
+    });
   }
 
   onLogin() {
@@ -119,7 +166,8 @@ export class AppComponent implements OnInit {
       dialogConfig.closeOnNavigation = true;
       dialogConfig.width = '90vw';
       dialogConfig.maxWidth = '500px';
-      dialogConfig.position = {top: '74px'}
+      dialogConfig.height = 'calc(100vh - 64px - 105px - 32px)';
+      dialogConfig.position = {top: '80px'}
 
       this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
       this.dialogRefAgrup.afterClosed().subscribe(res => {

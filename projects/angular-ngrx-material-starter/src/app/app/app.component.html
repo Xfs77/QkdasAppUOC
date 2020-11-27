@@ -6,13 +6,26 @@
       <div class="branding"><img [src]="logoBlack" [alt]="logo"/>
         <span class="">{{ 'anms.title.short' | translate}}</span></div>
       <mat-nav-list>
-        <a mat-list-item *ngFor="let item of navigationSideMenu" (click)="sidenav.close()" [routerLink]="[item.link]"
-          routerLinkActive="active">
-          {{item.label | translate}}
-        </a>
-        <a mat-list-item href="https://github.com/tomastrajan/angular-ngrx-material-starter" target="_blank" rel="noopener noreferrer">
-          Github
-        </a>
+        <div *ngFor="let item of navigationSideMenu">
+          <a [hidden]="item.label === 'Entrar' || item.label === 'Desconectar'" mat-list-item  (click)="sidenav.close()" [routerLink]="[item.link]">
+            <button mat-menu-item>
+              <mat-icon>{{item.icon}}</mat-icon>
+            </button>
+            {{item.label | translate}}
+          </a>
+          <a *ngIf="item.label === 'Entrar' && !(isAuthenticated$ |async)" (click)="onLogin()" mat-list-item>
+            <button mat-menu-item>
+              <mat-icon>{{item.icon}}</mat-icon>
+            </button>
+            {{item.label | translate}}
+          </a>
+          <a *ngIf="item.label === 'Desconectar'" (click)="onLogout()" mat-list-item>
+            <button mat-menu-item>
+              <mat-icon>{{item.icon}}</mat-icon>
+            </button>
+            {{item.label | translate}}
+          </a>
+        </div>
       </mat-nav-list>
     </mat-sidenav>
 
@@ -31,15 +44,24 @@
           <span routerLink="" class="branding spacer d-none d-md-inline"><img [src]="logo"[alt]="logo" /> {{ 'anms.title.long' | translate
             }}</span>
 
-          <span class="d-none d-md-inline">
-            <button mat-button class="nav-button" *ngFor="let item of navigation" [routerLink]="[item.link]"
-              routerLinkActive="active">
+          <span class="d-none d-md-inline spacer ">
+            <button mat-button class="nav-button main-options" *ngFor="let item of navigation" [routerLink]="[item.link]">
               {{item.label | translate}}
             </button>
           </span>
 
           <div>
             <button
+              *ngIf="this.filter"
+              mat-icon-button
+              (click)="onAgrupations()">
+              <mat-icon>filter_alt</mat-icon>
+            </button>
+          </div>
+
+          <div>
+            <button
+              *ngIf="(this.isAuthenticated$ |async)"
               mat-icon-button
               [routerLink]="['/cart']">
               <mat-icon
@@ -57,15 +79,8 @@
             </button>
           </div>
 
-          <div>
-            <button
-              mat-icon-button
-              (click)="onAgrupations()">
-              <mat-icon>filter_alt</mat-icon>
-            </button>
-          </div>
 
-          <div class="login-actions pl-5">
+          <div class="login-actions pl-3">
 
             <button
               mat-button

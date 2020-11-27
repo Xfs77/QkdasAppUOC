@@ -1,16 +1,16 @@
 <div class="expand" fxLayout="row" fxLayoutWrap
      fxLayoutGap="0.5%" fxLayoutAlign="center">
-  <mat-card fxFlex="50" fxFlex.lt-md="100" fxFlex.sm="80" flexFlex.md="70">
+  <mat-card fxFlex="100"  fxFlex.gt-sm="70">
 
     <mat-horizontal-stepper linear #stepper *ngIf="isCreateOrder">
       <mat-step>
         <ng-template matStepLabel>Confirmar Contenido</ng-template>
       </mat-step>
       <mat-step>
-        <ng-template matStepLabel>Indicar Dirección Envío</ng-template>
+        <ng-template matStepLabel>Dirección Envío</ng-template>
       </mat-step>
       <mat-step>
-        <ng-template matStepLabel>Realizar Pago</ng-template>
+        <ng-template matStepLabel>Pago</ng-template>
       </mat-step>
     </mat-horizontal-stepper>
 
@@ -23,7 +23,7 @@
       fxLayoutGap="1%"
       class="item-container"
       *ngFor="let item of cart$| async">
-      <div fxFlex="10">
+      <div fxFlex="20" fxFlex.gt-xs="10">
         <img
           [lazyLoad]="item.product.mainImage.urls.imgSM"
           [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
@@ -31,14 +31,15 @@
           alt="">
       </div>
       <div
-        fxFlex="40"
+        fxFlex="30"
+        fxFlex.gt-xs="40"
         fxLayout="column"
         fxLayoutWrap
         fxLayoutGap="0.5%">
         <div class="text-sm">
           <span class="bold">Ref: </span>{{item.product.reference}}
         </div>
-        <div class="text-xs">{{item.product.descr}}</div>
+        <div fxHide.xs class="text-xs">{{item.product.descr}}</div>
       </div>
       <div fxFlex="40"
            class="text-sm"
@@ -84,7 +85,9 @@
       fxLayoutWrap
       fxLayoutAlign="start center"
       fxLayoutGap="1%"
-      class="total-container">
+      [ngClass.lt-sm]="'text-sm'"
+      class="total-container"
+      *ngIf="(cart$| async).length !== 0">
       <div
         fxFlex="65"
         class="bold">
@@ -99,7 +102,7 @@
     </div>
 
     <div class="float-right mt20">
-      <button *ngIf="!isCreateOrder" mat-raised-button color="primary" class="text-align-center" (click)="iniOrder()">
+      <button *ngIf="!isCreateOrder && (cart$| async).length !== 0" mat-raised-button color="primary" class="text-align-center" (click)="iniOrder()">
         Iniciar Pedido
       </button>
     </div>

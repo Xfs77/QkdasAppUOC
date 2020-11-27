@@ -82,14 +82,14 @@ exports.generateThumbImages = functions.storage.object().onFinalize(async (objec
         }
       }
     });
-
     const config = {
       action: 'read',
       expires: '03-01-2500',
     };
     //Get thumbFile URL
     const thumbFile = bucket.file(thumbFilePath);
-    const url = await thumbFile.getSignedUrl(config);
+    // const url = await thumbFile.getSignedUrl(config);
+    const url = `https://firebasestorage.googleapis.com/v0/b/qkdasartuoc.appspot.com/o/${encodeURIComponent(thumbFilePath)}?alt=media&token=${token}`;
 
     // Update product with the value of URL
     const batch = admin.firestore().batch();

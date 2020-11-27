@@ -27,7 +27,6 @@ export class AddressComponent implements OnInit {
 
   currentSelectedAddress: Address;
   confirmedAddress: Address;
-
   showAddresses = false;
 
   constructor() { }

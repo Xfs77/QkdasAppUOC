@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CartWrapperComponent } from './cart-wrapper.component';
+import { AddressWrapperComponent } from './address-wrapper/address-wrapper.component';
 
 const routes: Routes = [
   {
@@ -10,8 +11,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'done/:checkout',
-    component: CartWrapperComponent,
+    path: 'address',
+    component: AddressWrapperComponent,
     data:  {title: 'Cesta'},
   }
 ];

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { from, Observable, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from './user.service';
@@ -33,6 +33,8 @@ import { Address, User } from './user.models';
 import { Store } from '@ngrx/store';
 import { loadingEnd, loadingStart } from '../general/general.action';
 import { NotificationService } from '../notifications/notification.service';
+import { selectAuth } from '../auth/auth.selectors';
+import { authLogin } from '../auth/auth.actions';
 
 @Injectable()
 export class UserEffects {
@@ -63,12 +65,21 @@ export class UserEffects {
     () =>
       this.actions$.pipe(
         ofType(userUpdateSuccess),
+        withLatestFrom(this.store$.select(selectAuth)),
+        switchMap(([action, auth]) => {
+          console.log(action.payload.user)
+          if (!auth.isAuthenticated && action.payload.user.password !== '') {
+            console.log('login')
+            return of(authLogin({payload: {email: action.payload.user.email, password: action.payload.user.password}}));
+          } else {
+            return of(null);
+          }
+        }),
         tap(() => {
             this.store$.dispatch(loadingEnd());
             this.router.navigate(['/profile']);
           }
-        )),
-    { dispatch: false });
+        )));
 
   userUpdateFailure = createEffect(
     () =>

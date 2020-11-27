@@ -19,7 +19,6 @@ import { DynamicDatabase } from '../../features/agrupations-wrapper/agrupations/
 import { DynamicFlatNode } from '../../features/agrupations-wrapper/agrupations/DynamicFlatNode';
 import { loadingEnd, loadingStart } from '../general/general.action';
 import { Store } from '@ngrx/store';
-import { authLoginFailure } from '../auth/auth.actions';
 import { NotificationService } from '../notifications/notification.service';
 
 

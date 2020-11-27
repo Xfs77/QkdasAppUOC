@@ -10,13 +10,13 @@
       fxFlex="100">
       <mat-card-title class="title">Gestión Productos</mat-card-title>
 
-      <div class="expand" *ngIf="(products$ | async).length === 0" fxLayoutAlign="center center">
+      <div class="viewer" *ngIf="(products$ | async).length === 0" fxLayoutAlign="center center">
         Seleccione algún elemento del catálogo
       </div>
 
-      <div class="viewer" *ngIf="(products$ | async).length !== 0">
+      <div class="h-100" *ngIf="(products$ | async).length !== 0">
 
-        <cdk-virtual-scroll-viewport #viewer class="expand" [itemSize]="100"
+        <cdk-virtual-scroll-viewport class="viewer "#viewer  [itemSize]="100"
                                      (scrolledIndexChange)="checkBatch()">
           <div *cdkVirtualFor="let product of products$ |async; let i = index; trackBy: trackByIdx">
             <mat-card class="product-edition-card mb5" [ngClass]="{'muted': !product.active,  'nostock': product.quantity <= 0}"

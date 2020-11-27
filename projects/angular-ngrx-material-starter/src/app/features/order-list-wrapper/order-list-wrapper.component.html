@@ -1,2 +1,5 @@
 <anms-order-list
-  [order$]="order$"></anms-order-list>
+  class="expand"
+  [order$]="order$"
+  (expedtionEvent)="expedition($event)"
+  (removeEvent)="remove($event)"></anms-order-list>

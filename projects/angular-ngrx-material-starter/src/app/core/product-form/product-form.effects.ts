@@ -189,7 +189,7 @@ export class ProductFormEffects {
         ofType(productFormSave),
         tap(_ => this.store$.dispatch(loadingStart())),
         mergeMap(action =>
-          of(this.productFormService.addProduct(action.payload.product, action.payload.imageToUpdateIsMain, action.payload.edit)).pipe(
+          of(this.productFormService.addProduct(action.payload.product, action.payload.imageToUpdateIsMain, action.payload.edit, null)).pipe(
             map(_ => productFormSaveSuccess({
               payload: {
                 product: action.payload.product,

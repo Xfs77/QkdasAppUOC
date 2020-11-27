@@ -15,7 +15,7 @@ virtual-scroller {
 }
 
 .scroll {
-  height: calc(100vh - 56px - 32px);
+  height: calc(100vh - 56px - 32px - 105px);
   width: 100%;
 }
 
@@ -30,7 +30,7 @@ virtual-scroller {
 
 @media only screen and (min-width: 600px) {
   .scroll {
-    height: calc(100%);
+    height: calc(100vh - 64px - 32px - 105px);
   }
   .item {
     width: calc(100% / 4);
@@ -52,13 +52,3 @@ virtual-scroller {
   border: 1px solid red;
 }
 
-
-
-// 900px - 12 => 266.4px i 633.6px
-// 266.4px - 12px =
-// 633.6px -12  = 621.6px --- 617.172px
-// 621.6px - (12 + 16)*2 =
-//•	xs: screen and (max-width: 599px)
-//•	sm: screen and (min-width: 600px) and (max-width: 959px)
-//•	md: screen and (min-width: 960px) and (max-width: 1279px)
-//•	lg: screen and (min-width: 1280px)

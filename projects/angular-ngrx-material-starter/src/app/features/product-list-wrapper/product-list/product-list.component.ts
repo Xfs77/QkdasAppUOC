@@ -44,7 +44,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   checkBatch() {
-/*    this.scrollDispatcher.scrolled().subscribe(_ => console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength()))
+    this.scrollDispatcher.scrolled().subscribe(_ => console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength()))
     const scroll$ = this.scrollDispatcher.scrolled().pipe(
       filter(event => {
           return this.viewport.getRenderedRange().end === this.viewport.getDataLength();
@@ -55,14 +55,14 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
       if (!res[1] && !res[2]) {
         this.nextBatchEvent.emit(true);
       }
-    });*/
-    if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
+    });
+  /*  if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
       combineLatest([this.isLoading$, this.isEnded$]).pipe(take(1)).subscribe(res => {
         if (!res[0] && !res[1]) {
           this.nextBatchEvent.emit(true);
         }
       });
-    }
+    }*/
   }
 
   trackByIdx(index, item) {

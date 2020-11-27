@@ -1,0 +1,85 @@
+<div class="order-container">
+  <div
+    class="order text-sm"
+    ngClass.lt-md="order-background"
+    fxLayout="row wrap"
+    fxLayoutAlign="center start">
+    <div fxFlex="17" fxFlex.lt-md="49" >
+      <div><span class="bold">Pedido:</span> {{order.id | number: '7.0' | noComma}}</div>
+      <div><span class="bold">Pago:</span> <span [ngClass]="{pending: order.status == 'Pendiente'}"> {{order.status}}</span></div>
+      <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total |number: '1.2'}} €</div>
+    </div>
+    <div fxFlex="20" fxFlex.lt-md="48">
+      <div><span class="bold">Fecha:</span> {{order.date  | date: 'dd/MM/yyyy'}}</div>
+      <div><span class="bold">Expedición:</span> {{order.expedition  | date: 'dd/MM/yyyy'}}</div>
+    </div>
+    <div fxFlex="30" fxHide.lt-md>
+      <div class="bold">Dirección de Envío:</div>
+      <div>{{order.shippingAddress.address}}</div>
+      <div>{{order.shippingAddress.CP}} {{order.shippingAddress.city}}</div>
+    </div>
+    <div fxFlex="30" fxHide.lt-md>
+      <div class="bold">Persona de Contacto:</div>
+      <div>{{order.shippingAddress.name}} {{order.shippingAddress.surname}}</div>
+      <div>{{order.shippingAddress.phone1}} <span
+        *ngIf="order.shippingAddress.phone2"> / {{order.shippingAddress.phone2}}</span></div>
+    </div>
+    <div fxFlex="3"  fxLayoutAlign="end end">
+        <div
+          class="container-actions">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            [matMenuTriggerData]="{ order: order }">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+    </div>
+  </div>
+  <div
+    fxLayout="row wrap"
+    fxLayoutAlign="start start"
+    class="order-details text-sm">
+    <div fxFlex="40" fxHide.gt-sm>
+      <div class="bold">Dirección de Envío:</div>
+      <div>{{order.shippingAddress.address}}</div>
+      <div>{{order.shippingAddress.CP}} {{order.shippingAddress.city}}</div>
+    </div>
+    <div fxFlex="40" fxHide.gt-sm>
+      <div class="bold">Persona de Contacto:</div>
+      <div>{{order.shippingAddress.name}} {{order.shippingAddress.surname}}</div>
+      <div>{{order.shippingAddress.phone1}} <span
+        *ngIf="order.shippingAddress.phone2"> / {{order.shippingAddress.phone2}}</span></div>
+    </div>
+    <div fxFlex="20" fxHide.gt-sm>
+      <div class="bold">Importe:</div>
+      {{this.total |number: '1.2'}} €
+    </div>
+  </div>
+
+</div>
+
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-order="order" >
+    <button
+      mat-menu-item
+      (click)="detail()">
+      <mat-icon>search</mat-icon>
+      <span>Detalle</span>
+    </button>
+    <button
+      (click)="expedition()"
+      mat-menu-item>
+      <mat-icon>local_shipping</mat-icon>
+      <span>Expedir</span>
+    </button>
+    <button
+      mat-menu-item
+      (click)="remove()">
+      <mat-icon>delete</mat-icon>
+      <span>Eliminar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+

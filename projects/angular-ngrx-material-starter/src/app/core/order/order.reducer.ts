@@ -7,7 +7,7 @@ import {
   orderCreateSuccess,
   orderListAdd,
   orderListRemove, orderListReset,
-  orderListUpdate
+  orderListUpdate, orderRemoveSuccess, orderUpdateSuccess
 } from './order.action';
 import { Action, createReducer, on } from '@ngrx/store';
 import { cartListAdd, cartListRemove, cartListReset, cartListUpdate } from '../cart/cart.action';
@@ -48,6 +48,12 @@ const reducer = createReducer(
   })),
   on(orderListReset, produce((draft, action) => {
     return adapterOrder.removeAll(draft);
+  })),
+  on(orderUpdateSuccess, produce((draft, action) => {
+    return adapterOrder.updateOne(action.payload.order, draft);
+  })),
+  on(orderRemoveSuccess, produce((draft, action) => {
+    return adapterOrder.removeOne(action.payload.order.id, draft);
   })),
 
 )

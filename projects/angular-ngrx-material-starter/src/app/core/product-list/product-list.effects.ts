@@ -114,7 +114,7 @@ export class ProductListEffects {
         mergeMap(action => {
           const tmp = {...action.payload.product};
           tmp.likes = tmp.likes ? tmp.likes + 1 : 1;
-          return of(this.productFormService.addProduct(tmp, null, true)).pipe(
+          return of(this.productFormService.addProduct(tmp, null, true, null)).pipe(
             map(_ => productListFavoriteSuccess({
               payload: {
                 product: action.payload.product

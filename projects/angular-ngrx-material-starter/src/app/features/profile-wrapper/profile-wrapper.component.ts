@@ -49,8 +49,9 @@ export class ProfileWrapperComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.closeOnNavigation = true;
+    dialogConfig.panelClass = 'no-scrolling-dialog'
     dialogConfig.width = '90vw';
-    dialogConfig.maxWidth = '350px';
+    dialogConfig.maxWidth = '400px';
 
     this.dialogRef = this.dialog.open(PasswordFormWrapperComponent, dialogConfig );
 

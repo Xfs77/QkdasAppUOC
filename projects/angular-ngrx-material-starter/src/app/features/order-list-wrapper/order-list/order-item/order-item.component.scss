@@ -1,0 +1,45 @@
+.order-container {
+  height:150px;
+}
+
+.order-background {
+  background: lightgray;
+}
+
+.order {
+  width: 100%;
+  text-align: left;
+  border-radius: 4px;
+  padding: 12px 12px;
+}
+
+.order-details {
+  text-align: left;
+  padding: 12px 12px;
+}
+
+
+
+.pending {
+  color: red;
+}
+
+.pending {
+
+  animation-name: parpadeo;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes parpadeo {
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+
+@media screen and (min-width: 960px) {
+  .order-container {
+    height: 90px;
+  }
+}

@@ -60,6 +60,7 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { MatBadgeModule } from '@angular/material/badge';
+import { NocommaPipe } from './pipes/nocomma.pipe';
 
 @NgModule({
   imports: [
@@ -100,7 +101,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     BigInputActionComponent,
     RtlSupportDirective,
     LongPressDirective,
-    PhotoDirective
+    PhotoDirective,
+    NocommaPipe,
   ],
   exports: [
     CommonModule,
@@ -143,7 +145,9 @@ import { MatBadgeModule } from '@angular/material/badge';
 
     LazyLoadImageModule,
     ScrollingModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+
+    NocommaPipe,
   ]
 })
 export class SharedModule {

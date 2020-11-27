@@ -1,9 +1,31 @@
+<div fxLayout="column"
+     fxFlex="100"
+     fxLayoutGap="0.0%"
+     fxLayoutAlign="center">
 
-<div *ngFor="let order of order$ |async">
-  <div>
-    {{order.id}}
-  </div>
-  <div  *ngFor ="let line of order.orderLines">
-    referencia: {{line.product.reference}}
-  </div>
+  <mat-card class="expand">
+
+    <div
+      class="text-align-center"
+      fxFlex="100">
+      <mat-card-title  class="title">Listado Pedidos</mat-card-title>
+
+      <div class="h-100" *ngIf="(order$ | async).length !== 0">
+
+        <cdk-virtual-scroll-viewport #viewer class="viewer" [itemSize]="size">
+          <div *cdkVirtualFor="let order of order$ |async; let i = index;">
+            <mat-card class="item" fxFlex="100">
+              <anms-order-item
+                [order]="order"
+                (expedtionEvent)="expedition($event)"
+                (removeEvent)="remove($event)"
+              ></anms-order-item>
+            </mat-card>
+          </div>
+        </cdk-virtual-scroll-viewport>
+      </div>
+
+    </div>
+
+  </mat-card>
 </div>

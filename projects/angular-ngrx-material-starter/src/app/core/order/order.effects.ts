@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { ProductListService } from '../product-list/product-list.service';
 import { ProductFormService } from '../product-form/product-form.service';
 import { NotificationService } from '../notifications/notification.service';
 import { catchError, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
@@ -11,28 +10,22 @@ import {
   orderCreateFailure,
   orderCreateSuccess,
   orderListAdd,
-  orderListGet, orderListGetFailure, orderListGetSuccess, orderListRemove, orderListUpdate
+  orderListGet,
+  orderListGetFailure,
+  orderListGetSuccess,
+  orderListRemove,
+  orderListUpdate, orderRemove, orderRemoveFailure, orderRemoveSuccess,
+  orderUpdate, orderUpdateFailure, orderUpdateSuccess
 } from './order.action';
 import { from, of } from 'rxjs';
-import { userUpdateFailure, userUpdateSuccess } from '../user/user.actions';
 import { HttpErrorResponse } from '@angular/common/http';
 import { OrderService } from './order.service';
-import {
-  productListAdd,
-  productListEmpty,
-  productListGet, productListRemove, productListUpdate
-} from '../product-list/product-list.action';
-import {
-  selectProductsFilter,
-  selectProductsFilterIsLoading
-} from '../products-filter/products-filter.selector';
 import { DocumentChangeAction } from '@angular/fire/firestore';
-import { Product } from '../product-form/product.models';
 import { Update } from '@ngrx/entity';
-import { productsFilterIsLoading } from '../products-filter/products-filter.action';
 import { selectUserProfile } from '../user/user.selectors';
 import { Order } from './order.models';
-import { cartListGetFailure, cartListGetSuccess } from '../cart/cart.action';
+import { stripeToForm } from '../stripe/stripe.actions';
+import { selectProductsFilter } from '../products-filter/products-filter.selector';
 
 @Injectable()
 export class OrderEffects {
@@ -50,9 +43,6 @@ export class OrderEffects {
     () => {
       return this.actions$.pipe(
         ofType(orderCreate),
-        tap(_ => {
-          return this.store$.dispatch(loadingStart());
-        }),
         tap(_ => this.store$.dispatch(loadingStart())),
         switchMap(res =>
           from(this.orderService.addOrder(res.payload.order)).pipe(
@@ -67,8 +57,10 @@ export class OrderEffects {
     () => {
       return this.actions$.pipe(
         ofType(orderCreateSuccess),
-        map(action =>
-          loadingEnd()
+        switchMap(action => [
+            loadingEnd(),
+            stripeToForm({ payload: { checkout: action.payload.order.checkout } })
+          ]
         )
       );
     });
@@ -91,15 +83,30 @@ export class OrderEffects {
               const actions = [];
               if (res && res.length > 0) {
                 for (const actionData of res) {
+                  let expedition = null;
+                  let date = null;
                   switch (actionData.payload.type) {
                     case 'added':
-                      actions.push(orderListAdd({ payload: { order: actionData.payload.doc.data() } }));
+                      date = ((actionData.payload.doc.data().date as any).toDate());
+                      if (actionData.payload.doc.data().expedition) {
+                        expedition = ((actionData.payload.doc.data().expedition as any).toDate());
+                      }
+                      const orderObj = {
+                        ...actionData.payload.doc.data(),
+                        date: date,
+                        expedition: expedition
+                      };
+                      actions.push(orderListAdd({ payload: { order: orderObj } }));
                       break;
                     case 'modified':
                       const order: Update<Order> = {
                         id: actionData.payload.doc.data().id,
                         changes: actionData.payload.doc.data()
                       };
+                      if (order.changes.expedition) {
+                        expedition = ((actionData.payload.doc.data().expedition as any).toDate());
+                      }
+                      order.changes.expedition = expedition;
                       actions.push(orderListUpdate({ payload: { order } }));
                       break;
                     case 'removed':
@@ -111,7 +118,7 @@ export class OrderEffects {
               return actions;
             }),
             mergeMap(res => {
-              if (res.length > 1 || (res.length === 1 && res[0].type === '[Order List] Add')) {
+              if (res.length === 0 || res.length > 1 || (res.length === 1 && res[0].type === '[Order List] Add')) {
                 res.push(orderListGetSuccess({ payload: { order: res } }));
               }
               return res;
@@ -137,4 +144,65 @@ export class OrderEffects {
     map(action => loadingEnd())
   );
 
+  orderListUpdate = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(orderUpdate),
+        tap(_ => this.store$.dispatch(loadingStart())),
+        withLatestFrom(this.store$.select(selectUserProfile)),
+        switchMap(([action, user]) =>
+          from(this.orderService.updateOrder(action.payload.order.changes.user, action.payload.order).commit()).pipe(
+            map(() => orderUpdateSuccess(action)),
+            catchError((error: HttpErrorResponse) => {
+              return of(orderUpdateFailure({ payload: { message: error.message } }));
+            })))
+      );
+    });
+
+  orderUpdateSuccess = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(orderUpdateSuccess),
+        map(action =>
+          loadingEnd()
+        )
+      );
+    });
+
+  orderUpdateFailure = this.actions$.pipe(
+    ofType(orderUpdateFailure),
+    tap(_ => this.notificationService.error('Se ha producido un error al realizar la expedición')),
+    map(action => loadingEnd())
+  );
+
+  orderRemove = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(orderRemove),
+        tap(_ => this.store$.dispatch(loadingStart())),
+        switchMap(action =>
+          from(this.orderService.removeOrder(action.payload.order)).pipe(
+            map(res => res.commit()),
+            map(() => orderRemoveSuccess(action)),
+            catchError((error: HttpErrorResponse) => {
+              return of(orderRemoveFailure({ payload: { message: error.message } }));
+            })))
+      );
+    });
+
+  orderRemoveSuccess = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(orderRemoveSuccess),
+        map(action =>
+          loadingEnd()
+        )
+      );
+    });
+
+  orderRemoveFailure = this.actions$.pipe(
+    ofType(orderRemoveFailure),
+    tap(_ => this.notificationService.error('No se ha podido eliminar el pedido')),
+    map(action => loadingEnd())
+  );
 }

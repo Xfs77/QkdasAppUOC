@@ -106,11 +106,16 @@ export class CartEffects {
         }),
         withLatestFrom(this.store$.select(selectAuthState)),
         mergeMap(([action, user]) => {
-          return from(this.cartService.addCart(user.id, action.payload.cart)).pipe(
-            map(res => cartAddSuccess({ payload: action.payload })),
-            catchError(error => {
-              return of(cartAddFailure(error.message));
-            }));
+          if (user.isAuthenticated) {
+            return from(this.cartService.addCart(user.id, action.payload.cart)).pipe(
+              map(res => cartAddSuccess({ payload: action.payload })),
+              catchError(error => {
+                return of(cartAddFailure({payload: {message: ''}}));
+              }));
+          } else {
+            return of(cartAddFailure({payload: {message: 'El usuario debe estar registrado'}}));
+          }
+
         }));
     });
 
@@ -120,15 +125,23 @@ export class CartEffects {
         ofType(cartAddSuccess),
         map(action =>
           loadingEnd()
-        )
-      );
+        ));
     });
 
-  cartAddFailure = this.actions$.pipe(
-    ofType(cartAddFailure),
-    tap(_ => this.notificationService.error('Se ha producido un error al añadir el producto a la cesta')),
-    map(action => loadingEnd())
-  );
+  cartAddFailure = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(cartAddFailure),
+        tap(action => {
+          if (action.payload.message !== '') {
+            this.notificationService.error(action.payload.message);
+          } else {
+            this.notificationService.error('No se ha podido realizar la compra')
+          }
+        }),
+        map(action => loadingEnd())
+      );
+    });
 
   cartCheckStock = createEffect(
     () => {
@@ -189,11 +202,14 @@ export class CartEffects {
       );
     });
 
-  cartUpdateFailure = this.actions$.pipe(
-    ofType(cartUpdateFailure),
-    tap(_ => this.notificationService.error('Se ha producido un error al modificar el producto a la cesta')),
-    map(action => loadingEnd())
-  );
+  cartUpdateFailure = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(cartUpdateFailure),
+        tap(_ => this.notificationService.error('Se ha producido un error al modificar el producto a la cesta')),
+        map(action => loadingEnd())
+      );
+    });
 
   cartRemove = createEffect(
     () => {
@@ -224,10 +240,13 @@ export class CartEffects {
       );
     });
 
-  cartRemoveFailure = this.actions$.pipe(
-    ofType(cartRemoveFailure),
-    tap(_ => this.notificationService.error('Se ha producido un error al eliminar el producto a la cesta')),
-    map(action => loadingEnd())
-  );
+  cartRemoveFailure = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(cartRemoveFailure),
+        tap(_ => this.notificationService.error('Se ha producido un error al eliminar el producto a la cesta')),
+        map(action => loadingEnd())
+      );
+    });
 
 }

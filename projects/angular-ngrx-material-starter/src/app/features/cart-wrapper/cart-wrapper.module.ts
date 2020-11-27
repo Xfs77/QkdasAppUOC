@@ -18,6 +18,9 @@ import { MatStepperModule } from '@angular/material/stepper';
   ],
   exports: [
     CartWrapperComponent
+  ],
+  entryComponents: [
+    AddressWrapperComponent
   ]
 })
 export class CartWrapperModule { }

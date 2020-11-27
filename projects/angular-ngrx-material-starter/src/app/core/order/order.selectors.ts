@@ -6,5 +6,14 @@ export const selectOrders = createSelector(
   selectOrderState,
   fromOrderList.selectAll
 );
+export const selectOrdersEntities = createSelector(
+  selectOrderState,
+  fromOrderList.selectEntities
+);
 
-
+export const selectOrderById = createSelector(
+  selectOrdersEntities,
+  (state, props) => {
+    return state[props.orderId]
+  }
+);

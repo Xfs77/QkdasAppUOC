@@ -36,3 +36,5 @@ exports.agrupationUpdatePathLevel3 = agrupationsUpdatePath.agrupationUpdatePathL
 exports.agrupationUpdatePathLevel4 = agrupationsUpdatePath.agrupationUpdatePathLevel4;
 
 exports.checkout = stripeFunctions.checkout;
+exports.hooks = stripeFunctions.hooks;
+exports.prova = stripeFunctions.prova;

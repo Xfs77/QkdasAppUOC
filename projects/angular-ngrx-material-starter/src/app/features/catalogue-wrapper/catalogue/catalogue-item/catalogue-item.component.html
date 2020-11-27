@@ -12,9 +12,9 @@
            alt="">
     </div>
   </div>
-  <mat-card-actions class="info">
-    <div class="main-info">
-      <div class="favorite">
+  <mat-card-actions class="info" [ngClass.lt-md]="'text-xs'">
+    <div class="main-info" >
+      <div class="favorite" >
         {{product.likes ?  product.likes : 0}}
         <button class="ml5" type="button" disabled="{{this.favoriteClick}}" class="favorite" mat-icon-button (click)="favorite(product)">
           <mat-icon class="icon_favorite">favorite</mat-icon>

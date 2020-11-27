@@ -87,6 +87,7 @@ import { ProductListEffects } from './product-list/product-list.effects';
 import { ProductsFilterEffects } from './products-filter/products-filter.effects';
 import { CartEffects } from './cart/cart.effects';
 import { OrderEffects } from './order/order.effects';
+import { StripeEffects } from './stripe/stripe.effects';
 
 export {
   TitleService,
@@ -153,6 +154,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       ProductsFilterEffects,
       CartEffects,
       OrderEffects,
+      StripeEffects,
       SettingsEffects,
       GoogleAnalyticsEffects
     ]),

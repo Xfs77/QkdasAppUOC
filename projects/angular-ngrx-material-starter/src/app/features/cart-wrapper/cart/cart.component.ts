@@ -52,11 +52,7 @@ export class CartComponent implements OnInit {
     this.shippingEvent.emit(true);
   }
 
-  cancelOrder() {
-   (this.stepper.reset());
 
-    this.isCreateOrder = false;
-  }
 
   next() {
     this.stepper.next();
@@ -72,6 +68,9 @@ export class CartComponent implements OnInit {
 
   back() {
     this.stepper.previous();
+    if (this.stepper._getFocusIndex() === 0) {
+      this.isCreateOrder = false;
+    }
   }
 
   private onPay() {

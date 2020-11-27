@@ -5,7 +5,8 @@ import { ImageData, Product } from './product.models';
 import { AppSettings, imageSizes, ORIGINAL_IMAGE } from '../../app/app.settings';
 import { forkJoin, Observable } from 'rxjs';
 import { last, mergeMap } from 'rxjs/operators';
-
+import Transaction = firebase.firestore.Transaction;
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,11 @@ export class ProductFormService {
   }
 
 
-  addProduct(product: Product, imageIsMain: ImageData, edit: boolean) {
-    const batch = this.afFirestore.firestore.batch();
+  addProduct(product: Product, imageIsMain: ImageData, edit: boolean, op: (any)): any {
+    let batch = op;
+    if (!op) {
+      batch = this.afFirestore.firestore.batch();
+    }
     const operation = (refItem) => {
       if (edit) {
         return batch.update(refItem, product);
@@ -46,7 +50,11 @@ export class ProductFormService {
     }
     productAgrupOperation(agr, product.agrupation.id);
 
-    return batch.commit();
+    if (!op) {
+      batch.commit();
+    } else {
+      return batch;
+    }
   }
 
   async removeProduct(product: Product) {
@@ -172,5 +180,8 @@ export class ProductFormService {
     await addProductAgrupImage(agr, product.agrupation.id);
     return batch.commit();
   }
+
+
+
 
 }

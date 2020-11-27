@@ -8,6 +8,8 @@ export class AppSettings {
   public static readonly API_IMAGES = 'images';
   public static readonly API_ADDRESS = 'address';
   public static readonly USER_KEY = 'user'
+  public static readonly API_CHECKOUT = 'checkouts';
+
 
 }
 

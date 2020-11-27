@@ -8,7 +8,7 @@ export interface Order {
   date: Date;
   expedition: Date;
   checkout: string;
-  status: string;
+  status: OrderStatus;
   orderLines: OrderLine[];
 }
 
@@ -22,4 +22,9 @@ export interface OrderLine {
 
 export interface OrdersFilterInterface {
   userId: string;
+}
+
+export enum OrderStatus {
+  Pending = 'Pendiente',
+  Confirmed = 'Realizado'
 }

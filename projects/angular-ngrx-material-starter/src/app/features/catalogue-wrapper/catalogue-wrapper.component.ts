@@ -16,6 +16,10 @@ import {
 } from '../../core/product-list/product-list.action';
 import { CartLine } from '../../core/cart/cart.models';
 import { cartAdd } from '../../core/cart/cart.action';
+import {
+  productsFilterSetIsActive,
+  productsFilterSetIsStock
+} from '../../core/products-filter/products-filter.action';
 
 @Component({
   selector: 'anms-catalogue-wrapper',
@@ -47,6 +51,9 @@ export class CatalogueWrapperComponent implements OnInit {
   ngOnInit() {
     this.isLoading$ = this.store$.select(selectProductsFilterIsLoading);
     this.isEnded$ = this.store$.select(selectProductsFilterIsEnded);
+    this.store$.dispatch(productsFilterSetIsStock({payload: {isStock: true}}));
+    this.store$.dispatch(productsFilterSetIsActive({payload: {isActive: true}}))
+
     this.store$.select(selectProductsFilter).pipe(take(1)).subscribe(res => {
       this.filter = res;
     });

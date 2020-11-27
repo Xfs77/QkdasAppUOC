@@ -1,0 +1,71 @@
+<mat-card>
+<mat-card-title class="title">Detalle Pedido {{(order$ |async).id| number: '7.0' | noComma}}</mat-card-title>
+<div
+  fxLayout="row"
+  fxLayoutWrap
+  fxLayoutAlign="start center"
+  fxLayoutGap="1%"
+  class="item-container"
+  *ngFor="let item of (order$| async).orderLines">
+  <div fxFlex="10">
+    <img
+      [lazyLoad]="item.product.mainImage.urls.imgSM"
+      [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
+      [errorImage]="'/assets/img/empty-image/empty-image-100.png'"
+      alt="">
+  </div>
+  <div
+    fxFlex="50"
+    fxLayout="column"
+    fxLayoutWrap
+    fxLayoutGap="0.5%">
+    <div class="text-sm">
+      <span class="bold">Ref: </span>{{item.product.reference}}
+    </div>
+    <div class="text-xs">{{item.product.descr}}</div>
+  </div>
+  <div fxFlex="40"
+       class="text-sm"
+       fxLayout="row"
+       fxLayoutWrap
+       fxLayoutAlign="start center"
+       fxLayoutGap="0.5%">
+    <div
+      fxFlex="50">
+      <mat-form-field class="text-align-right" appearance="standard" floatLabel="always"
+                      align="end">
+        <mat-label>Cantidad</mat-label>
+        <input matInput #quantity type="number" readonly class="text-align-right"
+               value="{{item.quantity}}">
+      </mat-form-field>
+    </div>
+    <div fxFlex="50">
+      <mat-form-field class="text-align-right"  appearance="standard"
+                      floatLabel="always" align="end">
+        <mat-label>Precio Unit.</mat-label>
+        <input matInput type="number" readonly
+               value="{{item.product.price}}">
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<div
+  fxLayout="row"
+  fxLayoutWrap
+  fxLayoutAlign="start center"
+  fxLayoutGap="1%"
+  class="total-container">
+  <div
+    fxFlex="65"
+    class="bold">
+    Precios con IVA incluido
+  </div>
+  <div
+    fxFlex="35"
+    class="bold">
+    Total Compra
+  </div>
+  <div>{{total$ |async}}</div>
+</div>
+</mat-card>

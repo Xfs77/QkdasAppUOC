@@ -44,7 +44,6 @@ export class CatalogueItemComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
     if (this.isImages(changes.product.currentValue)) {
       this.generateSizes();
       this.generateSrcSet();

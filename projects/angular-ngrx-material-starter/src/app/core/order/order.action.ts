@@ -43,3 +43,27 @@ export const orderListGetFailure = createAction(
   '[Order List] Get Failure',
   props<{payload: {message: string}}>()
 );
+export const orderUpdate = createAction(
+  '[Order] Update',
+  props<{payload: {order: Update<Order>}}>()
+);
+export const orderUpdateSuccess = createAction(
+  '[Order] Update Success',
+  props<{payload: {order: Update<Order>}}>()
+);
+export const orderUpdateFailure = createAction(
+  '[Order] Update Failure',
+  props<{payload: {message: string}}>()
+);
+export const orderRemove = createAction(
+  '[Order] Remove',
+  props<{payload: {order: Order}}>()
+);
+export const orderRemoveSuccess = createAction(
+  '[Order] Remove Success',
+  props<{payload: {order: Order}}>()
+);
+export const orderRemoveFailure = createAction(
+  '[Order] Remove Failure',
+  props<{payload: {message: string}}>()
+);

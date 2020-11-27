@@ -48,7 +48,7 @@ export const cartAddSuccess = createAction(
 );
 export const cartAddFailure = createAction(
   '[Cart] Add Failure',
-  props<{payload: {cart: CartLine}}>()
+  props<{payload: {message: string}}>()
 );
 export const cartUpdate = createAction(
   '[Cart] Update',
