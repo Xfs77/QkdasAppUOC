@@ -11,19 +11,19 @@
             <button mat-menu-item>
               <mat-icon>{{item.icon}}</mat-icon>
             </button>
-            {{item.label | translate}}
+            {{item.label}}
           </a>
           <a *ngIf="item.label === 'Entrar' && !(isAuthenticated$ |async)" (click)="onLogin()" mat-list-item>
             <button mat-menu-item>
               <mat-icon>{{item.icon}}</mat-icon>
             </button>
-            {{item.label | translate}}
+            {{item.label }}
           </a>
           <a *ngIf="item.label === 'Desconectar'" (click)="onLogout()" mat-list-item>
             <button mat-menu-item>
               <mat-icon>{{item.icon}}</mat-icon>
             </button>
-            {{item.label | translate}}
+            {{item.label}}
           </a>
         </div>
       </mat-nav-list>
@@ -46,7 +46,7 @@
 
           <span class="d-none d-md-inline spacer ">
             <button mat-button class="nav-button main-options" *ngFor="let item of navigation" [routerLink]="[item.link]">
-              {{item.label | translate}}
+              {{item.label }}
             </button>
           </span>
 

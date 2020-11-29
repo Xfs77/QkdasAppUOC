@@ -12,6 +12,7 @@ import { Agrupation } from '../../../../core/agrupation/agrupation.models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map, take } from 'rxjs/operators';
 import { PhotoDirective } from '../../../../shared/directives/photo.directive';
+import { ProductFormService } from '../../../../core/product-form/product-form.service';
 
 @Component({
   selector: 'anms-product-form',
@@ -34,10 +35,7 @@ export class ProductFormComponent implements OnInit {
   private selectedAgrup: Agrupation;
   edit = false;
 
-
   imageToUpdateIsMain: ImageData;
-
-
   productForm: FormGroup;
 
   descrMaxLength = 150;
@@ -47,10 +45,13 @@ export class ProductFormComponent implements OnInit {
     active: [
     ],
     agrupation: [
-      {type: 'required', message: 'El producto debe pertenecer a una agrupación'}
+      {type: 'required', message: 'El producto debe pertenecer a una agrupación'},
+      {type: 'productAgrupation', message: 'La agrupación no puede contener otras agrupaciones'}
+
     ],
     reference: [
       {type: 'required', message: 'La referencia debe informarse'},
+      {type: 'referenceExists', message: 'La referencia ya existe'},
       {type: 'maxlength', message: `La referencia como máximo puede tener ${this.refMaxLength} carácteres`}
     ],
     descr: [
@@ -69,6 +70,7 @@ export class ProductFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private productFormService: ProductFormService
   ) {
   }
 
@@ -94,6 +96,10 @@ export class ProductFormComponent implements OnInit {
         if (res && !this.edit) {
           this.selectedAgrup = res;
           this.agrupation.setValue(res.pathDescription);
+          if (res.hasChildren) {
+            this.agrupation.setErrors({productAgrupation: 'hasItems'})
+            console.log(this.productForm)
+          }
         }
       });
   }
@@ -111,11 +117,18 @@ export class ProductFormComponent implements OnInit {
     this.productForm = this.fb.group({
       active: [true],
       agrupation: [null, [Validators.required]],
-      reference: [null, [Validators.required, Validators.maxLength(13)]],
+      reference: [null,
+        {
+          validators: [Validators.required, Validators.maxLength(13)],
+          asyncValidators: [this.productFormService.referenceValidator()],
+          updateOn: 'blur'
+        }
+        ],
       descr: [null, [Validators.required, Validators.maxLength(150)]],
       quantity: [null, [Validators.required, Validators.min(0)]],
       price: [null, [Validators.required, Validators.min(0)]]
-    });
+    },
+      );
   }
 
   get active() {
@@ -143,6 +156,8 @@ export class ProductFormComponent implements OnInit {
   }
 
   onSave() {
+    console.log('sdsd')
+    console.log(this.productForm)
     const product = {
             ...this.getFormData()};
     if (this.productForm.valid)

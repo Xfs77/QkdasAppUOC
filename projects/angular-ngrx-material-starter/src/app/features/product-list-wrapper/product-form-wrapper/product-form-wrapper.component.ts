@@ -26,6 +26,7 @@ import {
 import { ImageFormComponent } from '../image-form/image-form.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AgrupationsComponent } from '../../agrupations-wrapper/agrupations/agrupations.component';
+import { NotificationService } from '../../../core/notifications/notification.service';
 
 @Component({
   selector: 'anms-product-form-wrapper',
@@ -40,23 +41,24 @@ export class ProductFormWrapperComponent implements OnInit {
   selectedAgrup$ = this.selectedAgrupSource.asObservable();
   currentSelectedAgrup: Agrupation;
   images$: Observable<ImageData[]>;
-  images: ImageData[];
   imagesToUpload = {} as { id: ImageData };
   imagesToRemove = {} as { id: ImageData };
   imageToUpdateIsMain: ImageData;
   index = 0;
+  numImages = 0;
 
   edit: boolean;
+  isMain = false;
 
-  @ViewChild(PhotoDirective, {static: true}) photoHost: PhotoDirective;
+  @ViewChild(PhotoDirective, { static: true }) photoHost: PhotoDirective;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private store$: Store,
     private dialog: MatDialog,
-    private componentFactoryResolver: ComponentFactoryResolver,
-
+    private notificationService: NotificationService,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
 
   }
@@ -91,16 +93,20 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   saveProduct($event) {
-    this.store$.dispatch(
-      productFormSave({
-        payload: {
-          product:  $event.product,
-          imagesToRemove: Object.values(this.imagesToRemove),
-          imagesToUpload: Object.values(this.imagesToUpload),
-          imageToUpdateIsMain: this.imageToUpdateIsMain,
-          edit: this.edit
-        }
-      }));
+    if (!this.isMain) {
+      this.notificationService.info('Debe adjuntar como mínimo una imagen');
+    } else {
+      this.store$.dispatch(
+        productFormSave({
+          payload: {
+            product: $event.product,
+            imagesToRemove: Object.values(this.imagesToRemove),
+            imagesToUpload: Object.values(this.imagesToUpload),
+            imageToUpdateIsMain: this.imageToUpdateIsMain,
+            edit: this.edit
+          }
+        }));
+    }
   }
 
   cancelProduct() {
@@ -114,8 +120,10 @@ export class ProductFormWrapperComponent implements OnInit {
       dialogConfig.closeOnNavigation = true;
       dialogConfig.width = '90vw';
       dialogConfig.maxWidth = '500px';
+      dialogConfig.height = 'calc(100% - 64px - 105px - 32px)'
+      dialogConfig.position = {top: '80px'}
 
-      this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
+      this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig);
       this.dialogRefAgrup.afterClosed().subscribe(result => {
         this.selectedAgrupSource.next(result);
       });
@@ -124,15 +132,13 @@ export class ProductFormWrapperComponent implements OnInit {
 
   getImages($event: Product) {
     if ($event) {
-      this.store$.dispatch(productImagesGet({payload: {product: $event}}));
+      this.store$.dispatch(productImagesGet({ payload: { product: $event } }));
       this.images$ = this.store$.select(selectProductImages);
       this.store$.select(selectProductImages).pipe(take(2)).subscribe(
-      res => {
-        console.log(res)
-        if (res.length > 0 && this.index === 0) {
+        res => {
+          if (res.length > 0 && this.index === 0) {
 
             this.index = res.length;
-            this.images = res;
             this.addNewImage(null);
           }
         });
@@ -142,28 +148,39 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   addNewImage(image: ImageData) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ImageFormComponent);
-    const viewContainerRef: ViewContainerRef = this.photoHost.viewContainerRef;
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as ImageFormComponent).component = componentRef;
-    (componentRef.instance as ImageFormComponent).id = this.index;
-    if (image) {
-      (componentRef.instance as ImageFormComponent).image = image;
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ImageFormComponent);
+      const viewContainerRef: ViewContainerRef = this.photoHost.viewContainerRef;
+      const componentRef = viewContainerRef.createComponent(componentFactory);
+      (componentRef.instance as ImageFormComponent).component = componentRef;
+      (componentRef.instance as ImageFormComponent).id = this.index;
+      if (image) {
+        (componentRef.instance as ImageFormComponent).image = image;
+      }
+      (componentRef.instance as ImageFormComponent).eventNewImage.subscribe(res => {
+        this.onAddImage(res);
+      });
+      (componentRef.instance as ImageFormComponent).eventRemoveImage.subscribe(res => {
+        this.onRemoveImage(res);
+      });
+      (componentRef.instance as ImageFormComponent).eventIsMain.subscribe(res => {
+        this.onIsMain();
+      });
+      (componentRef.instance as ImageFormComponent).eventRemoveComponent.subscribe(res => {
+        this.onRemoveComponent(res);
+      });
 
-    }
-    (componentRef.instance as ImageFormComponent).eventNewImage.subscribe(res => {
-      this.onAddImage(res);
-    });
-    (componentRef.instance as ImageFormComponent).eventRemoveImage.subscribe(res => {
-      this.onRemoveImage(res);
-    });
-    this.index++;
+      this.index++;
   }
 
   onAddImage(e) {
-    if (e.id === (this.index - 1).toString()) {
+    this.numImages++;
+    console.log(this.numImages);
+    if (e.id === (this.index - 1).toString() && this.numImages < 4) {
       this.addNewImage(null);
     }
+      if (this.numImages === 4) {
+        this.notificationService.info('Sólo pueden adjuntarse 4 imágenes');
+      }
     if (e.image) {
       this.imagesToUpload = {
         ...this.imagesToUpload,
@@ -176,7 +193,6 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   onRemoveImage(image: ImageData) {
-
 
     if (image != null) {
       delete this.imagesToUpload[image.id];
@@ -196,8 +212,24 @@ export class ProductFormWrapperComponent implements OnInit {
     this.selectedAgrupSource.next($event);
   }
 
-  onRemoveComponent($event: ImageData) {
-    this.onRemoveImage($event);
-    this.store$.dispatch(productImageRemoveSuccess({payload: {product: null, imageKey: $event.id}}));
+  onRemoveComponent($event: {image: ImageData , id: string}) {
+    this.numImages--;
+    if (this.numImages === 3) {
+      this.addNewImage(null);
+    }
+    if ($event.image.urls.imgXL) {
+      this.onRemoveImage($event.image);
+      this.store$.dispatch(productImageRemoveSuccess({
+        payload: {
+          product: null,
+          imageKey: $event.id
+        }
+      }));
+    }
+  }
+
+
+  onIsMain() {
+    this.isMain = true;
   }
 }

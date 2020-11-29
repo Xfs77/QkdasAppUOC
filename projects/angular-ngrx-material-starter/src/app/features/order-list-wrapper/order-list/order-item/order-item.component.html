@@ -7,7 +7,7 @@
     <div fxFlex="17" fxFlex.lt-md="49" >
       <div><span class="bold">Pedido:</span> {{order.id | number: '7.0' | noComma}}</div>
       <div><span class="bold">Pago:</span> <span [ngClass]="{pending: order.status == 'Pendiente'}"> {{order.status}}</span></div>
-      <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total |number: '1.2'}} €</div>
+      <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total | currency:'EUR':'symbol-narrow':'0.2-2'}} €</div>
     </div>
     <div fxFlex="20" fxFlex.lt-md="48">
       <div><span class="bold">Fecha:</span> {{order.date  | date: 'dd/MM/yyyy'}}</div>
@@ -53,7 +53,7 @@
     </div>
     <div fxFlex="20" fxHide.gt-sm>
       <div class="bold">Importe:</div>
-      {{this.total |number: '1.2'}} €
+      {{this.total |  currency:'EUR':'symbol-narrow':'0.2-2'}}
     </div>
   </div>
 

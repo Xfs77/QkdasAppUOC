@@ -4,9 +4,10 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { ImageData, Product } from './product.models';
 import { AppSettings, imageSizes, ORIGINAL_IMAGE } from '../../app/app.settings';
 import { forkJoin, Observable } from 'rxjs';
-import { last, mergeMap } from 'rxjs/operators';
+import { last, map, mergeMap } from 'rxjs/operators';
 import Transaction = firebase.firestore.Transaction;
 import * as firebase from 'firebase';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,23 @@ export class ProductFormService {
   ) {
   }
 
+  checkIfReferenceExists(reference: string): Observable<firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>> {
+    return this.afFirestore.collection(AppSettings.API_PRODUCT).doc(reference).get();
+  }
+
+  referenceValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.checkIfReferenceExists(control.value).pipe(
+        map(res => {
+          if (res.data()) {
+            return { referenceExists: true }
+          } else {
+            return null;
+          }
+        })
+      );
+    };
+  }
 
   addProduct(product: Product, imageIsMain: ImageData, edit: boolean, op: (any)): any {
     let batch = op;

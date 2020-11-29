@@ -77,4 +77,8 @@ export class CartComponent implements OnInit {
     this.payEvent.emit(true);
 
   }
+
+  pp(event$) {
+    console.log(event$)
+  }
 }

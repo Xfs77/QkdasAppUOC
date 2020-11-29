@@ -34,6 +34,8 @@
               "@firebase/performance",
               "@firebase/remote-config",
               "hammerjs",
+              "crypto-js",
+              "@tweenjs/tween.js"
 
             ],
             "outputPath": "dist/angular-ngrx-material-starter",
@@ -44,7 +46,9 @@
             "aot": true,
             "assets": [
               "projects/angular-ngrx-material-starter/src/favicon.ico",
-              "projects/angular-ngrx-material-starter/src/assets"
+              "projects/angular-ngrx-material-starter/src/assets",
+              "projects/angular-ngrx-material-starter/src/manifest.webmanifest",
+              "projects/angular-ngrx-material-starter/src/web.config"
             ],
             "styles": [
               "projects/angular-ngrx-material-starter/src/styles-app-loading.scss",
@@ -88,7 +92,7 @@
                 {
                   "type": "bundle",
                   "name": "main",
-                  "baseline": "1024kb",
+                  "baseline": "3024kb",
                   "maximumWarning": "100kb",
                   "maximumError": "200kb"
                 },
@@ -96,7 +100,9 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/angular-ngrx-material-starter/ngsw-config.json"
             }
           }
         },
@@ -126,7 +132,8 @@
             "karmaConfig": "projects/angular-ngrx-material-starter/karma.conf.js",
             "assets": [
               "projects/angular-ngrx-material-starter/src/favicon.ico",
-              "projects/angular-ngrx-material-starter/src/assets"
+              "projects/angular-ngrx-material-starter/src/assets",
+              "projects/angular-ngrx-material-starter/src/manifest.webmanifest"
             ],
             "styles": [
               "projects/angular-ngrx-material-starter/src/styles-app-loading.scss",

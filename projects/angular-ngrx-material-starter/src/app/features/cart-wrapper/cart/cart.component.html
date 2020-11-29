@@ -67,8 +67,10 @@
         <mat-form-field class="text-align-right" fxFlex="50" appearance="standard"
                         floatLabel="always" align="end">
           <mat-label>Precio Unit.</mat-label>
-          <input matInput type="number" readonly
-                 value="{{item.product.price}}">
+          <input matInput type="text" readonly
+                 [ngModelOptions]="{updateOn:'blur'}"
+                 [ngModel]="item.product.price |  currency:'EUR':'symbol-narrow':'0.2-2'"
+                 (ngModelChange)="item.product.price=$event">
         </mat-form-field>
 
         <button
@@ -98,7 +100,7 @@
         class="bold">
         Total Compra
       </div>
-      <div>{{totalImport |async}}</div>
+      <div class="bold">{{totalImport |async | currency:'EUR':'symbol-narrow':'0.2-2'}}</div>
     </div>
 
     <div class="float-right mt20">

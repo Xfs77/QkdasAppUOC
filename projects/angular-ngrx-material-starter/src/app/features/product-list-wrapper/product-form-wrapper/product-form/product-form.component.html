@@ -16,7 +16,7 @@
           formControlName="agrupation">
         <mat-error *ngFor="let validation of validationMessages.agrupation">
           <mat-error class="error-message"
-                     *ngIf="reference.hasError(validation.type) && (agrupation.dirty || agrupation.touched)">{{validation.message}}</mat-error>
+                     *ngIf="agrupation.hasError(validation.type) && (agrupation.dirty || agrupation.touched)">{{validation.message}}</mat-error>
         </mat-error>
       </mat-form-field>
     </div>
@@ -64,6 +64,9 @@
           <input
             required
             matInput
+            min="0"
+            step="1"
+            onkeypress="return event.keyCode >= 48 && event.keyCode <= 57"
             type="number"
             formControlName="quantity">
           <mat-error *ngFor="let validation of validationMessages.quantity">
@@ -75,11 +78,12 @@
 
       <div fxFlex="50">
         <mat-form-field floatLabel="always" class="text-align-right">
-          <mat-label>Precio</mat-label>
+          <mat-label>Precio ( € )</mat-label>
           <input
             required
             matInput
-            type="number"
+            anmsTwoDigitDecimal
+            type="text"
             formControlName="price">
           <mat-error *ngFor="let validation of validationMessages.price">
             <mat-error class="error-message"

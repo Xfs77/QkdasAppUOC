@@ -61,6 +61,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NocommaPipe } from './pipes/nocomma.pipe';
+import { TwoDigitDecimalDirective } from './directives/two-digit-decimal.directive';
 
 @NgModule({
   imports: [
@@ -103,6 +104,7 @@ import { NocommaPipe } from './pipes/nocomma.pipe';
     LongPressDirective,
     PhotoDirective,
     NocommaPipe,
+    TwoDigitDecimalDirective,
   ],
   exports: [
     CommonModule,
@@ -148,6 +150,7 @@ import { NocommaPipe } from './pipes/nocomma.pipe';
     VirtualScrollerModule,
 
     NocommaPipe,
+    TwoDigitDecimalDirective,
   ]
 })
 export class SharedModule {

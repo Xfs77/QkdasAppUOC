@@ -7,9 +7,9 @@
        alt="">
   <div  class="description ml20 ">
     <div class="text-sm"><span class="bold ">Ref: </span>{{product.reference}} / {{product.agrupation.pathDescription}}</div>
-    <div class="text-xs" fxFlexAlign="stretch"> {{product.descr}}  </div>
+    <div class="text-xs" fxHide.xs fxFlexAlign="stretch"> {{product.descr}}  </div>
   </div>
-  <div fxFlex="auto" class="text-align-right ml5">{{product.price}}€</div>
+  <div fxFlex="auto" class="text-align-right ml5">{{product.price |  currency:'EUR':'symbol-narrow':'0.2-2'}}</div>
   <button
     mat-icon-button
     [matMenuTriggerFor]="menu"

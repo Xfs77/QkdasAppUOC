@@ -44,7 +44,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   checkBatch() {
-    this.scrollDispatcher.scrolled().subscribe(_ => console.log(this.viewport.getRenderedRange().end, this.viewport.getDataLength()))
+
     const scroll$ = this.scrollDispatcher.scrolled().pipe(
       filter(event => {
           return this.viewport.getRenderedRange().end === this.viewport.getDataLength();

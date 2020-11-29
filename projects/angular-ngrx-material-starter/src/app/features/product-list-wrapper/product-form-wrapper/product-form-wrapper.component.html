@@ -28,9 +28,10 @@
               *ngFor="let image of this.images$ |async; index as i"
               [image]="image"
               [id]="i"
+              (eventRemoveComponent)="onRemoveComponent($event)"
               (eventNewImage)="onAddImage($event)"
-              (eventRemoveImage)="onRemoveImage($event)"
-              (eventRemoveComponent)="onRemoveComponent($event)">
+              (eventIsMain)="onIsMain()"
+              (eventRemoveImage)="onRemoveImage($event)">
             </anms-image-form>
           <ng-template appPhotoHost>
           </ng-template>
