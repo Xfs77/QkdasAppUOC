@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Order } from '../../../core/order/order.models';
+import { User } from '../../../core/user/user.models';
 
 @Component({
   selector: 'anms-order-list',
@@ -17,6 +18,7 @@ import { Order } from '../../../core/order/order.models';
 })
 export class OrderListComponent implements OnInit {
 
+  @Input() user$: Observable<User>;
   @Input() order$: Observable<Order[]>;
   @Output() expedtionEvent: EventEmitter<{order: Order, date: Date}> = new EventEmitter();
   @Output() removeEvent: EventEmitter<{order: Order}> = new EventEmitter();

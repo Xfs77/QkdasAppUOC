@@ -6,7 +6,7 @@ export const environment = {
   criptoKey: 'ashdafdfjk22323jadsad',
   production: true,
   test: false,
-  i18nPrefix: '/angular-ngrx-material-starter',
+  i18nPrefix: '',
   versions: {
     app: packageJson.version,
     angular: packageJson.dependencies['@angular/core'],
@@ -22,7 +22,7 @@ export const environment = {
     cypress: packageJson.devDependencies['cypress']
   },
   pkStripeTest: 'pk_test_51HnPcFIjHFJYs4LUjgsSfS4xIcGucoSeYjopLOLcmgaGw0R5JQE29ZGvCy8RCKGUSGtp50TCgdMesZpR1uglP7nk008VmSSMxk',
-  skStripeTest: 'sk_test_51HnPcFIjHFJYs4LUvmXiBnG8uCvscynq1cpGBnkTLLQwQrfOg6Us4LyLvBmwvL0aFLxBV3dH830jb3i4VtkaAz3N00yiELayqs',
+  stripeCheckout: 'https://us-central1-qkdasartuoc.cloudfunctions.net/checkout',
   firebaseConfig: {
     apiKey: 'AIzaSyAgvA8lyIGILOZwn5yZr6MyenTgqIDdRiY',
     authDomain: 'qkdasartuoc.firebaseapp.com',

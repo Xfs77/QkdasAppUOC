@@ -10,7 +10,7 @@ import { Match } from '../../../../shared/validators/match.validator';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PasswordFormComponent implements OnInit {
-  @Output() passwordEvent: EventEmitter<{password: string}> = new EventEmitter();
+  @Output() savePasswordEvent: EventEmitter<{password: string}> = new EventEmitter();
   @Output() cancelPasswordEvent: EventEmitter<boolean> = new EventEmitter();
 
   passwordForm: FormGroup;
@@ -63,7 +63,7 @@ export class PasswordFormComponent implements OnInit {
   onChange() {
     if (this.passwordForm.valid) {
       this.getFormData();
-      this.passwordEvent.emit(this.passwordData);
+      this.savePasswordEvent.emit(this.passwordData);
     }
   }
 

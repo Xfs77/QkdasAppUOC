@@ -134,7 +134,7 @@ export class CartEffects {
         ofType(cartAddFailure),
         tap(action => {
           if (action.payload.message !== '') {
-            this.notificationService.error(action.payload.message);
+            this.notificationService.info(action.payload.message);
           } else {
             this.notificationService.error('No se ha podido realizar la compra')
           }

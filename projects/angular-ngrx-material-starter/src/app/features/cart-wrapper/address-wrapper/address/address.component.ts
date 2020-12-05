@@ -43,7 +43,9 @@ export class AddressComponent implements OnInit {
 
   selectAddress() {
     this.showAddresses = false;
-    this.confirmedAddress = this.currentSelectedAddress;
+    if (this.currentSelectedAddress) {
+      this.confirmedAddress = this.currentSelectedAddress;
+    }
     this.selectedAddressEvent.emit(this.confirmedAddress);
   }
 
@@ -60,6 +62,7 @@ export class AddressComponent implements OnInit {
   }
 
   confirm() {
+    console.log(this.confirmedAddress)
     this.confirmEvent.emit(this.confirmedAddress);
   }
 

@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 const path = require('path');
 const os = require('os');
 const fs = require('fs-extra');
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 
 const sharp = require('sharp');
 
@@ -71,7 +71,7 @@ exports.generateThumbImages = functions.storage.object().onFinalize(async (objec
       .rotate()
       .toFile(tempLocalThumbFile);
 
-    const token = uuid();
+    const token = uuidv4();
     //Uploading thumbnail
     await bucket.upload(tempLocalThumbFile, {
       destination: thumbFilePath,

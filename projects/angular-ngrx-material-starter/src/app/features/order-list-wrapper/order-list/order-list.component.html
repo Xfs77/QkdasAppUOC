@@ -17,6 +17,7 @@
             <mat-card class="item" fxFlex="100">
               <anms-order-item
                 [order]="order"
+                [user$]="user$"
                 (expedtionEvent)="expedition($event)"
                 (removeEvent)="remove($event)"
               ></anms-order-item>

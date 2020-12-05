@@ -42,7 +42,10 @@ export class AddressWrapperComponent implements OnInit {
     });
 
     this.currentAddress$ = this.store$.select(selectCartAddress);
-    this.currentAddress$.subscribe(res => this.currentAddress = res);
+    this.currentAddress$.subscribe(res => {
+      console.log(res)
+      this.currentAddress = res;
+    });
     this.address$ = this.store$.select(selectAddressProfile);
   }
 

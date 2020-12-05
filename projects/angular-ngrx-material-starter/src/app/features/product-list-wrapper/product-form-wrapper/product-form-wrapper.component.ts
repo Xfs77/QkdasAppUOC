@@ -96,6 +96,7 @@ export class ProductFormWrapperComponent implements OnInit {
     if (!this.isMain) {
       this.notificationService.info('Debe adjuntar como mínimo una imagen');
     } else {
+
       this.store$.dispatch(
         productFormSave({
           payload: {
@@ -230,6 +231,7 @@ export class ProductFormWrapperComponent implements OnInit {
 
 
   onIsMain() {
+    console.log('ismain')
     this.isMain = true;
   }
 }

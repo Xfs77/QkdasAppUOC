@@ -25,7 +25,7 @@ export class ProductFormComponent implements OnInit {
   @Input() product$: Observable<Product> = of(emptyProduct() as Product);
   @Input() selectedAgrup$: Observable<Agrupation>;
   @Output() saveProductEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onAgrupationEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() agrupationEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() cancelProductEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() getImagesEvent: EventEmitter<Product> = new EventEmitter<Product>();
 
@@ -83,13 +83,16 @@ export class ProductFormComponent implements OnInit {
       map(product => {
         if (product && product.reference) {
           this.edit = true;
+          this.productForm.controls.reference.setAsyncValidators(this.productFormService.referenceValidator(this.edit));
+          this.productForm.controls.reference.updateValueAndValidity();
           this.getImagesEvent.emit(product);
         } else {
           this.getImagesEvent.emit(null);
         }
-      })).subscribe();
-  }
 
+      })).subscribe();
+
+  }
   private agrupationDataSubscription() {
     this.selectedAgrup$.subscribe(
       res => {
@@ -98,7 +101,6 @@ export class ProductFormComponent implements OnInit {
           this.agrupation.setValue(res.pathDescription);
           if (res.hasChildren) {
             this.agrupation.setErrors({productAgrupation: 'hasItems'})
-            console.log(this.productForm)
           }
         }
       });
@@ -120,7 +122,7 @@ export class ProductFormComponent implements OnInit {
       reference: [null,
         {
           validators: [Validators.required, Validators.maxLength(13)],
-          asyncValidators: [this.productFormService.referenceValidator()],
+          asyncValidators: [this.productFormService.referenceValidator(this.edit)],
           updateOn: 'blur'
         }
         ],
@@ -156,8 +158,6 @@ export class ProductFormComponent implements OnInit {
   }
 
   onSave() {
-    console.log('sdsd')
-    console.log(this.productForm)
     const product = {
             ...this.getFormData()};
     if (this.productForm.valid)
@@ -203,7 +203,7 @@ export class ProductFormComponent implements OnInit {
 
   onAgrupation() {
     if (!this.edit) {
-      this.onAgrupationEvent.emit(true);
+      this.agrupationEvent.emit(true);
     }
   }
 }

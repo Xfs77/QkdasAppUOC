@@ -24,6 +24,7 @@
     <img
       onclick="clickInput(this)"
       onload="hideCamera_showClose(this)"
+      (load)="onLoad()"
       #viewImage
       id="imagen{{this.id}}"
       src="{{image.urls.imgSM}}"

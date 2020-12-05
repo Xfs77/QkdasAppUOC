@@ -7,7 +7,7 @@
     <div fxFlex="17" fxFlex.lt-md="49" >
       <div><span class="bold">Pedido:</span> {{order.id | number: '7.0' | noComma}}</div>
       <div><span class="bold">Pago:</span> <span [ngClass]="{pending: order.status == 'Pendiente'}"> {{order.status}}</span></div>
-      <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total | currency:'EUR':'symbol-narrow':'0.2-2'}} €</div>
+      <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total | currency:'EUR':'symbol-narrow':'0.2-2'}} </div>
     </div>
     <div fxFlex="20" fxFlex.lt-md="48">
       <div><span class="bold">Fecha:</span> {{order.date  | date: 'dd/MM/yyyy'}}</div>
@@ -69,12 +69,14 @@
       <span>Detalle</span>
     </button>
     <button
+      *ngIf="(user$ | async).admin"
       (click)="expedition()"
       mat-menu-item>
       <mat-icon>local_shipping</mat-icon>
       <span>Expedir</span>
     </button>
     <button
+      *ngIf="(user$ | async).admin"
       mat-menu-item
       (click)="remove()">
       <mat-icon>delete</mat-icon>

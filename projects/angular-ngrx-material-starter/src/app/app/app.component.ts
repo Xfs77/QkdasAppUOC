@@ -160,20 +160,23 @@ export class AppComponent implements OnInit {
   }
 
   onAgrupations() {
+    const dialogConfig = new MatDialogConfig();
+
     if (window.innerWidth < 960) {
-      const dialogConfig = new MatDialogConfig();
       dialogConfig.autoFocus = true;
       dialogConfig.closeOnNavigation = true;
       dialogConfig.width = '90vw';
       dialogConfig.maxWidth = '500px';
       dialogConfig.height = 'calc(100vh - 64px - 105px - 32px)';
-      dialogConfig.position = {top: '80px'}
-
+      dialogConfig.position = { top: '80px' }
+    }
+    if (window.innerWidth <= 600) {
+      dialogConfig.height = 'calc(100vh - 56px - 105px - 32px)';
+      dialogConfig.position = { top: '70px' }
+    }
       this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig );
       this.dialogRefAgrup.afterClosed().subscribe(res => {
         this.store.dispatch(currentSelectedAgrupation({payload: {agrupation: res}}))
       });
     }
-
-  }
 }

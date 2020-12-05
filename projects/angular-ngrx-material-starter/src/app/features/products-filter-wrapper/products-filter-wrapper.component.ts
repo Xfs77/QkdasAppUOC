@@ -75,11 +75,12 @@ export class ProductsFilterWrapperComponent implements OnInit, OnChanges, OnDest
     sort.field = 'reference';
     sort.direction = 'asc';
 
-    this.store$.select(selectAgrupationSelected).subscribe(res => {
+   /* this.store$.select(selectAgrupationSelected).subscribe(res => {
       if (res) {
         this.onSelectAgrup(res);
       }
-    })
+    })*/
+
     this.store$.dispatch(productsFilterSetSort({payload: {sort}}));
 
     this.batchSub = this.batch$.subscribe(res => {

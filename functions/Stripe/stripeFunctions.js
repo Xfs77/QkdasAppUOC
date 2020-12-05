@@ -19,7 +19,7 @@ exports.checkout = functions.https.onRequest(async (req, res) => {
           product_data: {
             name: doc.data().product.reference,
             description: doc.data().product.descr,
-            images: [doc.data().product.mainImage.urls.imgSM[0]]
+            images: [doc.data().product.mainImage.urls.imgSM]
           },
           unit_amount: doc.data().price * 100
         },
@@ -32,8 +32,8 @@ exports.checkout = functions.https.onRequest(async (req, res) => {
       line_items: items,
       customer_email: `${userDoc.data().email}`,
       mode: 'payment',
-      success_url: `http://localhost:4200/#catalogue`,
-      cancel_url: 'http://localhost:4200/#/cart',
+      success_url: `qkdasartuoc.web.app/#catalogue`,
+      cancel_url: 'qkdasartuoc.web.app/#/cart',
     });
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -176,7 +176,7 @@ exports.hooks = functions.https.onRequest(async (req, res) => {
 
       const mailOptions = {
         from: `qkdasart@gmail.com`,
-        to: 'xferraserra@gmail.com',
+        to: orderDoc.data().user.email,
         subject: `Confirmación Pedido ${order.id} `,
         html: html
       };
@@ -192,104 +192,4 @@ exports.hooks = functions.https.onRequest(async (req, res) => {
   }
 
   res.sendStatus(200);
-});
-
-exports.prova = functions.https.onRequest(async (req, res) => {
-  var transporter = nodemailer.createTransport(smtpTransport({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    auth: {
-      user: 'qkdasart@gmail.com',
-      pass: 'RayiEva04'
-    }
-  }));
-
-
-
-  let orderDoc = await admin.firestore().collection('orders/').doc('3').get();
-  let order = orderDoc.data();
-  let html = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style type="text/css" nonce>
-    img {
-        height: 70px;
-        width: 44px;
-        border-radius: 5px;
-    }
-    .line {
-        display: flex;
-        flex-direction: row;
-        font-size: 12px;
-        margin: 16px 0;
-    }
-    .quantity, .price, .description {
-        margin-left: 16px;
-    }
-    .quantity, .price {
-        text-align: right;
-    }
-    .label {
-        font-weight: bold;
-    }
-    .description-value {
-        width: 300px;
-        max-height: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-</style>
-</head>
-
-<div>Su pedido núnero ${order.id} ha sido prcesado correctamente y en breve se procederá a su preparación.</div>`
-
-  let total_order  = 0;
-  for (line of order.orderLines) {
-
-    const total_line = line.quantity * line.price;
-    total_order = total_order + total_line;
-
-    html = html.concat(`
-<div class="line">
-<img src=${line.product.mainImage.urls.imgSM}>
-    <div class="description">
-        <div class="label description-label">Descripcion</div>
-        <div class="description-value">${line.product.descr}</div>
-    </div>
-    <div class="quantity">
-        <div class="label quantity-label">Cantidad</div>
-        <div class="quantity-value">${line.quantity}</div>
-    </div>
-    <div class="price">
-        <div class="label price-label">Precio Unit.</div>
-        <div class="price-value">${line.price} €</div>
-    </div>
-    <div class="price">
-        <div class="label price-label">Total</div>
-        <div class="price-value">${total_line} €</div>
-    </div>
-</div>
-`);
-  }
-   html = html.concat(`
-   <div class="order-import">El importe total del pedido es de ${total_order} €. Para cualquier aclaración puede dirigirse a <a href="mailito: qkdasart@gmail.com"> qkdasart@gmail.com</a></div>
-`);
-
-  const mailOptions = {
-    from: `qkdasart@gmail.com`,
-    to: 'xferraserra@gmail.com',
-    subject: `Confirmación Pedido ${order.id} `,
-    html: html
-  };
- return transporter.sendMail(mailOptions, (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-    console.log("Sent!")
-  });
 });

@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { Order } from '../../../../core/order/order.models';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '../../../../core/user/user.models';
 
 @Component({
   selector: 'anms-order-item',
@@ -16,7 +18,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrderItemComponent implements OnInit {
-
+  @Input() user$: Observable<User>;
   @Input() order: Order;
   @Output() expedtionEvent: EventEmitter<{order: Order, date: Date}> = new EventEmitter();
   @Output() removeEvent: EventEmitter<{order: Order}> = new EventEmitter();

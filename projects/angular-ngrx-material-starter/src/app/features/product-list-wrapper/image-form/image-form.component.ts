@@ -62,4 +62,9 @@ export class ImageFormComponent implements OnInit {
   }
 
 
+  onLoad() {
+    if (this.id === 0) {
+      this.eventIsMain.emit(true);
+    }
+  }
 }

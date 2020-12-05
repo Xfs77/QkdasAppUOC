@@ -9,6 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Match } from '../../../../shared/validators/match.validator';
 import { User } from '../../../../core/user/user.models';
+import { UserService } from '../../../../core/user/user.service';
 
 @Component({
   selector: 'anms-user-form',
@@ -32,6 +33,7 @@ export class UserFormComponent implements OnInit {
       { type: 'required', message: 'Los apellidos deben informarse' }
     ],
     email: [
+      {type: 'emailExists', message: 'El email ya existe en otro usuario'},
       { type: 'required', message: 'El email debe informarse' },
       { type: 'email', message: 'El email informado debe ser válido' },
 
@@ -52,18 +54,25 @@ export class UserFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.createForm();
     if (!this.user.id) {
       (this.signupForm.get('passwordGroup') as FormGroup).get('password').setValidators([Validators.required, Validators.minLength(6)]);
+      this.signupForm.controls.email.setAsyncValidators(this.userService.emailValidator(false));
+      this.signupForm.controls.email.updateValueAndValidity();
     }
   }
 
   private createForm() {
     this.signupForm = this.fb.group({
-      email: [this.user.email, [Validators.required, Validators.email]],
+      email: [this.user.email,
+        {
+          validators: [Validators.required, Validators.email],
+          updateOn: 'blur'
+        }],
       name: [this.user.name, [Validators.required]],
       surname: [this.user.surname, [Validators.required]],
       phone1: [this.user.phone1, [Validators.required]],

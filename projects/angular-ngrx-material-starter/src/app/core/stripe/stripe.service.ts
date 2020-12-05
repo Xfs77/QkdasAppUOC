@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,6 @@ export class StripeService {
 
   getCheckOut(userId: string): Observable<any> {
     const header = new HttpHeaders({'Content-Type':  'application/json'});
-    return this.http.post<any>('https://us-central1-qkdasartuoc.cloudfunctions.net/checkout', {userId}, { headers: header});
+    return this.http.post<any>(environment.stripeCheckout, {userId}, { headers: header});
   }
 }

@@ -4,7 +4,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Address, User } from './user.models';
 import { AppSettings } from '../../app/app.settings';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { from, Observable, ObservedValueOf } from 'rxjs';
+import * as firebase from 'firebase';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 
 @Injectable({
@@ -21,6 +23,29 @@ export class UserService {
   updateAuth(user: User): Promise<firebase.auth.UserCredential> {
     if (!user.id) {
       return this.afAuth.createUserWithEmailAndPassword(user.email, user.password);
+    }
+  }
+
+  checkIfEmailExists(email: string): Observable<ObservedValueOf<Promise<firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>>>> {
+    return from(this.afFirestore.collection(AppSettings.API_USERS).ref.where('email', '==', email).get());
+  }
+
+  emailValidator(edit: boolean): AsyncValidatorFn {
+    if (edit) {
+      return null;
+    } else {
+      return (control: AbstractControl): Observable<ValidationErrors | null> => {
+        return this.checkIfEmailExists(control.value).pipe(
+          map(res => {
+            console.log(res)
+            if (res.docs.length > 0) {
+              return { emailExists: true }
+            } else {
+              return null;
+            }
+          })
+        );
+      };
     }
   }
 

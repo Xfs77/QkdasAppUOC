@@ -5,7 +5,6 @@ import { ImageData, Product } from './product.models';
 import { AppSettings, imageSizes, ORIGINAL_IMAGE } from '../../app/app.settings';
 import { forkJoin, Observable } from 'rxjs';
 import { last, map, mergeMap } from 'rxjs/operators';
-import Transaction = firebase.firestore.Transaction;
 import * as firebase from 'firebase';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
@@ -24,18 +23,22 @@ export class ProductFormService {
     return this.afFirestore.collection(AppSettings.API_PRODUCT).doc(reference).get();
   }
 
-  referenceValidator(): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return this.checkIfReferenceExists(control.value).pipe(
-        map(res => {
-          if (res.data()) {
-            return { referenceExists: true }
-          } else {
-            return null;
-          }
-        })
-      );
-    };
+  referenceValidator(edit: boolean): AsyncValidatorFn {
+    if (edit) {
+      return null;
+    } else {
+      return (control: AbstractControl): Observable<ValidationErrors | null> => {
+        return this.checkIfReferenceExists(control.value).pipe(
+          map(res => {
+            if (res.data()) {
+              return { referenceExists: true }
+            } else {
+              return null;
+            }
+          })
+        );
+      };
+    }
   }
 
   addProduct(product: Product, imageIsMain: ImageData, edit: boolean, op: (any)): any {

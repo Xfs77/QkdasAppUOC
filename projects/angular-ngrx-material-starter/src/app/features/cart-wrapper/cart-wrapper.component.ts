@@ -88,6 +88,7 @@ export class CartWrapperComponent implements OnInit {
     this.dialogRef = this.dialog.open(AddressWrapperComponent, dialogConfig );
     this.dialogRef.afterClosed().subscribe(res => {
       if (res && res.next) {
+        console.log(res)
         this.cartComponent.next();
         this.order.shippingAddress = res.address;
         this.order.date = new Date();

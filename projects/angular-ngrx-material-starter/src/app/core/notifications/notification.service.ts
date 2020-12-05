@@ -47,7 +47,6 @@ export class NotificationService {
   }
 
   private show(message: string, configuration: MatSnackBarConfig) {
-    console.log(configuration)
     // Need to open snackBar from Angular zone to prevent issues with its position per
     // https://stackoverflow.com/questions/50101912/snackbar-position-wrong-when-use-errorhandler-in-angular-5-and-material
     configuration.horizontalPosition = 'center';

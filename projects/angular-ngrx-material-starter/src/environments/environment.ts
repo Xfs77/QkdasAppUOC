@@ -25,7 +25,9 @@ export const environment = {
     typescript: packageJson.devDependencies['typescript'],
     cypress: packageJson.devDependencies['cypress']
   },
+
   pkStripeTest: 'pk_test_51HnPcFIjHFJYs4LUjgsSfS4xIcGucoSeYjopLOLcmgaGw0R5JQE29ZGvCy8RCKGUSGtp50TCgdMesZpR1uglP7nk008VmSSMxk',
+  stripeCheckout: 'https://us-central1-qkdasartuoc.cloudfunctions.net/checkout',
   firebaseConfig: {
     apiKey: 'AIzaSyAgvA8lyIGILOZwn5yZr6MyenTgqIDdRiY',
     authDomain: 'qkdasartuoc.firebaseapp.com',

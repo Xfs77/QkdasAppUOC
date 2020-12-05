@@ -16,7 +16,7 @@
       <mat-card-title class="title">Edición Producto</mat-card-title>
       <anms-product-form [product$]="product$"
                          [selectedAgrup$]="selectedAgrup$"
-                         (onAgrupationEvent)="onAgrupations()"
+                         (agrupationEvent)="onAgrupations()"
                          (getImagesEvent)="getImages($event)"
                          (saveProductEvent)="saveProduct($event)"
                          (cancelProductEvent)="cancelProduct()"></anms-product-form>
