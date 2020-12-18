@@ -62,6 +62,8 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NocommaPipe } from './pipes/nocomma.pipe';
 import { TwoDigitDecimalDirective } from './directives/two-digit-decimal.directive';
+import { HammerModule } from '@angular/platform-browser';
+import { NodotPipe } from './pipes/nodot.pipe';
 
 @NgModule({
   imports: [
@@ -95,7 +97,9 @@ import { TwoDigitDecimalDirective } from './directives/two-digit-decimal.directi
 
     LazyLoadImageModule,
     ScrollingModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+
+    HammerModule
   ],
   declarations: [
     BigInputComponent,
@@ -104,6 +108,7 @@ import { TwoDigitDecimalDirective } from './directives/two-digit-decimal.directi
     LongPressDirective,
     PhotoDirective,
     NocommaPipe,
+    NodotPipe,
     TwoDigitDecimalDirective,
   ],
   exports: [
@@ -149,9 +154,13 @@ import { TwoDigitDecimalDirective } from './directives/two-digit-decimal.directi
     ScrollingModule,
     VirtualScrollerModule,
 
+    HammerModule,
+
     NocommaPipe,
+    NodotPipe,
     TwoDigitDecimalDirective,
-  ]
+  ],
+
 })
 export class SharedModule {
   constructor(faIconLibrary: FaIconLibrary) {

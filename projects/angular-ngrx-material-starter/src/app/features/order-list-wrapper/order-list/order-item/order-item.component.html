@@ -5,7 +5,7 @@
     fxLayout="row wrap"
     fxLayoutAlign="center start">
     <div fxFlex="17" fxFlex.lt-md="49" >
-      <div><span class="bold">Pedido:</span> {{order.id | number: '7.0' | noComma}}</div>
+      <div><span class="bold">Pedido:</span> {{order.id | number: '7.0' | noDot}}</div>
       <div><span class="bold">Pago:</span> <span [ngClass]="{pending: order.status == 'Pendiente'}"> {{order.status}}</span></div>
       <div fxHide.lt-md><span class="bold">Importe: </span>{{this.total | currency:'EUR':'symbol-narrow':'0.2-2'}} </div>
     </div>
@@ -24,14 +24,15 @@
       <div>{{order.shippingAddress.phone1}} <span
         *ngIf="order.shippingAddress.phone2"> / {{order.shippingAddress.phone2}}</span></div>
     </div>
-    <div fxFlex="3"  fxLayoutAlign="end end">
+    <div fxFlex="3"  fxLayoutAlign="end center">
         <div
           class="container-actions">
           <button
+            class="more"
             mat-icon-button
             [matMenuTriggerFor]="menu"
             [matMenuTriggerData]="{ order: order }">
-            <mat-icon>more_vert</mat-icon>
+            <mat-icon class="more">more_vert</mat-icon>
           </button>
         </div>
     </div>

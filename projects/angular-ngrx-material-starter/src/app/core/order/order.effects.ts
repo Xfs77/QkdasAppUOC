@@ -26,6 +26,7 @@ import { selectUserProfile } from '../user/user.selectors';
 import { Order } from './order.models';
 import { stripeToForm } from '../stripe/stripe.actions';
 import { selectProductsFilter } from '../products-filter/products-filter.selector';
+import { cartStockChecked } from '../cart/cart.action';
 
 @Injectable()
 export class OrderEffects {
@@ -58,8 +59,9 @@ export class OrderEffects {
       return this.actions$.pipe(
         ofType(orderCreateSuccess),
         switchMap(action => [
+            cartStockChecked({payload: {stockChecked: true}}),
             loadingEnd(),
-            stripeToForm({ payload: { checkout: action.payload.order.checkout } })
+            // stripeToForm({ payload: { checkout: action.payload.order.checkout } })
           ]
         )
       );

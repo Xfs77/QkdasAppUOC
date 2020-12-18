@@ -62,7 +62,6 @@ export class AddressComponent implements OnInit {
   }
 
   confirm() {
-    console.log(this.confirmedAddress)
     this.confirmEvent.emit(this.confirmedAddress);
   }
 

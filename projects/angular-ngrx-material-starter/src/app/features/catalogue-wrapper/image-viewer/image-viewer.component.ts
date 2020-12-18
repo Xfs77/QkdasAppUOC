@@ -1,4 +1,4 @@
-import {
+                                                                                                                                                          import {
   Component,
   OnInit,
   Input,
@@ -8,6 +8,7 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ImageData } from '../../../core/product-form/product.models';
 import 'hammerjs';
+                                                                                                                                                          import { NotificationService } from '../../../core/notifications/notification.service';
 
 @Component({
   selector: 'anms-image-viewer',
@@ -18,6 +19,7 @@ export class ImageViewerComponent implements OnInit {
 
 
   @Input() images: ImageData[];
+  @Input() reference: string;
   @Input() description: string;
   @ViewChild('image_container') imageContainer;
 
@@ -28,7 +30,9 @@ export class ImageViewerComponent implements OnInit {
                @Inject(MAT_DIALOG_DATA) data) {
 
     this.images = data.images;
+    this.reference = data.reference;
     this.description = data.description;
+    console.log(this.reference)
   }
 
   ngOnInit(): void {

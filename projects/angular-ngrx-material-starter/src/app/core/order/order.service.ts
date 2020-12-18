@@ -36,8 +36,6 @@ export class OrderService {
           }
           trans = <firebase.firestore.Transaction>this.productService.addProduct(newProduct as Product, null, false, trans);
         }
-        const checkoutRef = this.afFirestore.collection(AppSettings.API_CHECKOUT).doc(order.checkout).ref;
-        trans.set(checkoutRef, {order: order.id});
         const newOrderRef = this.afFirestore.collection(AppSettings.API_ORDER).doc(nextId).ref;
         const newOrderUserRef = this.afFirestore.collection(AppSettings.API_USERS).doc(order.user.id).collection(AppSettings.API_ORDER).doc(nextId).ref;
         trans.set(newOrderUserRef, order);
@@ -70,6 +68,10 @@ export class OrderService {
     const newOrderRef = this.afFirestore.collection(AppSettings.API_ORDER).doc(order.id.toString()).ref;
     const newOrderUserRef = this.afFirestore.collection(AppSettings.API_USERS).doc(user.id)
       .collection(AppSettings.API_ORDER).doc(order.id.toString()).ref;
+    if (order.changes.checkout) {
+      const checkoutRef = this.afFirestore.collection(AppSettings.API_CHECKOUT).doc(order.changes.checkout).ref;
+      batch.set(checkoutRef, {order: order.id});
+    }
     batch.update(newOrderRef, order.changes);
     batch.update(newOrderUserRef, order.changes);
     return batch;

@@ -90,3 +90,7 @@ export const cartSetAddress = createAction(
   '[Cart] Set Address',
   props<{payload: {address: Address}}>()
 );
+export const cartStockChecked = createAction(
+  '[Cart] Stock Checked',
+  props<{payload: {stockChecked: boolean}}>()
+);

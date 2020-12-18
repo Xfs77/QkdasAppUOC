@@ -31,3 +31,10 @@ export const  selectCartAddress = createSelector(
     return state.address;
   }
 )
+
+export const  selectCartStockChecked = createSelector(
+  selectCartState,
+  state => {
+    return state.stockChecked;
+  }
+)

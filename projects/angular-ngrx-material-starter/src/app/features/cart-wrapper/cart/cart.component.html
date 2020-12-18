@@ -2,7 +2,7 @@
      fxLayoutGap="0.5%" fxLayoutAlign="center">
   <mat-card fxFlex="100"  fxFlex.gt-sm="70">
 
-    <mat-horizontal-stepper linear #stepper *ngIf="isCreateOrder">
+    <mat-horizontal-stepper linear #stepper *ngIf="this.isCreateOrder">
       <mat-step>
         <ng-template matStepLabel>Confirmar Contenido</ng-template>
       </mat-step>
@@ -16,116 +16,127 @@
 
 
     <mat-card-title class="title">Cesta</mat-card-title>
-    <div
-      fxLayout="row"
-      fxLayoutWrap
-      fxLayoutAlign="start center"
-      fxLayoutGap="1%"
-      class="item-container"
-      *ngFor="let item of cart$| async">
-      <div fxFlex="20" fxFlex.gt-xs="10">
-        <img
-          [lazyLoad]="item.product.mainImage.urls.imgSM"
-          [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
-          [errorImage]="'/assets/img/empty-image/empty-image-100.png'"
-          alt="">
-      </div>
+    <form [formGroup]="cartForm"
+          (ngSubmit)="onSubmit()">
       <div
-        fxFlex="30"
-        fxFlex.gt-xs="40"
-        fxLayout="column"
+        fxLayout="row"
         fxLayoutWrap
-        fxLayoutGap="0.5%">
-        <div class="text-sm">
-          <span class="bold">Ref: </span>{{item.product.reference}}
+        fxLayoutAlign="start center"
+        fxLayoutGap="1%"
+        class="item-container"
+        *ngFor="let item of cart$| async">
+        <div fxFlex="20" fxFlex.gt-xs="10">
+          <img
+            [lazyLoad]="item.product.mainImage.urls.imgSM"
+            [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
+            [errorImage]="'/assets/img/empty-image/empty-image-100.png'"
+            alt="">
         </div>
-        <div fxHide.xs class="text-xs">{{item.product.descr}}</div>
-      </div>
-      <div fxFlex="40"
-           class="text-sm"
-           fxLayout="row"
-           fxLayoutWrap
-           fxLayoutAlign="start center"
-           fxLayoutGap="0.5%">
         <div
-          fxFlex="50">
-          <mat-form-field class="text-align-right" appearance="standard" floatLabel="always"
-                          align="end">
-            <mat-label>Cantidad</mat-label>
-            <input matInput #quantity type="number" class="text-align-right"
-                   value="{{item.quantity}}">
-            <button
+          fxFlex="30"
+          fxFlex.gt-xs="40"
+          fxLayout="column"
+          fxLayoutWrap
+          fxLayoutGap="0.5%">
+          <div class="text-sm">
+            <span class="bold">Ref: </span>{{item.product.reference}}
+          </div>
+          <div fxHide.xs class="text-xs">{{item.product.descr}}</div>
+        </div>
+        <div fxFlex="40"
+             class="text-sm"
+             fxLayout="row"
+             fxLayoutWrap
+             fxLayoutAlign="start center"
+             fxLayoutGap="0.5%">
+          <div
+            fxFlex="50">
+            <mat-form-field class="text-align-right" appearance="standard" floatLabel="always"
+                            align="end">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                #quantity
+                type="number"
+                class="text-align-right"
+                formControlName="{{item.product.reference}}">
+              <mat-error *ngFor="let validation of validationMessages">
+                <mat-error class="error-message"
+                           *ngIf="this.cartForm.get(item.product.reference).hasError(validation.type)">{{validation.message}}</mat-error>
+              </mat-error>
+              <button
               mat-button
               matSuffix
               mat-icon-button
               color="primary"
-              (click)="updateCart(quantity.value, item)">
+              (click)="updateCart(this.cartForm.get(item.product.reference).value, item)">
               <mat-icon>update</mat-icon>
             </button>
+            </mat-form-field>
+
+          </div>
+          <mat-form-field class="text-align-right" fxFlex="50" appearance="standard"
+                          floatLabel="always" align="end">
+            <mat-label>Precio Unit.</mat-label>
+            <input matInput type="text" readonly
+                   [value]="item.product.price |  currency:'EUR':'symbol-narrow':'0.2-2'">
           </mat-form-field>
+
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onRemoveCart(item)">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
-        <mat-form-field class="text-align-right" fxFlex="50" appearance="standard"
-                        floatLabel="always" align="end">
-          <mat-label>Precio Unit.</mat-label>
-          <input matInput type="text" readonly
-                 [ngModelOptions]="{updateOn:'blur'}"
-                 [ngModel]="item.product.price |  currency:'EUR':'symbol-narrow':'0.2-2'"
-                 (ngModelChange)="item.product.price=$event">
-        </mat-form-field>
-
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="onRemoveCart(item)">
-          <mat-icon>close</mat-icon>
-        </button>
       </div>
-    </div>
 
-    <div
-      fxLayout="row"
-      fxLayoutWrap
-      fxLayoutAlign="start center"
-      fxLayoutGap="1%"
-      [ngClass.lt-sm]="'text-sm'"
-      class="total-container"
-      *ngIf="(cart$| async).length !== 0">
       <div
-        fxFlex="65"
-        class="bold">
-        Precios con IVA incluido
+        fxLayout="row"
+        fxLayoutWrap
+        fxLayoutAlign="start center"
+        fxLayoutGap="1%"
+        [ngClass.lt-sm]="'text-sm'"
+        class="total-container"
+        *ngIf="(cart$| async).length !== 0">
+        <div
+          fxFlex="65"
+          class="bold">
+          Precios con IVA incluido
+        </div>
+        <div
+          fxFlex="35"
+          class="bold">
+          Total Compra
+        </div>
+        <div class="bold">{{totalImport |async | currency:'EUR':'symbol-narrow':'0.2-2'}}</div>
       </div>
-      <div
-        fxFlex="35"
-        class="bold">
-        Total Compra
-      </div>
-      <div class="bold">{{totalImport |async | currency:'EUR':'symbol-narrow':'0.2-2'}}</div>
-    </div>
 
-    <div class="float-right mt20">
-      <button *ngIf="!isCreateOrder && (cart$| async).length !== 0" mat-raised-button color="primary" class="text-align-center" (click)="iniOrder()">
-        Iniciar Pedido
-      </button>
-    </div>
-
-    <div class="mt20"  *ngIf="isCreateOrder">
-      <div class="float-right">
-        <button mat-raised-button color="primary" class="text-align-center" (click)="next()">
-          Siguiente
+      <div class="float-right mt20">
+        <button *ngIf="!isCreateOrder && (cart$| async).length !== 0" mat-raised-button color="primary" class="text-align-center" (click)="iniOrder()">
+          Iniciar Pedido
         </button>
       </div>
-      <div class="float-right mr10">
-        <button mat-raised-button color="warn" class="text-align-center" (click)="back()">
-          Anterior
-        </button>
+
+      <div class="mt20"  *ngIf="isCreateOrder">
+        <div class="float-right">
+          <button mat-raised-button  type="submit" color="primary" class="text-align-center">
+            Siguiente
+          </button>
+        </div>
+        <div class="float-right mr10">
+          <button mat-raised-button color="warn" class="text-align-center" (click)="back()">
+            Anterior
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="clear">
+      <div class="clear">
 
 
-    </div>
+      </div>
+    </form>
+
 
   </mat-card>
 </div>

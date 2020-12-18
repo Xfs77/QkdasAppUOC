@@ -1,5 +1,5 @@
 .order-container {
-  height:150px;
+  height:120px;
 }
 
 .order-background {
@@ -18,7 +18,14 @@
   padding: 12px 12px;
 }
 
+button.more {
+  height: 20px !important;
+  width: 20px !important;
+}
 
+mat-icon.more {
+  transform: scale(0.5);
+}
 
 .pending {
   color: red;
@@ -36,6 +43,20 @@
   0% { opacity: 1.0; }
   50% { opacity: 0.0; }
   100% { opacity: 1.0; }
+}
+
+@media screen and (min-width: 500px) {
+  .order-container {
+    height: 150px;
+  }
+  button.more {
+    height: 40px !important;
+    width: 40px !important;
+  }
+
+  mat-icon.more {
+    transform: scale(1);
+  }
 }
 
 @media screen and (min-width: 960px) {

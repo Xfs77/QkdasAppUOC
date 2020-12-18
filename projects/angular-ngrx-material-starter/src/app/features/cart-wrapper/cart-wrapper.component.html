@@ -2,7 +2,10 @@
   [cart$]="cart$"
   [totalImport]="total$"
   [userId]="userId"
+  [stockChecked$]="stockChecked$"
+  (iniEvent)="createOrder()"
   (removeEvent)="removeCart($event)"
   (updateEvent)="updateCart($event)"
   (shippingEvent)="shippingAddress()"
+  (stockCheckedEvent)="stockChecked($event)"
   (payEvent)="pay()"></anms-cart>

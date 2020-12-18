@@ -15,7 +15,7 @@ import {
   cartListRemove,
   cartListUpdate, cartRemove,
   cartRemoveFailure,
-  cartRemoveSuccess,
+  cartRemoveSuccess, cartStockChecked,
   cartUpdate,
   cartUpdateFailure,
   cartUpdateSuccess
@@ -151,7 +151,7 @@ export class CartEffects {
           return this.store$.dispatch(loadingStart());
         }),
         mergeMap(action =>
-          this.cartService.checkStock(action.payload.cart.product, action.payload.quantity).pipe(
+          this.cartService.checkStock(action.payload.cart.product.reference, action.payload.quantity).pipe(
             map(isStock => cartCheckStockSuccess({payload: {cart: action.payload.cart, isStock}}))
           )),
           catchError((error => of(cartCheckStockFailure({payload: {message: error.message}}))))

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AppSettings } from '../../app/app.settings';
-import { CartLine } from './cart.models';
+import { Cart, CartLine } from './cart.models';
 import { firestore } from 'firebase';
 import { Product } from '../product-form/product.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../user/user.models';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,21 @@ export class CartService {
   constructor(
     private afFirestore: AngularFirestore
   ) {
+  }
+
+  stockValidator(reference: string): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.checkStock(reference, control.value).pipe(
+         map(res => {
+           if (res) {
+             return null;
+           } else {
+             return { stock: true };
+           }
+         })
+       );
+      return null;
+    }
   }
 
   getCart(idUser: string): AngularFirestoreCollection<any> {
@@ -33,8 +49,8 @@ export class CartService {
     });
   }
 
-  checkStock(product: Product, quantity: number): Observable<boolean> {
-    return this.afFirestore.collection(AppSettings.API_PRODUCT).doc(product.reference).get().pipe(
+  checkStock(reference: string, quantity: number): Observable<boolean> {
+    return this.afFirestore.collection(AppSettings.API_PRODUCT).doc(reference).get().pipe(
       map(res => {
         const p = res.data() as Product;
         if (p.quantity >= quantity) {

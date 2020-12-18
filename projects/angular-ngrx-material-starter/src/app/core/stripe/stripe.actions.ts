@@ -7,7 +7,7 @@ export const stripeGetCheckout = createAction(
 );
 export const stripeGetCheckoutSuccess = createAction(
   '[Stripe] Get Checkout Success',
-  props<{payload: {order: Order}}>(),
+  props<{payload: {order: Order, checkout: string}}>(),
 );
 export const stripeGetCheckoutFailure = createAction(
   '[Stripe] Get Checkout Failure',

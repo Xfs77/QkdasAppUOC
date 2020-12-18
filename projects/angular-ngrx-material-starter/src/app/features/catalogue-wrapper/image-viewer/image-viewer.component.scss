@@ -9,6 +9,7 @@ img {
 
 .image-container {
   width: auto;
+  position: relative;
   max-width: 100%;
   height: calc(100% - 24px - 75px);
   object-fit: contain;
@@ -69,14 +70,14 @@ div.description {
 
 .control_right {
   position: absolute;
-  top: 50%;
-  right: 36px;
+  top: calc(50% - 24px);
+  right: - 36px;
 }
 
 .control_left {
   position: absolute;
-  top: 50%;
-  left: 36px;
+  top: calc(50% - 24px);
+  left: -36px;
 }
 
 .control_close {

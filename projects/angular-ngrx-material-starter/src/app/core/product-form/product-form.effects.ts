@@ -59,9 +59,8 @@ export class ProductFormEffects {
     () =>
       this.actions$.pipe(
         ofType(productFormEdit),
-        map(action => productImagesGet({ payload: { product: action.payload.product } })),
-        tap(action => this.router.navigate([`/products/edit`, action.payload.product.reference]))),
-    { dispatch: false });
+        tap(action => this.router.navigate([`/products/edit`, action.payload.product.reference], {queryParams: {position: action.payload.index}})),
+        map(action => productImagesGet({ payload: { product: action.payload.product } }))));
 
   storageImageAdd = createEffect(
     () => {

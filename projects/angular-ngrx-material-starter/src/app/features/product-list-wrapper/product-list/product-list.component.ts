@@ -11,6 +11,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { Product } from '../../../core/product-form/product.models';
 import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -27,19 +28,27 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() batchEvent = new EventEmitter<number>(); // calculates batch number depending of the viewer
   @Output() nextBatchEvent = new EventEmitter<boolean>(); // indicates that needs more data
   @Output() newEvent = new EventEmitter();
-  @Output() editEvent = new EventEmitter<Product>();
+  @Output() editEvent = new EventEmitter<{product: Product, index: number}>();
   @Output() removeEvent = new EventEmitter<Product>();
 
   @ViewChild('viewer') viewport: CdkVirtualScrollViewport; // viewport where we are displaying items
+  currentIndex: number;
 
   constructor(
     private scrollDispatcher: ScrollDispatcher,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit() {
+    this.viewport.scrolledIndexChange.subscribe(res => this.currentIndex = res );
+    this.route.queryParams.pipe(filter(params => params.position)).subscribe(res => {
+      setTimeout(_ => {
+        return this.viewport.scrollToIndex(res.position)});
+    })
     this.batchEvent.emit(Math.round(this.availableViewerHeight() / 100) + 5 );
   }
 
@@ -74,7 +83,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   editProduct(product: Product) {
-    this.editEvent.emit(product);
+    this.editEvent.emit({product, index: this.currentIndex});
   }
 
   removeProduct(product: Product) {
@@ -91,4 +100,6 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
   }
+
+
 }

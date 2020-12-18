@@ -1,6 +1,10 @@
+<div class="expand" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.0%" fxLayoutAlign="center">
 <anms-order-list
-  class="expand"
+  fxFlex="100"
+  fxFlex.gt-md="70"
   [order$]="order$"
   [user$]="user$"
   (expedtionEvent)="expedition($event)"
   (removeEvent)="remove($event)"></anms-order-list>
+</div>

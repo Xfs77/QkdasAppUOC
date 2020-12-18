@@ -32,13 +32,13 @@ exports.checkout = functions.https.onRequest(async (req, res) => {
       line_items: items,
       customer_email: `${userDoc.data().email}`,
       mode: 'payment',
-      success_url: `qkdasartuoc.web.app/#catalogue`,
-      cancel_url: 'qkdasartuoc.web.app/#/cart',
+      success_url: `https://qkdasartuoc.web.app/#about/?stripe=success&order=${req.body.order}`,
+      cancel_url: 'https://qkdasartuoc.web.app/#/cart/?stripe=error',
     });
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    return res.json({ id: session.id , });
+    return res.json({ id: session.id , order: req.body.order});
 
   });
 

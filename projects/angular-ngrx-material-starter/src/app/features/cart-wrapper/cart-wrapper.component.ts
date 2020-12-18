@@ -5,10 +5,15 @@ import { Store } from '@ngrx/store';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import {
   selectCartlineById,
-  selectCartListState,
+  selectCartListState, selectCartStockChecked,
   selectTotalCartListState
 } from '../../core/cart/cart.selectors';
-import { cartCheckStock, cartRemove, cartUpdate } from '../../core/cart/cart.action';
+import {
+  cartCheckStock,
+  cartRemove,
+  cartStockChecked,
+  cartUpdate
+} from '../../core/cart/cart.action';
 import { take } from 'rxjs/operators';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { AddressWrapperComponent } from './address-wrapper/address-wrapper.component';
@@ -18,6 +23,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Order, OrderLine, OrderStatus } from '../../core/order/order.models';
 import { stripeGetCheckout } from '../../core/stripe/stripe.actions';
+import { orderCreate } from '../../core/order/order.action';
 
 @Component({
   selector: 'anms-cart-wrapper',
@@ -28,6 +34,7 @@ import { stripeGetCheckout } from '../../core/stripe/stripe.actions';
 export class CartWrapperComponent implements OnInit {
 
   cart$: Observable<CartLine[]>;
+  stockChecked$: Observable<boolean>;
   order = {} as Order;
   total$: Observable<number>;
   userId: string;
@@ -46,6 +53,7 @@ export class CartWrapperComponent implements OnInit {
   ngOnInit(): void {
 
     this.cart$ = this.store$.select(selectCartListState);
+    this.stockChecked$ = this.store$.select(selectCartStockChecked);
     this.total$ = this.store$.select(selectTotalCartListState);
     this.store$.select(selectUserProfile).subscribe(res => {
       this.order.user = res;
@@ -61,9 +69,7 @@ export class CartWrapperComponent implements OnInit {
     this.store$.dispatch(cartCheckStock({payload: {cart: $event.cartLine, quantity: $event.quantity}}));
     this.store$.select(selectCartlineById, {id: $event.cartLine.id}).pipe(take(2)).subscribe(res => {
       if (res.isStock !== null ) {
-        if (!res.isStock) {
-          this.notificationService.error(`No hay suficiente stock del producto ${$event.cartLine.product.reference}`)
-        } else {
+        if (res.isStock) {
           this.store$.dispatch(cartUpdate(
             {
               payload: {
@@ -88,12 +94,11 @@ export class CartWrapperComponent implements OnInit {
     this.dialogRef = this.dialog.open(AddressWrapperComponent, dialogConfig );
     this.dialogRef.afterClosed().subscribe(res => {
       if (res && res.next) {
-        console.log(res)
         this.cartComponent.next();
         this.order.shippingAddress = res.address;
         this.order.date = new Date();
       } else {
-        this.cartComponent.back();
+          this.cartComponent.back();
       }
     });
   }
@@ -118,5 +123,14 @@ export class CartWrapperComponent implements OnInit {
 
       }
     })
+  }
+
+  createOrder() {
+    this.createOrderContent();
+    this.store$.dispatch(orderCreate({payload: {order: this.order}}));
+  }
+
+  stockChecked($event: boolean) {
+    this.store$.dispatch(cartStockChecked({payload: {stockChecked: $event}}));
   }
 }

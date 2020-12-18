@@ -1,3 +1,8 @@
-<anms-order-detail
-  [order$]="order$">
-</anms-order-detail>
+<div class="expand" fxLayout="row" fxLayoutWrap
+     fxLayoutGap="0.0%" fxLayoutAlign="center">
+  <anms-order-detail
+    fxFlex="100"
+    fxFlex.gt-sm="70"
+    [order$]="order$">
+  </anms-order-detail>
+</div>

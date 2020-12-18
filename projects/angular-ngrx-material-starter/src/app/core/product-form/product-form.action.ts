@@ -7,7 +7,7 @@ export const productFormAdd = createAction(
 );
 export const productFormEdit = createAction(
   '[Product Form] Edit',
-  props<{payload: {product: Product}}>()
+  props<{payload: {product: Product, index: number}}>()
 );
 export const productFormRemove = createAction(
   '[Product Form] Remove',

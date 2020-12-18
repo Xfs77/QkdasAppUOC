@@ -17,8 +17,9 @@ export class StripeService {
   ) {
   }
 
-  getCheckOut(userId: string): Observable<any> {
+  getCheckOut(userId: string, order: string): Observable<any> {
     const header = new HttpHeaders({'Content-Type':  'application/json'});
-    return this.http.post<any>(environment.stripeCheckout, {userId}, { headers: header});
+    console.log(order)
+    return this.http.post<any>(environment.stripeCheckout, {userId, order}, { headers: header});
   }
 }

@@ -52,7 +52,6 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
       this.batchEvent.emit(Math.ceil((window.innerHeight - 56) / pictureHeight ) + 2);
     } else if (window.innerWidth >= 600 && window.innerWidth < 960) {
       const pictureHeight = (window.innerWidth - 32 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  100;
-      console.log('a', Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) + 4)
       this.batchEvent.emit(Math.ceil((window.innerHeight - 64 - 105) / pictureHeight ) * 4 + 4);
     } else if (window.innerWidth >= 960 && window.innerWidth < 1280) {
       const pictureHeight = ((window.innerWidth - 32 ) * 0.7 - 16 - 32 * 4 - 24 * 4) / 4 * 1600 / 1200 + 16 * 2 + 12 * 2 +  100;
@@ -92,7 +91,8 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
           const dialogConfig = new MatDialogConfig();
           dialogConfig.data = {
             images: filtered[0].images,
-            description: product.descr
+            description: product.descr,
+            reference: product.reference
           };
           dialogConfig.closeOnNavigation = true;
           dialogConfig.position = {

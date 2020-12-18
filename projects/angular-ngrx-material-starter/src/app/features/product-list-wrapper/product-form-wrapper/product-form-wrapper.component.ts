@@ -15,7 +15,7 @@ import {
   selectProductImages,
   selectProductProductForm
 } from '../../../core/product-form/product-form.selectors';
-import { map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { selectProductsFilter } from '../../../core/products-filter/products-filter.selector';
 import { productsFilterIsLoading } from '../../../core/products-filter/products-filter.action';
 import {
@@ -49,6 +49,7 @@ export class ProductFormWrapperComponent implements OnInit {
 
   edit: boolean;
   isMain = false;
+  position: number;
 
   @ViewChild(PhotoDirective, { static: true }) photoHost: PhotoDirective;
 
@@ -64,6 +65,9 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParams.pipe(filter(params => params.position)).subscribe(param => {
+      this.position = param.position;
+    });
     this.route.params.subscribe(params => {
       const reference = params.reference;
       if (reference) {
@@ -111,7 +115,7 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   cancelProduct() {
-    this.router.navigate(['products']);
+    this.router.navigate(['products'], {queryParams: {position: this.position}});
   }
 
   onAgrupations() {
@@ -175,7 +179,6 @@ export class ProductFormWrapperComponent implements OnInit {
 
   onAddImage(e) {
     this.numImages++;
-    console.log(this.numImages);
     if (e.id === (this.index - 1).toString() && this.numImages < 4) {
       this.addNewImage(null);
     }
@@ -231,7 +234,6 @@ export class ProductFormWrapperComponent implements OnInit {
 
 
   onIsMain() {
-    console.log('ismain')
     this.isMain = true;
   }
 }

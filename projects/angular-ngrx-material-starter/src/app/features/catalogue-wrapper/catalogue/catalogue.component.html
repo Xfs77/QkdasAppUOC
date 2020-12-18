@@ -9,7 +9,7 @@
   </mat-card>
 </div>
 
-<div fxLayoutGap="0.0%" fxLayoutAlign="center" class="expand xx" *ngIf="(products$ | async).length !== 0">
+<div fxLayoutGap="0.0%" fxLayoutAlign="center" class="expand" *ngIf="(products$ | async).length !== 0">
   <virtual-scroller   class="scroll"  #scroll   [items]="products$ |async" (vsEnd)="fetchMore($event)">
     <anms-catalogue-item
       (favoriteEvent)="favorite($event)"

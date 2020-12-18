@@ -82,8 +82,8 @@ export class ProductListWrapperComponent implements OnInit {
     this.store$.dispatch(productFormAdd());
   }
 
-  onEdit($event: Product) {
-    this.store$.dispatch(productFormEdit({payload: {product: $event}}));
+  onEdit($event) {
+    this.store$.dispatch(productFormEdit({payload: {product: $event.product, index: $event.index}}));
   }
 
   onRemove($event: Product) {

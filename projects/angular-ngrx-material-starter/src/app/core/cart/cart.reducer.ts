@@ -7,12 +7,13 @@ import {
   cartListAdd,
   cartListRemove,
   cartListReset, cartListResetSuccess,
-  cartListUpdate, cartSetAddress
+  cartListUpdate, cartSetAddress, cartStockChecked
 } from './cart.action';
 import { Address } from '../user/user.models';
 
 export interface CartState extends EntityState<CartLine> {
   address: Address;
+  stockChecked: boolean;
 }
 
 export const adapterCart: EntityAdapter<CartLine> =
@@ -21,7 +22,8 @@ export const adapterCart: EntityAdapter<CartLine> =
   });
 
 export const initialCartState: EntityState<CartLine> = adapterCart.getInitialState({
-  address: null
+  address: null,
+  stockChecked: false
 });
 
 export const {
@@ -54,6 +56,9 @@ const reducer = createReducer(
   })),
   on(cartSetAddress, produce((draft, action) => {
     draft.address  = action.payload.address;
+  })),
+  on(cartStockChecked, produce((draft, action) => {
+    draft.stockChecked  = action.payload.stockChecked;
   })),
 );
 

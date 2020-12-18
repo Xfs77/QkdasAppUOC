@@ -1,5 +1,5 @@
 <mat-card>
-<mat-card-title class="title">Detalle Pedido {{(order$ |async).id| number: '7.0' | noComma}}</mat-card-title>
+<mat-card-title class="title">Detalle Pedido {{(order$ |async).id| number: '7.0' | noDot }}</mat-card-title>
 <div
   fxLayout="row"
   fxLayoutWrap
@@ -7,7 +7,7 @@
   fxLayoutGap="1%"
   class="item-container"
   *ngFor="let item of (order$| async).orderLines">
-  <div fxFlex="10">
+  <div fxFlex="20" fxFlex.gt-xs="10">
     <img
       [lazyLoad]="item.product.mainImage.urls.imgSM"
       [defaultImage]="'/assets/img/empty-image/empty-image-100.png'"
@@ -15,23 +15,24 @@
       alt="">
   </div>
   <div
-    fxFlex="50"
+    fxFlex="30"
+    fxFlex.gt-xs="40"
     fxLayout="column"
     fxLayoutWrap
     fxLayoutGap="0.5%">
     <div class="text-sm">
       <span class="bold">Ref: </span>{{item.product.reference}}
     </div>
-    <div class="text-xs">{{item.product.descr}}</div>
+    <div fxHide.xs class="text-xs">{{item.product.descr}}</div>
   </div>
-  <div fxFlex="40"
-       class="text-sm"
+  <div fxFlex="50"
        fxLayout="row"
        fxLayoutWrap
        fxLayoutAlign="start center"
        fxLayoutGap="0.5%">
     <div
-      fxFlex="50">
+      fxFlex="50"
+      class="text-sm">
       <mat-form-field class="text-align-right" appearance="standard" floatLabel="always"
                       align="end">
         <mat-label>Cantidad</mat-label>
@@ -39,7 +40,8 @@
                value="{{item.quantity}}">
       </mat-form-field>
     </div>
-    <div fxFlex="50">
+    <div fxFlex="50"
+         class="text-sm">
       <mat-form-field class="text-align-right"  appearance="standard"
                       floatLabel="always" align="end">
         <mat-label>Precio Unit.</mat-label>
@@ -56,7 +58,7 @@
   fxLayout="row"
   fxLayoutWrap
   fxLayoutAlign="start center"
-  fxLayoutGap="1%"
+  [ngClass.lt-sm]="'text-sm'"
   class="total-container">
   <div
     fxFlex="65"

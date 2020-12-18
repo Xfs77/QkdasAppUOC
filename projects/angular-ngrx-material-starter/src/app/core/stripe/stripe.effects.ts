@@ -17,7 +17,7 @@ import { Store } from '@ngrx/store';
 import { NotificationService } from '../notifications/notification.service';
 import { StripeService } from './stripe.service';
 import { environment } from '../../../environments/environment';
-import { orderCreate } from '../order/order.action';
+import { orderCreate, orderUpdate } from '../order/order.action';
 
 @Injectable()
 export class StripeEffects {
@@ -35,14 +35,18 @@ export class StripeEffects {
     () =>
       this.actions$.pipe(
         ofType(stripeGetCheckout),
-        tap(_ => this.store$.dispatch(loadingStart())),
+        tap(_ => {
+          console.log(_)
+          this.store$.dispatch(loadingStart());
+        }),
         switchMap(res =>
-          from(this.stripeService.getCheckOut(res.payload.order.user.id)).pipe(
+          from(this.stripeService.getCheckOut(res.payload.order.user.id, res.payload.order.id)).pipe(
             map((checkout) => {
               const order = { ...res.payload.order, checkout: checkout.id };
               return stripeGetCheckoutSuccess({
                 payload: {
-                  order: order
+                  order: order,
+                  checkout: checkout.id
                 }
               });
             }),
@@ -57,7 +61,8 @@ export class StripeEffects {
         ofType(stripeGetCheckoutSuccess),
         switchMap((res) => [
           loadingEnd(),
-          orderCreate({payload: {order: res.payload.order}}),
+          orderUpdate({payload: {order: {id: res.payload.order.id, changes: {...res.payload.order}}}}),
+          stripeToForm({payload: {checkout: res.payload.checkout}})
           ]
         ))
   );
@@ -66,7 +71,8 @@ export class StripeEffects {
     () =>
       this.actions$.pipe(
         ofType(stripeGetCheckoutFailure),
-        tap(_ => this.notificationService.error('No se ha podido iniciar la sesión.')),
+        // tap(_ => this.notificationService.error('No se ha podido iniciar la sesión.')),
+        tap(res => console.log(res.payload.message)),
         map(action => loadingEnd())
       ));
 
@@ -75,14 +81,15 @@ export class StripeEffects {
       this.actions$.pipe(
         ofType(stripeToForm),
         tap(_ => this.store$.dispatch(loadingStart())),
+        tap(_ => console.log(_)),
         switchMap(res =>
-          from(Stripe(environment.pkStripeTest).redirectToCheckout({ sessionId: res.payload.checkout })).pipe(
+        from(Stripe(environment.pkStripeTest).redirectToCheckout({ sessionId: res.payload.checkout})).pipe(
             map(_ => stripeToFormSuccess(res)),
             catchError((error: HttpErrorResponse) => {
               return of(stripeToFormFailure({ payload: { message: error.message } }));
             })
-          ))),
-    {dispatch: false});
+          )
+        )));
 
   stripeFormSuccess = createEffect(
     () =>
