@@ -1,5 +1,10 @@
 @import '../../../../styles-variables';
 
+@font-face {
+  font-family: 'GloriaHallelujah';
+  src: url('../../../../assets/fonts/Gloria/GloriaHallelujah-Regular.ttf') format('truetype');
+}
+
 h1 {
   text-align: center;
   font-size: 3em;
@@ -13,14 +18,14 @@ h2 {
 }
 
 @media (min-width: 600px) {
-h2 {
-  font-size: 1.3em;
-}
+  h2 {
+    font-size: 1.3em;
+  }
 }
 
 .cover {
   margin: -16px -16px 0 -16px;
-  padding:0;
+  padding: 0;
   width: calc(100% + 32px);
   position: relative;
 
@@ -28,12 +33,15 @@ h2 {
     width: 100%;
     object-fit: cover;
   }
-  }
-
+}
 
 .details {
   padding-top: 16px;
   width: 100%;
+
+  mat-card {
+    margin-bottom: 16px;
+  }
 
   img {
     width: 100%;
@@ -42,3 +50,47 @@ h2 {
 }
 
 
+.lema {
+  font-size: 30px;
+  font-family: GloriaHallelujah;
+
+  &.f1 {
+    position: absolute;
+    top: 10%;
+    right: 80px;
+    color: white;
+  }
+
+  &.f2 {
+    position: absolute;
+    top: 30%;
+    right: 24px;
+    color: white;
+  }
+}
+
+@media (min-width: 600px) {
+  .lema {
+    font-size: 60px;
+
+    &.f1 {
+      right: 120px;
+    }
+
+    &.f2 {
+      right: 64px;
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .lema {
+    font-size: 80px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .lema {
+    font-size: 100px;
+  }
+}

@@ -29,7 +29,7 @@ export class OrderListWrapperComponent implements OnInit {
   }
 
   expedition($event: { order: Order; date: Date }) {
-    // this.store$.dispatch(orderUpdate({payload: {order: {id: $event.order.id, changes: {user: $event.order.user, expedition: $event.date}}}}))
+     this.store$.dispatch(orderUpdate({payload: {order: {id: $event.order.id, changes: {user: $event.order.user, expedition: $event.date}}}}))
   }
 
   remove($event: { order: Order }) {

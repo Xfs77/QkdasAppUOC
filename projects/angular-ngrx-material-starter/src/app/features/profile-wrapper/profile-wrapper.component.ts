@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { Address, User } from '../../core/user/user.models';
 import { Store } from '@ngrx/store';
 import { selectAddressProfile, selectUserProfile } from '../../core/user/user.selectors';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { MatRadioChange } from '@angular/material/radio';
 import { userAddressDefault, userAddressRemove } from '../../core/user/user.actions';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -15,11 +15,12 @@ import { PasswordFormWrapperComponent } from './password-form-wrapper/password-f
   styleUrls: ['./profile-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileWrapperComponent implements OnInit {
+export class ProfileWrapperComponent implements OnInit, OnDestroy {
 
   user$: Observable<User>;
   address$: Observable<Address[]>;
   dialogRef: MatDialogRef<PasswordFormWrapperComponent, any>;
+  private onDestroy = new Subject();
 
   constructor(
     private store$: Store,
@@ -33,14 +34,18 @@ export class ProfileWrapperComponent implements OnInit {
 
   removeAddress(address: Address) {
     if (!address.default) {
-      this.store$.select(selectUserProfile).pipe(take(1)).subscribe(res => {
+      this.store$.select(selectUserProfile).pipe(
+        take(1),
+        takeUntil(this.onDestroy)).subscribe(res => {
         this.store$.dispatch(userAddressRemove({payload: {user: res, address}}));
       });
     }
   }
 
   updateDefaultAddress($event: MatRadioChange) {
-    this.store$.select(selectUserProfile).pipe(take(1)).subscribe(res => {
+    this.store$.select(selectUserProfile).pipe(
+      take(1),
+      takeUntil(this.onDestroy)).subscribe(res => {
       this.store$.dispatch(userAddressDefault({payload: {user: res, default: $event.value}}));
     });
   }
@@ -55,5 +60,10 @@ export class ProfileWrapperComponent implements OnInit {
 
     this.dialogRef = this.dialog.open(PasswordFormWrapperComponent, dialogConfig );
 
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }

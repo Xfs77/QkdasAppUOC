@@ -6,12 +6,12 @@ import {
   Output,
   Inject,
   AfterViewInit,
-  EventEmitter
+  EventEmitter, OnDestroy
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Product } from '../../../core/product-form/product.models';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { map, takeWhile } from 'rxjs/operators';
+import { map, takeUntil, takeWhile } from 'rxjs/operators';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { CartLine } from '../../../core/cart/cart.models';
@@ -22,7 +22,7 @@ import { CartLine } from '../../../core/cart/cart.models';
   styleUrls: ['./catalogue.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogueComponent implements OnInit, AfterViewInit {
+export class CatalogueComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() products$: Observable<Product[]>; // product list
   @Input() isLoading$; // indicates if it's loading data and we have to wait to do next call
@@ -34,6 +34,7 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
   @Output() favoriteEvent = new EventEmitter<{product: Product}>();
 
   private productsLength: number;
+  private onDestroy = new Subject();
 
   constructor(
     private dialog: MatDialog,
@@ -107,7 +108,9 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
           return false;
         }
         return true;
-      })).subscribe();
+      }),
+      takeUntil(this.onDestroy)
+      ).subscribe();
   }
 
   addToCart($event: {cart: CartLine}) {
@@ -120,5 +123,10 @@ export class CatalogueComponent implements OnInit, AfterViewInit {
 
   trackBy(index: number, product: Product): string {
     return product.reference;
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }

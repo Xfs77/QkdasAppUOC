@@ -6,7 +6,6 @@ const routes: Routes = [
   {
     path: '',
     component: LoginWrapperComponent,
-    data:  {title: 'anms.menu.login'},
     pathMatch: 'full'
   }
 ];

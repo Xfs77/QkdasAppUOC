@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: CatalogueWrapperComponent,
-    data:  {title: 'Catálogo'},
+    data:  {title: 'anms.menu.catalogue'},
     pathMatch: 'full'
   }
 ];

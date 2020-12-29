@@ -3,9 +3,9 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ViewChild,
-  ComponentFactoryResolver, ElementRef, ViewContainerRef
+  ComponentFactoryResolver, ElementRef, ViewContainerRef, OnDestroy
 } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { emptyProduct, ImageData, Product } from '../../../core/product-form/product.models';
 import { Agrupation } from '../../../core/agrupation/agrupation.models';
 import { PhotoDirective } from '../../../shared/directives/photo.directive';
@@ -15,7 +15,7 @@ import {
   selectProductImages,
   selectProductProductForm
 } from '../../../core/product-form/product-form.selectors';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { selectProductsFilter } from '../../../core/products-filter/products-filter.selector';
 import { productsFilterIsLoading } from '../../../core/products-filter/products-filter.action';
 import {
@@ -34,7 +34,7 @@ import { NotificationService } from '../../../core/notifications/notification.se
   styleUrls: ['./product-form-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductFormWrapperComponent implements OnInit {
+export class ProductFormWrapperComponent implements OnInit, OnDestroy {
   dialogRefAgrup: MatDialogRef<AgrupationsComponent, any>;
   product$: Observable<Product>;
   private selectedAgrupSource = new BehaviorSubject<Agrupation>(null);
@@ -50,6 +50,7 @@ export class ProductFormWrapperComponent implements OnInit {
   edit: boolean;
   isMain = false;
   position: number;
+  private onDestroy = new Subject();
 
   @ViewChild(PhotoDirective, { static: true }) photoHost: PhotoDirective;
 
@@ -65,10 +66,12 @@ export class ProductFormWrapperComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.pipe(filter(params => params.position)).subscribe(param => {
+    this.route.queryParams.pipe(
+      filter(params => params.position),
+      takeUntil(this.onDestroy)).subscribe(param => {
       this.position = param.position;
     });
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this.onDestroy)).subscribe(params => {
       const reference = params.reference;
       if (reference) {
         this.product$ = this.store$.select(selectProductProductForm);
@@ -81,15 +84,16 @@ export class ProductFormWrapperComponent implements OnInit {
 
     this.product$.pipe(
       take(1),
+      takeUntil(this.onDestroy),
       map(res => {
         if (res && res.reference) {
           this.currentSelectedAgrup = res.agrupation;
           this.selectedAgrupSource.next(res.agrupation);
         } else {
-          this.store$.select(selectProductsFilter).subscribe(filter => {
-            if (filter && filter.agrupation) {
-              this.currentSelectedAgrup = filter.agrupation;
-              this.selectedAgrupSource.next(filter.agrupation);
+          this.store$.select(selectProductsFilter).subscribe(filter_res => {
+            if (filter_res && filter_res.agrupation) {
+              this.currentSelectedAgrup = filter_res.agrupation;
+              this.selectedAgrupSource.next(filter_res.agrupation);
             }
           });
         }
@@ -129,7 +133,7 @@ export class ProductFormWrapperComponent implements OnInit {
       dialogConfig.position = {top: '80px'}
 
       this.dialogRefAgrup = this.dialog.open(AgrupationsComponent, dialogConfig);
-      this.dialogRefAgrup.afterClosed().subscribe(result => {
+      this.dialogRefAgrup.afterClosed().pipe(takeUntil(this.onDestroy)).subscribe(result => {
         this.selectedAgrupSource.next(result);
       });
     }
@@ -139,7 +143,9 @@ export class ProductFormWrapperComponent implements OnInit {
     if ($event) {
       this.store$.dispatch(productImagesGet({ payload: { product: $event } }));
       this.images$ = this.store$.select(selectProductImages);
-      this.store$.select(selectProductImages).pipe(take(2)).subscribe(
+      this.store$.select(selectProductImages).pipe(
+        take(2),
+        takeUntil(this.onDestroy)).subscribe(
         res => {
           if (res.length > 0 && this.index === 0) {
 
@@ -161,16 +167,16 @@ export class ProductFormWrapperComponent implements OnInit {
       if (image) {
         (componentRef.instance as ImageFormComponent).image = image;
       }
-      (componentRef.instance as ImageFormComponent).eventNewImage.subscribe(res => {
+      (componentRef.instance as ImageFormComponent).eventNewImage.pipe(takeUntil(this.onDestroy)).subscribe(res => {
         this.onAddImage(res);
       });
-      (componentRef.instance as ImageFormComponent).eventRemoveImage.subscribe(res => {
+      (componentRef.instance as ImageFormComponent).eventRemoveImage.pipe(takeUntil(this.onDestroy)).subscribe(res => {
         this.onRemoveImage(res);
       });
-      (componentRef.instance as ImageFormComponent).eventIsMain.subscribe(res => {
+      (componentRef.instance as ImageFormComponent).eventIsMain.pipe(takeUntil(this.onDestroy)).subscribe(res => {
         this.onIsMain();
       });
-      (componentRef.instance as ImageFormComponent).eventRemoveComponent.subscribe(res => {
+      (componentRef.instance as ImageFormComponent).eventRemoveComponent.pipe(takeUntil(this.onDestroy)).subscribe(res => {
         this.onRemoveComponent(res);
       });
 
@@ -236,4 +242,10 @@ export class ProductFormWrapperComponent implements OnInit {
   onIsMain() {
     this.isMain = true;
   }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
+  }
+
 }

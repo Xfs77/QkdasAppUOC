@@ -7,13 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: CartWrapperComponent,
-    data:  {title: 'Cesta'},
+    data:  {title: 'anms.menu.cart'},
     pathMatch: 'full'
   },
   {
     path: 'address',
     component: AddressWrapperComponent,
-    data:  {title: 'Cesta'},
   }
 ];
 

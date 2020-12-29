@@ -13,11 +13,12 @@ const routes: Routes = [
   },
   {
     path: 'edit',
-    component: UserFormWrapperComponent
+    component: UserFormWrapperComponent,
+    data:  {title: 'anms.menu.profile_edit'},
   },
   {
     path: 'address/edit',
-    data: {title: 'Formulario Usuario'},
+    data:  {title: 'anms.menu.address_edit'},
     component: AddressFormWrapperComponent
   },
 ];

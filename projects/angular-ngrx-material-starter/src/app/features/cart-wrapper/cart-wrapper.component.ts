@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { CartLine } from '../../core/cart/cart.models';
 import { Store } from '@ngrx/store';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import {
   cartStockChecked,
   cartUpdate
 } from '../../core/cart/cart.action';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { NotificationService } from '../../core/notifications/notification.service';
 import { AddressWrapperComponent } from './address-wrapper/address-wrapper.component';
 import { CartComponent } from './cart/cart.component';
@@ -31,7 +31,7 @@ import { orderCreate } from '../../core/order/order.action';
   styleUrls: ['./cart-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CartWrapperComponent implements OnInit {
+export class CartWrapperComponent implements OnInit, OnDestroy {
 
   cart$: Observable<CartLine[]>;
   stockChecked$: Observable<boolean>;
@@ -41,13 +41,11 @@ export class CartWrapperComponent implements OnInit {
   dialogRef: MatDialogRef<AddressWrapperComponent, any>;
 
   @ViewChild(CartComponent) cartComponent: CartComponent;
+  private onDestroy = new Subject();
 
   constructor(
     private store$: Store,
     private dialog: MatDialog,
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -55,7 +53,7 @@ export class CartWrapperComponent implements OnInit {
     this.cart$ = this.store$.select(selectCartListState);
     this.stockChecked$ = this.store$.select(selectCartStockChecked);
     this.total$ = this.store$.select(selectTotalCartListState);
-    this.store$.select(selectUserProfile).subscribe(res => {
+    this.store$.select(selectUserProfile).pipe(takeUntil(this.onDestroy)).subscribe(res => {
       this.order.user = res;
       this.order.status = OrderStatus.Pending;
     });
@@ -67,7 +65,7 @@ export class CartWrapperComponent implements OnInit {
 
   updateCart($event: { quantity: number; cartLine: CartLine }) {
     this.store$.dispatch(cartCheckStock({payload: {cart: $event.cartLine, quantity: $event.quantity}}));
-    this.store$.select(selectCartlineById, {id: $event.cartLine.id}).pipe(take(2)).subscribe(res => {
+    this.store$.select(selectCartlineById, {id: $event.cartLine.id}).pipe(take(2)).pipe(takeUntil(this.onDestroy)).subscribe(res => {
       if (res.isStock !== null ) {
         if (res.isStock) {
           this.store$.dispatch(cartUpdate(
@@ -92,7 +90,7 @@ export class CartWrapperComponent implements OnInit {
     dialogConfig.disableClose = true;
 
     this.dialogRef = this.dialog.open(AddressWrapperComponent, dialogConfig );
-    this.dialogRef.afterClosed().subscribe(res => {
+    this.dialogRef.afterClosed().pipe(takeUntil(this.onDestroy)).subscribe(res => {
       if (res && res.next) {
         this.cartComponent.next();
         this.order.shippingAddress = res.address;
@@ -111,7 +109,7 @@ export class CartWrapperComponent implements OnInit {
 
   private createOrderContent() {
     this.order.orderLines = [];
-    this.cart$.pipe(take(1)).subscribe(async res => {
+    this.cart$.pipe(take(1)).pipe(takeUntil(this.onDestroy)).subscribe(async res => {
       for (const line of res) {
         const orderLine = {} as OrderLine;
         orderLine.id = line.id;
@@ -132,5 +130,10 @@ export class CartWrapperComponent implements OnInit {
 
   stockChecked($event: boolean) {
     this.store$.dispatch(cartStockChecked({payload: {stockChecked: $event}}));
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }

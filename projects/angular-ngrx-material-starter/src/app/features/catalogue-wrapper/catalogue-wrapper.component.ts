@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Product } from '../../core/product-form/product.models';
 import { ProductsFilterInterface } from '../../core/products-filter/products-filter.models';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import {
   selectProductsFilterIsEnded,
   selectProductsFilterIsLoading
 } from '../../core/products-filter/products-filter.selector';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import {
   productListFavorite,
@@ -27,7 +27,7 @@ import {
   styleUrls: ['./catalogue-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CatalogueWrapperComponent implements OnInit {
+export class CatalogueWrapperComponent implements OnInit, OnDestroy {
 
   private batchSource = new BehaviorSubject(null);
   batch$ = this.batchSource.asObservable();
@@ -40,7 +40,7 @@ export class CatalogueWrapperComponent implements OnInit {
 
   products$: Observable<Product[]>;
   filter: ProductsFilterInterface;
-
+  private onDestroy = new Subject();
   nextBatchId: string;
 
   constructor(
@@ -54,7 +54,9 @@ export class CatalogueWrapperComponent implements OnInit {
     this.store$.dispatch(productsFilterSetIsStock({payload: {isStock: true}}));
     this.store$.dispatch(productsFilterSetIsActive({payload: {isActive: true}}))
 
-    this.store$.select(selectProductsFilter).pipe(take(1)).subscribe(res => {
+    this.store$.select(selectProductsFilter).pipe(
+      take(1),
+      takeUntil(this.onDestroy)).subscribe(res => {
       this.filter = res;
     });
   }
@@ -91,6 +93,11 @@ export class CatalogueWrapperComponent implements OnInit {
 
   addToCart($event: {cart: CartLine}) {
     this.store$.dispatch(cartAdd({payload: $event}));
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }
 

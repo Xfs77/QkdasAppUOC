@@ -5,14 +5,14 @@ import {
   Input,
   Output,
   EventEmitter,
-  ViewChild, ElementRef
+  ViewChild, ElementRef, OnDestroy
 } from '@angular/core';
 import { CartLine } from '../../../core/cart/cart.models';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { MatStepper } from '@angular/material/stepper';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CartService } from '../../../core/cart/cart.service';
-import { map, take } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'anms-cart',
@@ -20,7 +20,7 @@ import { map, take } from 'rxjs/operators';
   styleUrls: ['./cart.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
 
   @Input() cart$: Observable<CartLine[]>;
   @Input() stockChecked$: Observable<boolean>;
@@ -34,12 +34,12 @@ export class CartComponent implements OnInit {
   @Output() stockCheckedEvent: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('stepper') stepper: MatStepper;
+  private onDestroy = new Subject();
 
   validationMessages = [
       { type: 'stock', message: 'No  hay suficiente stock' },
       { type: 'min', message: 'La cantidad debe ser > 1' },
-
-    {type: 'required', message: 'Debe informar una cantidad' }
+      {type: 'required', message: 'Debe informar una cantidad' }
     ];
 
   isCreateOrder = false;
@@ -54,6 +54,7 @@ export class CartComponent implements OnInit {
   }
 
   onRemoveCart($event) {
+    this.cartForm.removeControl($event.product.reference);
     this.removeEvent.emit($event);
   }
 
@@ -95,19 +96,20 @@ export class CartComponent implements OnInit {
 
   private createForm() {
     this.cartForm = this.fb.group({});
-    this.cart$.pipe(map((list: CartLine[]) => {
+    this.cart$.pipe(
+      map((list: CartLine[]) => {
       list.forEach((item: CartLine) => {
         this.cartForm.addControl(item.product.reference, new FormControl(
         item.quantity, [Validators.required, Validators.min(1)], this.cartService.stockValidator(item.product.reference))
         );
           })
-      })).subscribe();
-
+      }),
+      takeUntil(this.onDestroy)).subscribe();
   }
 
   onSubmit() {
     if (this.cartForm.valid) {
-      this.cart$.pipe(take(1)).subscribe(res => {
+      this.cart$.pipe(take(1)).pipe(takeUntil(this.onDestroy)).subscribe(res => {
         for (const line of res) {
           if (this.cartForm.get(line.product.reference).value !== line.quantity) {
             this.updateCart(this.cartForm.get(line.product.reference).value , line);
@@ -116,6 +118,11 @@ export class CartComponent implements OnInit {
       })
       this.next();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }
 

@@ -158,7 +158,7 @@
       (click)="addEmptyAgrupation(null)">
       <mat-icon>add</mat-icon>
     </button>
-    <span class="select-text">*Pulse durante unos segundos para seleccionar</span>
+    <span class="select-text" *ngIf="!editionMode">*Pulse durante unos segundos para seleccionar</span>
   </mat-card>
 
 <mat-menu #menu="matMenu">

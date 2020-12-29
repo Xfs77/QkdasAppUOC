@@ -75,6 +75,7 @@ export class DynamicDataSource implements DataSource<DynamicFlatNode> {
     this.dataChange.next(value);
   }
 
+  /*** Adds children nodes to node ***/
   addChildren(node: DynamicFlatNode, children: DynamicFlatNode[]) {
     if (children.length > 0) {
 

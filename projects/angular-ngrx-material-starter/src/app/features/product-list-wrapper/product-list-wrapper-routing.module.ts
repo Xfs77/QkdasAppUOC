@@ -7,15 +7,18 @@ const routes: Routes = [
   {
     path: '',
     component: ProductListWrapperComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data:  {title: 'anms.menu.products'},
   },
   {
     path: 'add',
     component: ProductFormWrapperComponent,
+    data:  {title: 'anms.menu.products_add'},
   },
   {
     path: 'edit/:reference',
     component: ProductFormWrapperComponent,
+    data:  {title: 'anms.menu.products_edit'},
   }
 
 ];

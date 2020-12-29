@@ -16,7 +16,5 @@ export class IndicatorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onLoad() {
-    console.log('onload')
-  }
+
 }

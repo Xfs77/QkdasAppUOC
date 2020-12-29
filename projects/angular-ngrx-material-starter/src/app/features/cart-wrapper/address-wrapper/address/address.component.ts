@@ -4,12 +4,12 @@ import {
   ChangeDetectionStrategy,
   Input,
   Output,
-  EventEmitter
+  EventEmitter, OnDestroy
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Address } from '../../../../core/user/user.models';
 import { MatRadioChange } from '@angular/material/radio';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'anms-address',
@@ -17,7 +17,7 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./address.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
 
   @Input() currentAddress$: Observable<Address>;
   @Input() address$: Observable<Address[]>
@@ -25,6 +25,7 @@ export class AddressComponent implements OnInit {
   @Output() confirmEvent: EventEmitter<Address> = new EventEmitter<Address>() ;
   @Output() cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>() ;
 
+  private onDestroy = new Subject();
   currentSelectedAddress: Address;
   confirmedAddress: Address;
   showAddresses = false;
@@ -32,7 +33,7 @@ export class AddressComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.currentAddress$.pipe(take(1)).subscribe(res => {
+    this.currentAddress$.pipe(take(1)).pipe(takeUntil(this.onDestroy)).subscribe(res => {
       this.confirmedAddress = res;
     })
   }
@@ -65,4 +66,8 @@ export class AddressComponent implements OnInit {
     this.confirmEvent.emit(this.confirmedAddress);
   }
 
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
+  }
 }

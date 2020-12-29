@@ -7,14 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: OrderListWrapperComponent,
-    data:  {title: 'Pedidos'},
+    data:  {title: 'anms.menu.order'},
     pathMatch: 'full'
   },
 
   {
     path: ':orderId',
     component: OrderDetailWrapperComponent,
-    data:  {title: 'Pedidos'},
+    data:  {title: 'anms.menu.order_detail'},
     pathMatch: 'full'
   }
 ];

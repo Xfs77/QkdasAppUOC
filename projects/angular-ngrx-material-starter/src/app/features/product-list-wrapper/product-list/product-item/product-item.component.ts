@@ -35,12 +35,8 @@ export class ProductItemComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.product.reference === '001') {
-      console.log(this.isImages(changes.product.currentValue))
-    }
     this.image$.next('')
     if (this.isImages(changes.product.currentValue)) {
-
       this.generateSrcSet();
     }
   }

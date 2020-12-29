@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { Address, User } from '../../../core/user/user.models';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,12 +17,13 @@ import { userAddressUpdate } from '../../../core/user/user.actions';
   styleUrls: ['./address-form-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddressFormWrapperComponent implements OnInit {
+export class AddressFormWrapperComponent implements OnInit, OnDestroy {
 
   @Input() user$: Observable<User>;
   address: Address;
 
   private address$: Observable<Address>;
+  private onDestroy = new Subject();
 
   constructor(
     private store$: Store,
@@ -64,5 +65,10 @@ export class AddressFormWrapperComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['/profile']);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
   }
 }

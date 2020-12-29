@@ -9,9 +9,9 @@ import {
 import { Store } from '@ngrx/store';
 import { selectAddressProfile, selectDefaultAddress } from '../../../core/user/user.selectors';
 import { Address } from '../../../core/user/user.models';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { cartSetAddress } from '../../../core/cart/cart.action';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { selectCartAddress } from '../../../core/cart/cart.selectors';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
@@ -21,12 +21,13 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
   styleUrls: ['./address-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddressWrapperComponent implements OnInit {
+export class AddressWrapperComponent implements OnInit, OnDestroy {
 
   currentAddress$: Observable<Address>;
   address$: Observable<Address[]>;
   next = false;
   currentAddress: Address;
+  private onDestroy = new Subject();
 
   constructor(
     private store$: Store,
@@ -37,12 +38,12 @@ export class AddressWrapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store$.select(selectDefaultAddress).pipe(take(1)).subscribe(res => {
+    this.store$.select(selectDefaultAddress).pipe(take(1)).pipe(takeUntil(this.onDestroy)).subscribe(res => {
       this.store$.dispatch(cartSetAddress({ payload: { address: res } }))
     });
 
     this.currentAddress$ = this.store$.select(selectCartAddress);
-    this.currentAddress$.subscribe(res => {
+    this.currentAddress$.pipe(takeUntil(this.onDestroy)).subscribe(res => {
       this.currentAddress = res;
     });
     this.address$ = this.store$.select(selectAddressProfile);
@@ -59,4 +60,8 @@ export class AddressWrapperComponent implements OnInit {
     this.dialogRef.close({next: this.next});
   }
 
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
+  }
 }

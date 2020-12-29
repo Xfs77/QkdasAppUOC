@@ -5,12 +5,12 @@ import {
   AfterViewInit,
   Input,
   Output,
-  EventEmitter, ViewChild, OnChanges, SimpleChanges
+  EventEmitter, ViewChild, OnChanges, SimpleChanges, OnDestroy
 } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { Product } from '../../../core/product-form/product.models';
 import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { filter, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -21,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
+export class ProductListComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() products$: Observable<Product[]>; // product list
   @Input() isLoading$; // indicates if it's loading data and we have to wait to do next call
   @Input() isEnded$; // indicates if we have gotten all product list data
@@ -33,6 +33,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('viewer') viewport: CdkVirtualScrollViewport; // viewport where we are displaying items
   currentIndex: number;
+  private onDestroy = new Subject();
 
   constructor(
     private scrollDispatcher: ScrollDispatcher,
@@ -45,7 +46,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.viewport.scrolledIndexChange.subscribe(res => this.currentIndex = res );
-    this.route.queryParams.pipe(filter(params => params.position)).subscribe(res => {
+    this.route.queryParams.pipe(
+      filter(params => params.position),
+      takeUntil(this.onDestroy)).subscribe(res => {
       setTimeout(_ => {
         return this.viewport.scrollToIndex(res.position)});
     })
@@ -60,18 +63,13 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
         }
       ));
 
-    scroll$.pipe(withLatestFrom(this.isLoading$, this.isEnded$)).subscribe(res => {
+    scroll$.pipe(
+      withLatestFrom(this.isLoading$, this.isEnded$),
+      takeUntil(this.onDestroy)).subscribe(res => {
       if (!res[1] && !res[2]) {
         this.nextBatchEvent.emit(true);
       }
     });
-  /*  if (this.viewport.getRenderedRange().end === this.viewport.getDataLength()) {
-      combineLatest([this.isLoading$, this.isEnded$]).pipe(take(1)).subscribe(res => {
-        if (!res[0] && !res[1]) {
-          this.nextBatchEvent.emit(true);
-        }
-      });
-    }*/
   }
 
   trackByIdx(index, item) {
@@ -101,5 +99,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
   }
 
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.unsubscribe();
+  }
 
 }

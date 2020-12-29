@@ -8,7 +8,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ImageData } from '../../../core/product-form/product.models';
 import 'hammerjs';
-                                                                                                                                                          import { NotificationService } from '../../../core/notifications/notification.service';
 
 @Component({
   selector: 'anms-image-viewer',
@@ -32,11 +31,9 @@ export class ImageViewerComponent implements OnInit {
     this.images = data.images;
     this.reference = data.reference;
     this.description = data.description;
-    console.log(this.reference)
   }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
 
   onRight(event?) {

@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: AgrupationsWrapperComponent,
-    data:  {title: 'Agrupaciones'},
+    data:  {title: 'anms.menu.agrupations'},
     pathMatch: 'full'
   }
 ];
