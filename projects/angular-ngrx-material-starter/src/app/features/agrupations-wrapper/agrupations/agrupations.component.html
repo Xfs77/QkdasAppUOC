@@ -8,11 +8,13 @@
         *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="20"
         [ngClass]="isSelected(node.node)"
         class="hand-pointer"
-        #descriptionItem
-        anmsLongPress (onLongPress) ="onSelectAgrupation(node.node)">
+        #descriptionItem>
         <button mat-icon-button disabled></button>
         <div *ngIf="(!edit) || (edit && currentNode!==node)"
-             class="mr20">{{node.node.description}} </div>
+             class="mr20"
+             anmsLongPress (onLongPress) ="onSelectAgrupation(node.node)">
+          {{node.node.description}}
+        </div>
 
         <!--- Edit Form -->
         <div class="container-form" fxLayout="row" *ngIf="edit && currentNode === node">
@@ -55,8 +57,7 @@
       <mat-tree-node
         *matTreeNodeDef="let node; when: hasNoContent" matTreeNodePadding matTreeNodePaddingIndent="20"
         class="hand-pointer"
-        [ngClass]="isSelected(node.node)"
-        anmsLongPress (onLongPress)="onSelectAgrupation(node.node)">
+        [ngClass]="isSelected(node.node)">
         <button mat-icon-button disabled></button>
         <div class="mr20">
           <div class="container-form" *ngIf="new" fxLayout="row">
@@ -99,8 +100,7 @@
       <mat-tree-node
         *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20"
         class="hand-pointer"
-        [ngClass]="isSelected(node.node)"
-        anmsLongPress (onLongPress)="onSelectAgrupation(node.node)">
+        [ngClass]="isSelected(node.node)">
         <button mat-icon-button
                 [attr.aria-label]="'toggle ' + node.node.description"
                 matTreeNodeToggle>
@@ -109,7 +109,10 @@
           </mat-icon>
         </button>
         <div *ngIf="(!edit) || (edit && currentNode!==node)"
-             class="mr20">{{node.node.description}}</div>
+             class="mr20"
+             anmsLongPress (onLongPress)="onSelectAgrupation(node.node)">
+          {{node.node.description}}
+        </div>
         <!--- Edit Form -->
         <div class="container-form" fxLayout="row" *ngIf="edit && currentNode === node">
           <mat-form-field>

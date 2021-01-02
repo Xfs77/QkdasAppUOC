@@ -42,6 +42,7 @@ const reducer = createReducer(
        delete draft.children[action.payload.parent.id][action.payload.agrupation.id];
   })),
   on(currentSelectedAgrupation, produce((draft, action) =>  {
+    draft.currentSelectedAgrup = {};
     draft.currentSelectedAgrup[action.payload.agrupation.id] = action.payload.agrupation;
   })),
   on(resetCurrentSelectedAgrupation, produce((draft, action) =>  {

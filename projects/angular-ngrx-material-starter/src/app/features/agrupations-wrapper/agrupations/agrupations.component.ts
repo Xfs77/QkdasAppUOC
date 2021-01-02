@@ -151,6 +151,7 @@ export class AgrupationsComponent implements OnInit, OnDestroy {
         this.dialogRef.close(node);
       }
       this.currentSelected = node;
+      console.log(node.description, !this.editionMode)
       this.selectedAgrupEvent.emit(node);
     }
   }

@@ -67,6 +67,15 @@ h2 {
     right: 24px;
     color: white;
   }
+
+  &.users {
+    font-size: 14px;
+    font-family: SansSerif;
+    color: red;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
 }
 
 @media (min-width: 600px) {

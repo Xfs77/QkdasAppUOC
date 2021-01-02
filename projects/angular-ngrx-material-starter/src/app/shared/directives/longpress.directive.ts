@@ -42,7 +42,7 @@ export class LongPressDirective {
       this.interval = window.setInterval(() => {
         this.onLongPressing.emit(event);
       }, 50);
-    }, 1000);
+    }, 100);
   }
 
   @HostListener('touchend')
